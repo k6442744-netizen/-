@@ -89,11 +89,11 @@
 html {
   /* 최소 360px 유지 — 그보다 좁으면 가로 스크롤 */
   min-width: 360px;
-  background: #efe4f8;
+  background: #fdeff6;
 }
 
 body {
-  background: #efe4f8;
+  background: #fdeff6;
   color: var(--text-primary);
   /* @theme inline 의 토큰은 :root 로 내보내지지 않으므로 raw CSS 에서는 원본 변수를 쓴다 */
   font-family: var(--font-pretendard-base), "Apple SD Gothic Neo", sans-serif;
