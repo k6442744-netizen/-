@@ -56,8 +56,8 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3021";
 const title = "FORTUNE PORTAL — 990원 사주";
 const description =
   "2000년대 초 인터넷에서 발견한, 조금은 신비롭고 사랑스러운 운세 포털. 내 운명이 궁금할 때, 단돈 990원.";
-/* 히어로 첫 배너를 공유 썸네일로 사용 */
-const ogImage = `${siteUrl}/hero.png`;
+/* 공유 썸네일 — 히어로 첫 배너를 OG 권장 규격(1200×630)으로 리사이즈한 것 */
+const ogImage = `${siteUrl}/og.jpg`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     title,
     description,
     url: siteUrl,
-    images: [{ url: ogImage, width: 1548, height: 1016, alt: "990원 사주" }],
+    images: [{ url: ogImage, width: 1200, height: 630, alt: "990원 사주" }],
   },
   twitter: {
     card: "summary_large_image",
