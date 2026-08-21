@@ -1,0 +1,299 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   FORTUNE PORTAL — Design System v1.0
+   Clean Y2K × Early 2000s Internet × Pastel Tech
+   ========================================================================== */
+
+@theme inline {
+  --font-kr: var(--font-pretendard-base), "Apple SD Gothic Neo", sans-serif;
+  --font-pixel: var(--font-silkscreen-base), monospace;
+  --font-display: var(--font-jalnan-base), var(--font-pretendard-base), sans-serif;
+  /* 설명·부가 텍스트 (Umdot Mono) — 14px 기준으로 설계된 도트 폰트라 14px/28px에서 가장 또렷하다 */
+  --dot-text: var(--font-umdot-base), ui-monospace, monospace;
+  --font-label: var(--font-yeoju-base), var(--font-pretendard-base), sans-serif;
+}
+
+@theme {
+  /* --- Color (§2) : White 65 / Pink 15 / Lavender 10 / Blue 5 / Silver 5 --- */
+  --color-page: #ffffff;
+  --color-page-pink: #ffeef7;
+  --color-page-lav: #f3ecff;
+
+  --color-brand-pink: #ff4fa3;
+  /* 재화(하트) 수치 전용 */
+  --color-heart: #f04685;
+  --color-brand-pink-soft: #ffb3dc;
+  --color-brand-lav: #9b6bff;
+  --color-brand-lav-soft: #e0d0ff;
+  --color-brand-blue: #c8ecff;
+
+  --color-silver: #ebe4f3;
+  --color-silver-mid: #b8adcd;
+  --color-line: #e0d5ec;
+  /* 레퍼런스 스타일의 검은 테두리 (순검정보다 살짝 자주빛) */
+  --color-outline: #2a1a3a;
+
+  --color-ink: #2b1b3d;
+  --color-ink-soft: #6b5b85;
+
+  /* --- 간편 로그인 브랜드 컬러 ---
+     각 사업자 브랜드 가이드가 색을 고정하므로 디자인 시스템 팔레트의 예외로 둔다.
+     이 토큰은 소셜 로그인 버튼 외에는 사용하지 않는다. */
+  --color-kakao: #fee500;
+  --color-kakao-ink: #191600;
+  --color-naver: #03c75a;
+
+  /* --- Radius (§6) : Square UI 기본, 2–4px --- */
+  --radius-win: 3px;
+  --radius-tag: 2px;
+
+  /* --- Shadow (§6) : 얇고 낮게 --- */
+  --shadow-object: 0 8px 24px rgba(70, 55, 90, 0.08);
+  --shadow-card: 0 4px 16px rgba(70, 55, 90, 0.04);
+
+  /* --- Mobile frame (360 ~ 420px) --- */
+  --container-frame: 420px;
+}
+
+:root {
+  /* 디자인 시스템 문서와 동일한 토큰명 (raw CSS / 인라인 스타일용) */
+  --bg-primary: #ffffff;
+  --bg-pink: #ffeef7;
+  --bg-lavender: #f3ecff;
+  --pink-primary: #ff4fa3;
+  --pink-soft: #ffb3dc;
+  --lavender-primary: #9b6bff;
+  --lavender-soft: #e0d0ff;
+  --blue-soft: #c8ecff;
+  --silver-light: #ebe4f3;
+  --silver-mid: #b8adcd;
+  --text-primary: #2b1b3d;
+  --text-secondary: #6b5b85;
+
+  --border-default: 1px solid #e0d5ec;
+  --border-pink: 1px solid #ff8ec7;
+  --border-lavender: 1px solid #a97cff;
+  --border-active: 1.5px solid #ff4fa3;
+
+  /* 모바일 전용 레이아웃 (§13) */
+  --page-padding: 20px;
+}
+
+@media (max-width: 374px) {
+  :root {
+    --page-padding: 16px;
+  }
+}
+
+html {
+  /* 최소 360px 유지 — 그보다 좁으면 가로 스크롤 */
+  min-width: 360px;
+  background: #efe4f8;
+}
+
+body {
+  background: #efe4f8;
+  color: var(--text-primary);
+  /* @theme inline 의 토큰은 :root 로 내보내지지 않으므로 raw CSS 에서는 원본 변수를 쓴다 */
+  font-family: var(--font-pretendard-base), "Apple SD Gothic Neo", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* 한글 줄바꿈을 어절 단위로 (§17 가독성) */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* --- Typography: Pixel / Retro (§4-C) — 영문 label & microcopy 전용 --- */
+.pixel {
+  font-family: var(--font-silkscreen-base), "Courier New", monospace;
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+/* --- 설명 / 부가 텍스트 (Umdot Mono) ---
+   고정폭 폰트라 공백이 한 글자만큼 벌어져서 어절 간격을 줄여준다 */
+.dot-text {
+  font-family: var(--font-umdot-base), ui-monospace, monospace;
+  word-spacing: -0.32em;
+}
+
+/* --- Label / Retro (여주 도자체) — 섹션·윈도우 라벨 --- */
+.ceramic {
+  font-family: var(--font-yeoju-base), var(--font-pretendard-base), sans-serif;
+  letter-spacing: 0.01em;
+}
+
+/* --- Chrome Display Typography (§4-A) — Hero 전용 --- */
+.chrome-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.chrome-silver {
+  background-image: linear-gradient(
+    176deg,
+    #ffffff 0%,
+    #efe9f8 24%,
+    #b9aed2 44%,
+    #ffffff 54%,
+    #ded0ff 72%,
+    #9f93bd 100%
+  );
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.95))
+    drop-shadow(0 6px 14px rgba(70, 55, 90, 0.16));
+}
+
+.chrome-pink {
+  background-image: linear-gradient(
+    176deg,
+    #fff6fa 0%,
+    #ffbcdd 18%,
+    #ff5fa8 42%,
+    #ffffff 53%,
+    #ff8ec7 68%,
+    #d92a86 100%
+  );
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.95))
+    drop-shadow(0 6px 14px rgba(160, 70, 115, 0.18));
+}
+
+/* --- Gradient (§3) : 소재감 표현용 --- */
+.grad-pale-pink {
+  background-image: linear-gradient(90deg, #ffeef7 0%, #ffcfe8 100%);
+}
+.grad-lav-blue {
+  background-image: linear-gradient(90deg, #e6d8ff 0%, #dbeefb 100%);
+}
+.grad-silver-pink {
+  background-image: linear-gradient(90deg, #efe9f8 0%, #ffe6f4 100%);
+}
+
+/* --- Iridescent (CD / Chrome / Glass object) --- */
+.iridescent {
+  background-image: conic-gradient(
+    from 210deg,
+    #ffdcf0 0deg,
+    #c9edff 52deg,
+    #ddd0ff 104deg,
+    #fff3c8 156deg,
+    #ffd2ea 208deg,
+    #bfe8ff 260deg,
+    #e0d0ff 312deg,
+    #ffdcf0 360deg
+  );
+}
+
+/* --- Accessibility: 포커스 링은 항상 보이게 (§17) --- */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--pink-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* 픽셀아트 에셋은 보간 없이 또렷하게 */
+.pixelated {
+  image-rendering: pixelated;
+}
+
+/* 스와이프 캐러셀 스크롤바 숨김 */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+.float-soft {
+  animation: float-soft 5s ease-in-out infinite;
+}
+
+/* --- 마이페이지 오버레이 전환 ---
+   패널은 오른쪽에서 끝까지 밀려 들어오고 닫힐 때 같은 경로로 되돌아간다.
+   fill-mode both 로 애니메이션 종료 후 위치가 튀지 않게 고정한다. */
+/* 메뉴 버튼이 좌측에 있으므로 패널도 왼쪽에서 들어온다.
+   가운데 정렬(-translate-x-1/2)은 Tailwind v4의 `translate` 속성이 담당하므로
+   여기서는 `transform` 으로 슬라이드 오프셋만 준다 (두 속성은 합성된다) */
+@keyframes menu-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes menu-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+.menu-in {
+  animation: menu-in 300ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.menu-out {
+  animation: menu-out 240ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@keyframes dim-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dim-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.dim-in {
+  animation: dim-in 300ms ease-out both;
+}
+.dim-out {
+  animation: dim-out 240ms ease-in both;
+}
+
+@keyframes blink-dot {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+}
+.blink-dot {
+  animation: blink-dot 1.6s steps(1, end) infinite;
+}
