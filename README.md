@@ -12,6 +12,37 @@ pnpm install
 pnpm dev      # http://localhost:3021
 ```
 
+## 배포 (GitHub Pages)
+
+라이브: **https://k6442744-netizen.github.io/-/**
+
+```bash
+pnpm deploy
+```
+
+- Next를 `output: "export"` 정적 빌드로 내보내 `gh-pages` 브랜치에 푸시합니다
+- 프로젝트 페이지라 `/<repo>` 하위에 서빙되므로 빌드 시 `NEXT_PUBLIC_BASE_PATH`를 주입합니다
+- `next/image`는 `unoptimized` 상태에서 basePath를 자동으로 붙이지 않습니다.
+  순수 `<img>`도 마찬가지라, public 에셋 경로는 **반드시 `asset()`(`src/lib/asset.ts`)로 감싸야** 합니다
+- `public/.nojekyll` — 없으면 GitHub Pages가 `_next/` 디렉터리를 무시합니다
+
+### Actions 자동 배포 (미적용)
+
+워크플로 파일을 `docs/github-pages-workflow.yml`에 준비해 뒀습니다.
+현재 gh 토큰에 `workflow` 스코프가 없어 `.github/workflows/` 경로로는 푸시가 거부되기 때문입니다.
+
+스코프를 추가한 뒤 제자리로 옮기면 push할 때마다 자동 배포됩니다.
+
+```bash
+gh auth refresh -s workflow
+```
+
+```bash
+mkdir -p .github/workflows && mv docs/github-pages-workflow.yml .github/workflows/deploy.yml
+```
+
+이때 Pages 소스를 `gh-pages` 브랜치 → **GitHub Actions**로 바꿔야 합니다.
+
 ## 뷰포트 규칙
 
 | 항목 | 값 |
