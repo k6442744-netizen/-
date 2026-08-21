@@ -30,20 +30,30 @@ export function MiniFortuneCard({
   showRank?: boolean;
   className?: string;
 }) {
-  const { type, tone, object, name, hearts, rank } = product;
+  const { type, tone, object, name, hearts, rank, image, short } = product;
 
   return (
     <a
       href="#"
       className={`group flex flex-col overflow-hidden rounded-win border border-outline bg-white transition-colors hover:border-brand-pink ${className}`}
     >
-      <div className={`relative flex h-[104px] items-center justify-center ${tint[tone]}`}>
+      {/* 타이틀이 위, 이미지가 아래 — 이미지 칸을 길게 잡아 둘 다 들어가게 한다 */}
+      <div
+        className={`relative flex h-[142px] flex-col items-center gap-1 pt-5 ${tint[tone]}`}
+      >
         {showRank && rank ? (
-          <CeramicLabel className={`absolute left-2 top-2 text-[12px] ${labelColor[tone]}`}>
+          <CeramicLabel
+            className={`absolute left-2.5 top-2 z-10 text-[12px] ${labelColor[tone]}`}
+          >
             {rank}위
           </CeramicLabel>
         ) : null}
-        <FortuneObject name={object} size={76} />
+
+        <span className="title-y text-[27px] leading-none text-ink">{short}</span>
+
+        <span className="relative flex w-full flex-1 items-center justify-center">
+          <FortuneObject name={object} src={image} size={74} />
+        </span>
       </div>
 
       <div className="flex flex-1 flex-col border-t border-outline px-3 pb-3 pt-2.5">

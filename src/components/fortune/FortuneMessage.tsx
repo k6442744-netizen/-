@@ -15,7 +15,12 @@ export function FortuneMessage() {
     >
       <div className="px-4 pb-5 pt-6 text-center">
         <div className="relative mx-auto w-fit">
-          <FortuneObject name="envelope" size={84} className="float-soft" />
+          <FortuneObject
+            name="envelope"
+            src="/products/re-match.png"
+            size={84}
+            className="float-soft"
+          />
           <PixelDecoration
             shape="sparkle"
             size={11}

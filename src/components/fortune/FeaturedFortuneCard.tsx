@@ -30,7 +30,8 @@ export function FeaturedFortuneCard({
   product: FortuneProduct;
   className?: string;
 }) {
-  const { labelKo, type, tone, object, name, description, hearts } = product;
+  const { labelKo, type, tone, object, name, description, hearts, image } =
+    product;
 
   return (
     <RetroWindow
@@ -47,13 +48,18 @@ export function FeaturedFortuneCard({
       <div
         className={`flex items-center gap-2 bg-linear-to-b px-4 pb-5 pt-5 ${bodyTint[tone]} to-white`}
       >
-        <div className="flex w-[32%] shrink-0 items-center justify-center">
-          <FortuneObject name={object} size={96} className="float-soft" />
+        <div className="flex w-[38%] shrink-0 items-center justify-center">
+          <FortuneObject
+            name={object}
+            src={image}
+            size={122}
+            className="float-soft"
+          />
         </div>
 
         <div className="min-w-0 flex-1">
           {/* 제목은 항상 한 줄로 — 폭에 맞춰 크기만 조절한다 */}
-          <h3 className="whitespace-nowrap text-[clamp(19px,5.6vw,23px)] font-bold leading-[1.35] tracking-[-0.02em] text-ink">
+          <h3 className="whitespace-nowrap text-[clamp(17px,5vw,22px)] font-bold leading-[1.35] tracking-[-0.02em] text-ink">
             {name}
           </h3>
           {description ? (

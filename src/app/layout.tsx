@@ -25,6 +25,13 @@ const yeoju = localFont({
   display: "swap",
 });
 
+/* 상품 카드 짧은 타이틀 — Y유니버스 B */
+const yuniverse = localFont({
+  src: "../fonts/YUniverse-B.woff2",
+  variable: "--font-yuniverse-base",
+  display: "swap",
+});
+
 /* 설명 / 부가 텍스트 — Umdot Mono (도트 계열, 14px 기준으로 설계된 폰트) */
 const umdot = localFont({
   src: [
@@ -61,7 +68,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${pretendard.variable} ${jalnan.variable} ${yeoju.variable} ${umdot.variable} ${silkscreen.variable} antialiased`}
+        className={`${pretendard.variable} ${jalnan.variable} ${yeoju.variable} ${umdot.variable} ${yuniverse.variable} ${silkscreen.variable} antialiased`}
       >
         {children}
       </body>

@@ -17,8 +17,15 @@ export default function Home() {
       <Header />
 
       <main className="flex-1">
-        {/* 원본 1548×1016 — 잘리지 않게 이미지 비율 그대로 사용 */}
-        <FortuneHero src="/hero.png" ratio="1548/1016" alt="990원 사주" />
+        {/* 원본 1548×1016 — 잘리지 않게 이미지 비율 그대로 사용.
+            slides에 항목을 추가하면 4초 간격으로 자동 순환한다. */}
+        <FortuneHero
+          ratio="1548/1016"
+          slides={[
+            { src: "/hero.png", alt: "990원 사주" },
+            { src: "/hero-2.png", alt: "궁합운세 Destiny Match" },
+          ]}
+        />
 
         {/* Section gap 48px (§5) */}
         <div className="space-y-12 pb-4 pt-7">

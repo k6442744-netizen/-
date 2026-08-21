@@ -40,10 +40,10 @@ export function FortuneCarousel({ items }: { items: FortuneProduct[] }) {
   return (
     <section aria-labelledby="pick-your-fortune">
       <h2 id="pick-your-fortune" className="sr-only">
-        운세 골라보기
+        추천운세
       </h2>
       <SectionHeader
-        title="운세 골라보기"
+        title="추천운세"
         right={
           <PixelLabel className="!text-[11px] text-silver-mid">
             <span className="text-ink">{pad(index + 1)}</span> / {pad(items.length)}

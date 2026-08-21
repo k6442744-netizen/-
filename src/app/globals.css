@@ -93,7 +93,16 @@ html {
 }
 
 body {
-  background: #fdeff6;
+  /* 프레임 바깥 배경 — 하단에 Y2K 홀로그램 그라데이션을 깔아 둔다.
+     fixed 라 스크롤해도 화면 아래쪽에 계속 머문다. */
+  background:
+    linear-gradient(
+        180deg,
+        rgba(255, 200, 232, 0) 45%,
+        rgba(255, 200, 232, 0.85) 100%
+      )
+      fixed,
+    #fdeff6;
   color: var(--text-primary);
   /* @theme inline 의 토큰은 :root 로 내보내지지 않으므로 raw CSS 에서는 원본 변수를 쓴다 */
   font-family: var(--font-pretendard-base), "Apple SD Gothic Neo", sans-serif;
@@ -117,6 +126,12 @@ body {
 .dot-text {
   font-family: var(--font-umdot-base), ui-monospace, monospace;
   word-spacing: -0.32em;
+}
+
+/* --- 상품 카드 짧은 타이틀 (Y유니버스 B) --- */
+.title-y {
+  font-family: var(--font-yuniverse-base), var(--font-pretendard-base), sans-serif;
+  letter-spacing: -0.01em;
 }
 
 /* --- Label / Retro (여주 도자체) — 섹션·윈도우 라벨 --- */
@@ -238,6 +253,39 @@ body {
 /* 메뉴 버튼이 좌측에 있으므로 패널도 왼쪽에서 들어온다.
    가운데 정렬(-translate-x-1/2)은 Tailwind v4의 `translate` 속성이 담당하므로
    여기서는 `transform` 으로 슬라이드 오프셋만 준다 (두 속성은 합성된다) */
+/* --- 배경을 떠다니는 하트 --- */
+@keyframes heart-float {
+  0% {
+    transform: translate3d(0, 18vh, 0) rotate(-6deg) scale(0.85);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--heart-opacity, 0.5);
+  }
+  70% {
+    opacity: var(--heart-opacity, 0.5);
+  }
+  100% {
+    transform: translate3d(var(--heart-drift, 12px), -105vh, 0) rotate(8deg)
+      scale(1.05);
+    opacity: 0;
+  }
+}
+
+.heart-float {
+  /* 마스크 경로는 basePath가 필요해서 컴포넌트에서 CSS 변수로 주입한다 */
+  -webkit-mask-image: var(--heart-mask);
+  mask-image: var(--heart-mask);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+  animation: heart-float var(--heart-duration, 18s) linear infinite;
+  animation-delay: var(--heart-delay, 0s);
+}
+
 @keyframes menu-in {
   from {
     transform: translateX(-100%);
