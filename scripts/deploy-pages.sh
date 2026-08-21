@@ -9,7 +9,9 @@ REPO_NAME="-"
 cd "$(dirname "$0")/.."
 
 echo "▸ static export 빌드 (basePath=/$REPO_NAME)"
-NEXT_PUBLIC_BASE_PATH="/$REPO_NAME" pnpm build
+NEXT_PUBLIC_BASE_PATH="/$REPO_NAME" \
+  NEXT_PUBLIC_SITE_URL="https://k6442744-netizen.github.io/$REPO_NAME" \
+  pnpm build
 
 echo "▸ gh-pages 브랜치 푸시"
 cd out
