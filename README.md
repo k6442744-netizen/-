@@ -17,7 +17,7 @@ pnpm dev      # http://localhost:3021
 라이브: **https://k6442744-netizen.github.io/-/**
 
 ```bash
-pnpm deploy
+pnpm run deploy:pages
 ```
 
 - Next를 `output: "export"` 정적 빌드로 내보내 `gh-pages` 브랜치에 푸시합니다

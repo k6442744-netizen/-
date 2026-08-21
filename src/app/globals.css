@@ -89,7 +89,7 @@
 html {
   /* 최소 360px 유지 — 그보다 좁으면 가로 스크롤 */
   min-width: 360px;
-  background: #fdeff6;
+  background: #fef7fb;
 }
 
 body {
@@ -98,11 +98,11 @@ body {
   background:
     linear-gradient(
         180deg,
-        rgba(255, 200, 232, 0) 45%,
-        rgba(255, 200, 232, 0.85) 100%
+        rgba(255, 216, 238, 0) 45%,
+        rgba(255, 216, 238, 0.5) 100%
       )
       fixed,
-    #fdeff6;
+    #fef7fb;
   color: var(--text-primary);
   /* @theme inline 의 토큰은 :root 로 내보내지지 않으므로 raw CSS 에서는 원본 변수를 쓴다 */
   font-family: var(--font-pretendard-base), "Apple SD Gothic Neo", sans-serif;
