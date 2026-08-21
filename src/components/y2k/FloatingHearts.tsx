@@ -27,7 +27,7 @@ export function FloatingHearts() {
     /* 프레임 폭에 맞춘 뷰포트 고정 레이어 — 스크롤과 무관하게 계속 떠오른다 */
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-y-0 left-1/2 z-0 w-full min-w-[360px] max-w-[420px] -translate-x-1/2 overflow-hidden"
+      className="pointer-events-none fixed inset-y-0 left-1/2 z-0 w-full min-w-[360px] -translate-x-1/2 overflow-hidden min-[480px]:max-w-[420px]"
     >
       {hearts.map((heart, i) => (
         <span

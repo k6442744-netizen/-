@@ -82,7 +82,7 @@ export function MobileMenu() {
                 onAnimationEnd={() => {
                   if (phase === "closing") setPhase("closed");
                 }}
-                className={`absolute inset-y-0 left-1/2 flex w-full min-w-[360px] max-w-[420px] -translate-x-1/2 flex-col border-x border-silver bg-page ${
+                className={`absolute inset-y-0 left-1/2 flex w-full min-w-[360px] -translate-x-1/2 flex-col bg-page min-[480px]:max-w-[420px] min-[480px]:border-x min-[480px]:border-silver ${
                   phase === "closing" ? "menu-out" : "menu-in"
                 }`}
               >
