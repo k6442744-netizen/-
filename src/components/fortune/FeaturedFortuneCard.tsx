@@ -6,17 +6,12 @@ import { HeartCoin } from "@/components/ui/HeartCoin";
 import { Icon } from "@/components/ui/Icon";
 import type { FortuneProduct } from "@/lib/products";
 
-const bodyTint: Record<FortuneProduct["tone"], string> = {
-  pink: "from-[#ffe9f5]",
-  lavender: "from-[#f0e6ff]",
-  blue: "from-[#e2f5ff]",
-};
-
 /** 하단 가격·CTA 줄은 얇은 선 대신 별도 바(레트로 윈도우의 상태 표시줄)로 분리한다 */
 const footerBand: Record<FortuneProduct["tone"], string> = {
-  pink: "border-outline bg-[#ffeaf5]",
-  lavender: "border-outline bg-[#f2e9ff]",
-  blue: "border-outline bg-[#e9f7ff]",
+  pink: "bg-[#ffdcef]",
+  lavender: "bg-[#e7daff]",
+  blue: "bg-[#d6f0ff]",
+  yellow: "bg-[#ffeec2]",
 };
 
 /**
@@ -45,9 +40,8 @@ export function FeaturedFortuneCard({
       }
       className={className}
     >
-      <div
-        className={`flex items-center gap-2 bg-linear-to-b px-4 pb-5 pt-5 ${bodyTint[tone]} to-white`}
-      >
+      {/* 본문은 흰 바탕 — 색은 타이틀바와 하단 가격바가 맡는다 */}
+      <div className="flex items-center gap-2 bg-white px-4 pb-5 pt-5">
         <div className="flex w-[38%] shrink-0 items-center justify-center">
           <FortuneObject
             name={object}
@@ -59,7 +53,7 @@ export function FeaturedFortuneCard({
 
         <div className="min-w-0 flex-1">
           {/* 제목은 항상 한 줄로 — 폭에 맞춰 크기만 조절한다 */}
-          <h3 className="whitespace-nowrap text-[clamp(17px,5vw,22px)] font-bold leading-[1.35] tracking-[-0.02em] text-ink">
+          <h3 className="dot-title whitespace-nowrap text-[clamp(17px,5vw,21px)] leading-[1.35] text-ink">
             {name}
           </h3>
           {description ? (
@@ -71,7 +65,7 @@ export function FeaturedFortuneCard({
       </div>
 
       <div
-        className={`flex items-center justify-between gap-3 border-t px-4 py-2 ${footerBand[tone]}`}
+        className={`flex items-center justify-between gap-3 px-4 py-2 ${footerBand[tone]}`}
       >
         <p className="flex items-center gap-1.5">
           <span className="dot-text text-[18px] font-bold leading-none text-heart">

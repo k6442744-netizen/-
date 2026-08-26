@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { MiniFortuneCard } from "./MiniFortuneCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { CeramicLabel } from "@/components/y2k/CeramicLabel";
+import { DotLabel } from "@/components/y2k/DotLabel";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import {
@@ -44,9 +44,9 @@ export function AllFortuneGrid({ items }: { items: FortuneProduct[] }) {
       <SectionHeader
         title="전체 운세"
         right={
-          <CeramicLabel className="text-[13px] text-silver-mid">
+          <DotLabel className="text-[13px] text-silver-mid">
             총 <span className="text-ink">{matched.length}</span>개
-          </CeramicLabel>
+          </DotLabel>
         }
       />
 
@@ -64,10 +64,12 @@ export function AllFortuneGrid({ items }: { items: FortuneProduct[] }) {
               role="tab"
               aria-selected={active}
               onClick={() => changeFilter(c)}
+              /* 탭은 눌러야 할 영역이라 카드와 달리 경계를 남긴다. 그림자 없이 보더로만.
+                 선택/비선택 높이가 어긋나지 않게 양쪽 다 1px 보더를 준다 */
               className={`h-9 shrink-0 rounded-win border px-3.5 text-[13px] font-semibold transition-colors ${
                 active
-                  ? "border-[1.5px] border-brand-pink bg-[#ffeef7] text-brand-pink"
-                  : "border-outline bg-white text-ink-soft hover:bg-page-lav"
+                  ? "border-brand-pink bg-brand-pink text-page"
+                  : "border-line bg-page text-ink-soft hover:bg-page-pink"
               }`}
             >
               {c}

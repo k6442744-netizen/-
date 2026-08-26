@@ -6,7 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { MiniFortuneCard } from "@/components/fortune/MiniFortuneCard";
 import { FortuneObject, type ObjectName } from "@/components/fortune/FortuneObject";
 import { PixelDecoration } from "@/components/y2k/PixelDecoration";
-import { CeramicLabel } from "@/components/y2k/CeramicLabel";
+import { DotLabel } from "@/components/y2k/DotLabel";
 import { findTestType, products, testTypes } from "@/lib/products";
 
 export function generateStaticParams() {
@@ -78,9 +78,9 @@ export default async function TestTypePage({
             <p className="text-[14px] font-semibold text-ink">
               전체 {items.length}개
             </p>
-            <CeramicLabel className="text-[12px] text-silver-mid">
+            <DotLabel className="text-[12px] text-silver-mid">
               전체 목록
-            </CeramicLabel>
+            </DotLabel>
           </div>
 
           <ul className="mt-3 grid grid-cols-2 gap-3">

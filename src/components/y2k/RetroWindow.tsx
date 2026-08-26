@@ -1,14 +1,14 @@
 import type { ReactNode } from "react";
-import { CeramicLabel } from "./CeramicLabel";
+import { DotLabel } from "./DotLabel";
 import { PixelLabel } from "./PixelLabel";
 
-export type WindowTone = "pink" | "lavender" | "blue";
+export type WindowTone = "pink" | "lavender" | "blue" | "yellow";
 
 interface RetroWindowProps {
   /** 윈도우 라벨 */
   label: string;
-  /** 라벨 폰트 — 기본은 여주 도자체, 영문 .EXE 창은 픽셀 */
-  labelFont?: "ceramic" | "pixel";
+  /** 라벨 폰트 — 기본은 라벨용 자간, 영문 .EXE 창은 픽셀 microcopy 크기 */
+  labelFont?: "label" | "pixel";
   tone?: WindowTone;
   /** label 왼쪽 작은 장식 아이콘 */
   icon?: ReactNode;
@@ -17,24 +17,12 @@ interface RetroWindowProps {
   bodyClassName?: string;
 }
 
-const tone: Record<WindowTone, { bar: string; border: string; label: string }> =
-  {
-    pink: {
-      bar: "bg-[#ffc9e6]",
-      border: "border-outline",
-      label: "text-[#d1247e]",
-    },
-    lavender: {
-      bar: "bg-[#ddc9ff]",
-      border: "border-outline",
-      label: "text-[#6b3fc7]",
-    },
-    blue: {
-      bar: "bg-[#c4ecff]",
-      border: "border-outline",
-      label: "text-[#1f7fae]",
-    },
-  };
+const tone: Record<WindowTone, { bar: string; label: string }> = {
+  pink: { bar: "bg-[#ffc9e6]", label: "text-[#d1247e]" },
+  lavender: { bar: "bg-[#ddc9ff]", label: "text-[#6b3fc7]" },
+  blue: { bar: "bg-[#c4ecff]", label: "text-[#1f7fae]" },
+  yellow: { bar: "bg-[#ffe6a3]", label: "text-[#9a6b12]" },
+};
 
 /**
  * Signature Component — Retro Window (§7)
@@ -43,7 +31,7 @@ const tone: Record<WindowTone, { bar: string; border: string; label: string }> =
  */
 export function RetroWindow({
   label,
-  labelFont = "ceramic",
+  labelFont = "label",
   tone: toneName = "pink",
   icon,
   children,
@@ -54,10 +42,10 @@ export function RetroWindow({
 
   return (
     <section
-      className={`overflow-hidden rounded-win border ${t.border} bg-white shadow-card ${className}`}
+      className={`overflow-hidden rounded-win border border-line bg-white shadow-win ${className}`}
     >
       <div
-        className={`flex h-[34px] items-center justify-between gap-2 border-b ${t.border} ${t.bar} pl-2.5 pr-2`}
+        className={`flex h-[34px] items-center justify-between gap-2 ${t.bar} pl-2.5 pr-2`}
       >
         <div className="flex min-w-0 items-center gap-1.5">
           {icon ? (
@@ -70,9 +58,9 @@ export function RetroWindow({
               {label}
             </PixelLabel>
           ) : (
-            <CeramicLabel className={`truncate text-[13px] ${t.label}`}>
+            <DotLabel className={`truncate text-[13px] ${t.label}`}>
               {label}
-            </CeramicLabel>
+            </DotLabel>
           )}
         </div>
         <WindowControls />
@@ -89,7 +77,7 @@ function WindowControls() {
       {["–", "□", "×"].map((glyph, i) => (
         <span
           key={i}
-          className="flex h-[13px] w-[14px] items-center justify-center rounded-[1px] border border-outline bg-white text-[9px] leading-none text-ink"
+          className="flex h-[13px] w-[14px] items-center justify-center rounded-[1px] bg-white text-[9px] leading-none text-ink"
         >
           {glyph}
         </span>

@@ -1,6 +1,6 @@
 import { MiniFortuneCard } from "./MiniFortuneCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { CeramicLabel } from "@/components/y2k/CeramicLabel";
+import { DotLabel } from "@/components/y2k/DotLabel";
 import type { FortuneProduct } from "@/lib/products";
 
 /**
@@ -16,9 +16,9 @@ export function TrendingRow({ items }: { items: FortuneProduct[] }) {
       <SectionHeader
         title="지금 인기 운세"
         right={
-          <CeramicLabel className="text-[13px] text-silver-mid">
+          <DotLabel className="text-[13px] text-silver-mid">
             실시간 순위
-          </CeramicLabel>
+          </DotLabel>
         }
       />
 

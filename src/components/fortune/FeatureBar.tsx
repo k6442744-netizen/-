@@ -19,7 +19,7 @@ export function FeatureBar() {
   return (
     <section
       aria-label="서비스 특징"
-      className="overflow-hidden rounded-win border border-silver bg-white"
+      className="overflow-hidden rounded-win border border-line bg-white shadow-card"
     >
       <ul className="grid grid-cols-2">
         {features.map((f, i) => (

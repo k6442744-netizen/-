@@ -11,7 +11,7 @@ const items: { icon: IconName; label: string }[] = [
 /** Utility Nav (§13) — 마지막 항목은 2열 그리드에서 전체 폭을 차지한다. */
 export function UtilityNav() {
   return (
-    <nav aria-label="고객지원" className="rounded-win border border-silver bg-white">
+    <nav aria-label="고객지원" className="rounded-win border border-line bg-white shadow-card">
       <ul className="grid grid-cols-2">
         {items.map((item, i) => {
           const isLast = i === items.length - 1;

@@ -11,7 +11,7 @@ export function FortuneMessage() {
       label="FORTUNE MESSAGE.EXE"
       labelFont="pixel"
       tone="lavender"
-      bodyClassName="bg-[linear-gradient(180deg,#ffeef7_0%,#ffffff_62%)]"
+      bodyClassName="bg-[linear-gradient(180deg,#f3ecff_0%,#ffffff_62%)]"
     >
       <div className="px-4 pb-5 pt-6 text-center">
         <div className="relative mx-auto w-fit">
@@ -30,7 +30,7 @@ export function FortuneMessage() {
 
         <h2 className="dot-text mt-3 text-[18px] font-bold leading-[1.45] text-ink">
           오늘의 행운이 도착했어요{" "}
-          <span aria-hidden="true" className="text-brand-pink">
+          <span aria-hidden="true" className="text-brand-lav">
             ♡
           </span>
         </h2>
@@ -38,7 +38,7 @@ export function FortuneMessage() {
           미호무녀가 전하는 오늘의 한마디
         </p>
 
-        <Button className="dot-text mt-4 w-full">
+        <Button tone="lavender" className="dot-text mt-4 w-full">
           메시지 열기
           <Icon name="arrow-right" size={16} />
         </Button>

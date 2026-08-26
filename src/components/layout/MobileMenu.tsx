@@ -87,7 +87,7 @@ export function MobileMenu() {
                 }`}
               >
                 {/* 상단 바 */}
-                <div className="flex h-12 shrink-0 items-center justify-between border-b border-outline bg-[#ffc9e6] pl-4 pr-2">
+                <div className="flex h-12 shrink-0 items-center justify-between bg-[#ffc9e6] pl-4 pr-2">
                   <PixelLabel className="!text-[12px] text-[#8f0f57]">
                     MY PAGE.EXE
                   </PixelLabel>
@@ -110,7 +110,7 @@ export function MobileMenu() {
                     icon={<PixelDecoration shape="star" size={11} />}
                   >
                     <div className="flex items-center gap-3.5 px-4 pb-4 pt-4">
-                      <span className="flex size-14 shrink-0 items-center justify-center border-2 border-outline bg-brand-pink-soft">
+                      <span className="flex size-14 shrink-0 items-center justify-center bg-brand-pink-soft">
                         <span className="dot-text text-[20px] font-bold text-white">
                           {account.name.slice(0, 1)}
                         </span>
@@ -136,7 +136,7 @@ export function MobileMenu() {
                       </button>
                     </div>
 
-                    <div className="flex items-center gap-2 border-t border-outline bg-[#fff5fa] px-4 py-2.5">
+                    <div className="flex items-center gap-2 bg-[#fff5fa] px-4 py-2.5">
                       <span className="rounded-tag bg-kakao px-1.5 py-px text-[11px] font-bold text-kakao-ink">
                         {account.provider}
                       </span>
@@ -169,7 +169,7 @@ export function MobileMenu() {
 
                   {/* 메뉴 — 리스트 대신 2열 아이콘 그리드 */}
                   <nav aria-label="계정 메뉴">
-                    <ul className="grid grid-cols-2 overflow-hidden rounded-win border border-outline bg-white">
+                    <ul className="grid grid-cols-2 overflow-hidden rounded-win border border-line bg-white shadow-card">
                       {menuItems.map((item, i) => {
                         const isLast = i === menuItems.length - 1;
                         return (

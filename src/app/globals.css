@@ -7,11 +7,12 @@
 
 @theme inline {
   --font-kr: var(--font-pretendard-base), "Apple SD Gothic Neo", sans-serif;
-  --font-pixel: var(--font-silkscreen-base), monospace;
-  --font-display: var(--font-jalnan-base), var(--font-pretendard-base), sans-serif;
+  --font-pixel: var(--font-umdot-base), monospace;
   /* 설명·부가 텍스트 (Umdot Mono) — 14px 기준으로 설계된 도트 폰트라 14px/28px에서 가장 또렷하다 */
   --dot-text: var(--font-umdot-base), ui-monospace, monospace;
-  --font-label: var(--font-yeoju-base), var(--font-pretendard-base), sans-serif;
+  --font-label: var(--font-umdot-base), monospace;
+  /* 타이틀 픽셀체 (카페24 PRO UP) */
+  --font-title: var(--font-cafe24-proup-base), var(--font-umdot-base), monospace;
 }
 
 @theme {
@@ -28,12 +29,9 @@
   --color-brand-lav-soft: #e0d0ff;
   --color-brand-blue: #c8ecff;
 
-  --color-silver: #ebe4f3;
+  --color-silver: #fdf3f8;
   --color-silver-mid: #b8adcd;
-  --color-line: #e0d5ec;
-  /* 레퍼런스 스타일의 검은 테두리 (순검정보다 살짝 자주빛) */
-  --color-outline: #2a1a3a;
-
+  --color-line: #fde9f3;
   --color-ink: #2b1b3d;
   --color-ink-soft: #6b5b85;
 
@@ -48,9 +46,15 @@
   --radius-win: 3px;
   --radius-tag: 2px;
 
-  /* --- Shadow (§6) : 얇고 낮게 --- */
+  /* --- Shadow (§6) ---
+     박스는 테두리 없이 그림자로만 면을 분리한다. 배경이 핑크 계열이라
+     회색 그림자는 탁해 보여서 자주빛이 도는 핑크 그림자를 쓴다. */
   --shadow-object: 0 8px 24px rgba(70, 55, 90, 0.08);
-  --shadow-card: 0 4px 16px rgba(70, 55, 90, 0.04);
+  --shadow-card:
+    0 1px 2px rgba(170, 90, 135, 0.06), 0 3px 10px rgba(170, 90, 135, 0.08);
+  /* 레트로 윈도우 — 카드보다 한 단계 떠 있다 */
+  --shadow-win:
+    0 2px 6px rgba(170, 90, 135, 0.08), 0 10px 28px rgba(170, 90, 135, 0.10);
 
   /* --- Mobile frame (360 ~ 420px) --- */
   --container-frame: 420px;
@@ -66,12 +70,12 @@
   --lavender-primary: #9b6bff;
   --lavender-soft: #e0d0ff;
   --blue-soft: #c8ecff;
-  --silver-light: #ebe4f3;
+  --silver-light: #fdf3f8;
   --silver-mid: #b8adcd;
   --text-primary: #2b1b3d;
   --text-secondary: #6b5b85;
 
-  --border-default: 1px solid #e0d5ec;
+  --border-default: 1px solid #fde9f3;
   --border-pink: 1px solid #ff8ec7;
   --border-lavender: 1px solid #a97cff;
   --border-active: 1.5px solid #ff4fa3;
@@ -115,7 +119,7 @@ body {
 
 /* --- Typography: Pixel / Retro (§4-C) — 영문 label & microcopy 전용 --- */
 .pixel {
-  font-family: var(--font-silkscreen-base), "Courier New", monospace;
+  font-family: var(--font-umdot-base), "Courier New", monospace;
   font-size: 11px;
   line-height: 1.2;
   letter-spacing: 0.02em;
@@ -128,63 +132,19 @@ body {
   word-spacing: -0.32em;
 }
 
-/* --- 상품 카드 짧은 타이틀 (Y유니버스 B) --- */
-.title-y {
-  font-family: var(--font-yuniverse-base), var(--font-pretendard-base), sans-serif;
-  letter-spacing: -0.01em;
+/* --- 타이틀 (카페24 PRO UP) — 섹션 제목·카드 제목 ---
+   픽셀체라 보간되면 흐려진다. 크기는 정수 px로만 쓴다. */
+.dot-title {
+  font-family: var(--font-cafe24-proup-base), var(--font-umdot-base),
+    ui-monospace, monospace;
+  letter-spacing: 0;
 }
 
-/* --- Label / Retro (여주 도자체) — 섹션·윈도우 라벨 --- */
-.ceramic {
-  font-family: var(--font-yeoju-base), var(--font-pretendard-base), sans-serif;
+/* --- Label / Retro — 윈도우 라벨·상품 종류 등 짧은 라벨 ---
+   본문(.dot-text)과 같은 Umdot Mono지만 자간은 라벨용으로 살짝 벌린다 */
+.dot-label {
+  font-family: var(--font-umdot-base), monospace;
   letter-spacing: 0.01em;
-}
-
-/* --- Chrome Display Typography (§4-A) — Hero 전용 --- */
-.chrome-text {
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
-
-.chrome-silver {
-  background-image: linear-gradient(
-    176deg,
-    #ffffff 0%,
-    #efe9f8 24%,
-    #b9aed2 44%,
-    #ffffff 54%,
-    #ded0ff 72%,
-    #9f93bd 100%
-  );
-  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.95))
-    drop-shadow(0 6px 14px rgba(70, 55, 90, 0.16));
-}
-
-.chrome-pink {
-  background-image: linear-gradient(
-    176deg,
-    #fff6fa 0%,
-    #ffbcdd 18%,
-    #ff5fa8 42%,
-    #ffffff 53%,
-    #ff8ec7 68%,
-    #d92a86 100%
-  );
-  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.95))
-    drop-shadow(0 6px 14px rgba(160, 70, 115, 0.18));
-}
-
-/* --- Gradient (§3) : 소재감 표현용 --- */
-.grad-pale-pink {
-  background-image: linear-gradient(90deg, #ffeef7 0%, #ffcfe8 100%);
-}
-.grad-lav-blue {
-  background-image: linear-gradient(90deg, #e6d8ff 0%, #dbeefb 100%);
-}
-.grad-silver-pink {
-  background-image: linear-gradient(90deg, #efe9f8 0%, #ffe6f4 100%);
 }
 
 /* --- Iridescent (CD / Chrome / Glass object) --- */
@@ -207,6 +167,17 @@ body {
   outline: 2px solid var(--pink-primary);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+/* --- 픽셀 별 패턴 — 카드 배경에 아주 연하게 깔린다 ---
+   별을 mask로 뚫고 색은 배경색이 채운다. 톤별 색을 그대로 쓰기 위한 구조다. */
+.pixel-stars {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%20shape-rendering%3D%22crispEdges%22%3E%3Cg%20fill%3D%22%23fff%22%3E%3Crect%20x%3D%226%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%225%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%226%22%20width%3D%227%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%227%22%20width%3D%225%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%228%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%229%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%227%22%20y%3D%229%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%2210%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%228%22%20y%3D%2210%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2222%22%20y%3D%2220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2221%22%20y%3D%2221%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2219%22%20y%3D%2222%22%20width%3D%227%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2223%22%20width%3D%225%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2221%22%20y%3D%2224%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2225%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2223%22%20y%3D%2225%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2219%22%20y%3D%2226%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2226%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2223%22%20y%3D%226%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2222%22%20y%3D%227%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2223%22%20y%3D%228%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2222%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%228%22%20y%3D%2223%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%20shape-rendering%3D%22crispEdges%22%3E%3Cg%20fill%3D%22%23fff%22%3E%3Crect%20x%3D%226%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%225%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%226%22%20width%3D%227%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%227%22%20width%3D%225%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%228%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%229%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%227%22%20y%3D%229%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%2210%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%228%22%20y%3D%2210%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2222%22%20y%3D%2220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2221%22%20y%3D%2221%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2219%22%20y%3D%2222%22%20width%3D%227%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2223%22%20width%3D%225%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2221%22%20y%3D%2224%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2225%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2223%22%20y%3D%2225%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2219%22%20y%3D%2226%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2226%22%20width%3D%222%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2223%22%20y%3D%226%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2222%22%20y%3D%227%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%2223%22%20y%3D%228%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2222%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%228%22%20y%3D%2223%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  -webkit-mask-size: 32px 32px;
+  mask-size: 32px 32px;
 }
 
 /* 픽셀아트 에셋은 보간 없이 또렷하게 */

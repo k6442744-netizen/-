@@ -16,7 +16,7 @@ export function Header() {
           className="absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5"
         >
           <PixelDecoration shape="star" size={11} className="text-[#ffa6d2]" />
-          <PixelLabel className="!text-[15px] tracking-[0.03em] text-[#ff8ec7]">
+          <PixelLabel className="!text-[15px] font-bold tracking-[0.03em] text-[#ff8ec7]">
             FORTUNE PORTAL
           </PixelLabel>
           <PixelDecoration shape="star" size={11} className="text-[#ffa6d2]" />

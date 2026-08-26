@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CeramicLabel } from "@/components/y2k/CeramicLabel";
+import { DotLabel } from "@/components/y2k/DotLabel";
 import { Icon } from "@/components/ui/Icon";
 
 /** 서브 페이지 헤더 — 뒤로가기 + Pixel Font 화면 라벨 */
@@ -23,7 +23,7 @@ export function SubHeader({
         </Link>
 
         <h1 className="pointer-events-none absolute inset-x-0 text-center">
-          <CeramicLabel className="text-[16px] text-ink">{title}</CeramicLabel>
+          <DotLabel className="text-[16px] text-ink">{title}</DotLabel>
         </h1>
       </div>
     </header>

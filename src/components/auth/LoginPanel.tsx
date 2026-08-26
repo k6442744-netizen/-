@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { providers, type Provider } from "./providers";
-import { CeramicLabel } from "@/components/y2k/CeramicLabel";
+import { DotLabel } from "@/components/y2k/DotLabel";
 
 const [primary, ...secondary] = providers;
 
@@ -73,9 +73,9 @@ export function LoginPanel() {
         {notice ? (
           <div className="mt-4 rounded-win border border-[#a97cff] bg-white">
             <div className="flex items-center justify-between border-b border-[#cdb4ff] bg-[#eadcff] px-2.5 py-1.5">
-              <CeramicLabel className="text-[12px] text-[#6b3fc7]">
+              <DotLabel className="text-[12px] text-[#6b3fc7]">
                 시스템 메시지
-              </CeramicLabel>
+              </DotLabel>
               <button
                 type="button"
                 onClick={() => setNotice(null)}

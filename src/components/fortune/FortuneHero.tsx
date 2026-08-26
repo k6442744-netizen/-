@@ -1,5 +1,5 @@
 import { HeroCarousel } from "./HeroCarousel";
-import { CeramicLabel } from "@/components/y2k/CeramicLabel";
+import { DotLabel } from "@/components/y2k/DotLabel";
 import { PixelDecoration } from "@/components/y2k/PixelDecoration";
 import { PixelLabel } from "@/components/y2k/PixelLabel";
 
@@ -40,9 +40,9 @@ export function FortuneHero({
           style={{ aspectRatio: ratio }}
         >
           <PixelDecoration shape="sparkle" size={16} className="text-brand-pink-soft" />
-          <CeramicLabel className="text-[14px] text-silver-mid">
+          <DotLabel className="text-[14px] text-silver-mid">
             히어로 이미지 영역
-          </CeramicLabel>
+          </DotLabel>
           <PixelLabel className="!text-[9px] text-silver-mid/70">
             840 × 525 @2x
           </PixelLabel>
