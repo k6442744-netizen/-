@@ -42,3 +42,6 @@ next-env.d.ts
 
 # build info
 *.tsbuildinfo
+
+# Claude Code 로컬 설정
+.claude/
