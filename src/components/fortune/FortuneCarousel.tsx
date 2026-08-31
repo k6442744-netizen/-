@@ -115,11 +115,12 @@ export function FortuneCarousel({ items }: { items: FortuneProduct[] }) {
         }
       />
 
-      {/* 트랙을 잘라내는 창.
-          -my-2 py-2 는 카드 그림자가 잘리지 않게 위아래로 준 여유이고,
-          mt-1.5 는 그 패딩 8px 을 뺀 값이라 실제 위 간격은 종전과 같은 14px 이다. */}
+      {/* 트랙을 잘라내는 창 — 좌우로만 자르고 싶지만 overflow 는 축을 따로 못 준다.
+          shadow-win 이 카드 아래로 38px(오프셋 10 + 블러 28) 뻗으므로 위아래 44px 을
+          비워 두고, 그만큼 마진에서 도로 빼서 위 간격은 종전과 같은 14px(44-30)로 둔다.
+          여유가 모자라면 그림자가 직선으로 잘려 띠처럼 보인다. */}
       <div
-        className="-my-2 mt-1.5 touch-pan-y select-none overflow-hidden py-2"
+        className="-mb-11 -mt-[30px] touch-pan-y select-none overflow-hidden py-11"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={endDrag}
