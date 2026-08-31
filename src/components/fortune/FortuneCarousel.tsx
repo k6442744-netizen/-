@@ -4,38 +4,101 @@ import { useCallback, useRef, useState } from "react";
 import { FeaturedFortuneCard } from "./FeaturedFortuneCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { PixelLabel } from "@/components/y2k/PixelLabel";
+import { EDGE_RESISTANCE, SWIPE_TRANSITION, swipeThreshold } from "@/lib/swipe";
 import type { FortuneProduct } from "@/lib/products";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+/** 카드 사이 간격 (gap-3) — 한 칸 이동 거리 계산에 쓴다 */
+const GAP = 12;
+
 /**
- * Featured swipe card + Pagination (§13)
+ * Featured swipe card (§13)
  * 모바일 상품 전체를 긴 1열 목록으로 만들지 않기 위해 스와이프 캐러셀로 구성한다 (§16).
+ *
+ * 히어로 배너와 같은 방식 — 네이티브 스크롤 대신 트랙을 transform 으로 직접 민다.
+ * 손을 따라 1:1로 붙고, 놓으면 두 캐러셀이 같은 곡선으로 넘어간다.
+ * 현재 위치는 섹션 헤더 우측의 `01 / 04` 카운터가 알려준다.
  */
 export function FortuneCarousel({ items }: { items: FortuneProduct[] }) {
   const trackRef = useRef<HTMLUListElement>(null);
+  const indexRef = useRef(0);
   const [index, setIndex] = useState(0);
+  const last = items.length - 1;
 
-  const goTo = useCallback((next: number) => {
+  const drag = useRef({ active: false, startX: 0, dx: 0 });
+
+  const setX = useCallback((i: number, dx: number) => {
     const track = trackRef.current;
     if (!track) return;
-    const clamped = Math.max(0, Math.min(next, track.children.length - 1));
-    const target = track.children[clamped] as HTMLElement | undefined;
-    if (!target) return;
-    track.scrollTo({ left: target.offsetLeft - track.offsetLeft, behavior: "smooth" });
-    setIndex(clamped);
+    track.style.transform = `translateX(calc(${-i * 100}% - ${i * GAP}px + ${dx}px))`;
   }, []);
 
-  const handleScroll = useCallback(() => {
+  const goTo = useCallback(
+    (next: number) => {
+      const track = trackRef.current;
+      if (!track) return;
+      const clamped = Math.max(0, Math.min(next, last));
+      indexRef.current = clamped;
+      setIndex(clamped);
+      track.style.transition = SWIPE_TRANSITION;
+      setX(clamped, 0);
+    },
+    [last, setX],
+  );
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (items.length < 2) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
     const track = trackRef.current;
     if (!track) return;
-    const first = track.children[0] as HTMLElement | undefined;
-    const second = track.children[1] as HTMLElement | undefined;
-    if (!first) return;
-    const step = second ? second.offsetLeft - first.offsetLeft : first.offsetWidth;
-    const next = Math.round(track.scrollLeft / step);
-    setIndex(Math.max(0, Math.min(next, track.children.length - 1)));
-  }, []);
+
+    drag.current = { active: true, startX: e.clientX, dx: 0 };
+    track.style.transition = "none";
+    /* 마우스로 끌 때 이미지·텍스트가 딸려오는 기본 동작만 막는다 (click 은 그대로) */
+    if (e.pointerType === "mouse") e.preventDefault();
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      /* 캡처가 안 되면 캡처 없이 진행 */
+    }
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!drag.current.active) return;
+    let dx = e.clientX - drag.current.startX;
+    /* 첫 장에서 뒤로, 마지막 장에서 앞으로 — 갈 곳이 없으면 저항을 준다 */
+    const atEdge =
+      (indexRef.current === 0 && dx > 0) || (indexRef.current === last && dx < 0);
+    if (atEdge) dx *= EDGE_RESISTANCE;
+    drag.current.dx = dx;
+    setX(indexRef.current, dx);
+  };
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!drag.current.active) return;
+    drag.current.active = false;
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+
+    const threshold = swipeThreshold(e.currentTarget.clientWidth || 1);
+    const { dx } = drag.current;
+    if (dx <= -threshold) goTo(indexRef.current + 1);
+    else if (dx >= threshold) goTo(indexRef.current - 1);
+    else goTo(indexRef.current); // 임계값 미달 — 제자리로 되돌린다
+  };
+
+  /* 화면 밖 카드의 버튼으로 탭 이동하면 그 카드를 따라 보여 준다.
+     스크롤 컨테이너가 아니라 브라우저가 대신 맞춰 주지 않는다. */
+  const handleFocus = (e: React.FocusEvent<HTMLUListElement>) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = (e.target as HTMLElement).closest("li");
+    if (!card) return;
+    const i = Array.prototype.indexOf.call(track.children, card);
+    if (i >= 0 && i !== indexRef.current) goTo(i);
+  };
 
   return (
     <section aria-labelledby="pick-your-fortune">
@@ -46,40 +109,34 @@ export function FortuneCarousel({ items }: { items: FortuneProduct[] }) {
         title="추천운세"
         right={
           <PixelLabel className="!text-[11px] text-silver-mid">
-            <span className="text-ink">{pad(index + 1)}</span> / {pad(items.length)}
+            <span className="text-ink">{pad(index + 1)}</span> /{" "}
+            {pad(items.length)}
           </PixelLabel>
         }
       />
 
-      <ul
-        ref={trackRef}
-        onScroll={handleScroll}
-        className="no-scrollbar mt-3.5 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain"
+      {/* 트랙을 잘라내는 창.
+          -my-2 py-2 는 카드 그림자가 잘리지 않게 위아래로 준 여유이고,
+          mt-1.5 는 그 패딩 8px 을 뺀 값이라 실제 위 간격은 종전과 같은 14px 이다. */}
+      <div
+        className="-my-2 mt-1.5 touch-pan-y select-none overflow-hidden py-2"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
       >
-        {items.map((product) => (
-          <li key={product.id} className="w-full shrink-0 snap-start">
-            <FeaturedFortuneCard product={product} />
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-4 flex items-center justify-center gap-1.5">
-        {items.map((product, i) => (
-          <button
-            key={product.id}
-            type="button"
-            aria-label={`${product.name} 보기`}
-            aria-current={i === index}
-            onClick={() => goTo(i)}
-            className="flex size-6 items-center justify-center"
-          >
-            <span
-              className={`h-[7px] rounded-full transition-all duration-200 ${
-                i === index ? "w-[18px] bg-brand-pink" : "w-[7px] bg-silver-mid/70"
-              }`}
-            />
-          </button>
-        ))}
+        <ul
+          ref={trackRef}
+          onFocus={handleFocus}
+          className="flex w-full gap-3"
+          style={{ transition: SWIPE_TRANSITION }}
+        >
+          {items.map((product) => (
+            <li key={product.id} className="w-full shrink-0">
+              <FeaturedFortuneCard product={product} />
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
