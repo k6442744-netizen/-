@@ -202,20 +202,37 @@ Retro Window 문법은 Featured / Fortune Message에만 쓰고 Mini Card에는 �
 
 ## 히어로 이미지
 
-히어로는 이미지 한 장으로 채우는 구성입니다. 에셋을 `public/`에 넣고 `src`만 넘기면 됩니다.
+히어로는 배너 이미지로 채우는 구성입니다. 에셋을 `public/`에 넣고 `slides`에 추가하면 됩니다.
 
 ```tsx
-<FortuneHero src="/hero.png" ratio="1548/1016" alt="990원 사주" />
+<FortuneHero
+  ratio="1548/1016"
+  slides={[
+    { src: "/hero.jpg", alt: "990원 사주" },
+    { src: "/hero-2.jpg", alt: "궁합운세 Destiny Match" },
+  ]}
+/>
 ```
 
-현재 적용된 에셋: `public/hero.png` (CD 주얼케이스 키비주얼, 1548 × 1016, 2.5MB PNG).
-잘림 없이 보이도록 `ratio`를 원본 비율 그대로 넘겼습니다.
-`next/image`가 webp로 변환해 서빙하지만, 배포 전 원본을 1000px 폭 정도로 리사이즈하면 더 가볍습니다.
+현재 적용된 에셋 — CD 주얼케이스 키비주얼:
 
-- 기본 비율 8:5 — `ratio` prop으로 이미지 원본 비율을 넘기면 잘리지 않습니다
-- 권장 사이즈 **840 × 525px @2x** (표시 폭 최대 420px)
-- `src`가 없으면 자리만 유지하는 placeholder가 렌더됩니다 (§20-13)
+| 파일 | 원본 | 용량 |
+| --- | --- | --- |
+| `public/hero.jpg` | 1548 × 1016 | 572KB |
+| `public/hero-2.jpg` | 1557 × 1010 | 678KB |
+| `public/og.jpg` | 1200 × 630 (첫 배너 상단 크롭) | 282KB |
+
+- `ratio`는 **첫 배너 원본 비율**을 넘깁니다. 두 번째 배너는 `object-cover`라 좌우가 1%쯤 잘리는데, 제목이 상단에 있어 세로가 잘리는 쪽을 피한 선택입니다
+- **JPEG로 넣으세요.** `output: "export"` + `images: { unoptimized: true }`라 `next/image`가 최적화하지 않고 **원본이 그대로 나갑니다.** PNG 원본(각 2.5MB)을 그대로 두면 LCP가 눈에 띄게 늦습니다. `sips -s format jpeg -s formatOptions 90` 기준 1/4로 줄었고 표시 폭(최대 420px)에서는 차이가 보이지 않습니다
+- `slides`가 2장 이상이면 4초 간격으로 자동 순환하고, 드래그·점 인디케이터로도 넘길 수 있습니다
+- `slides`가 없으면 자리만 유지하는 placeholder가 렌더됩니다 (§20-13)
 - `next/image`의 `fill` + `priority`로 렌더 — LCP 이미지이므로 우선 로딩됩니다
+- OG 썸네일은 첫 배너에서 따로 만듭니다. 배너를 바꾸면 `public/og.jpg`도 같이 갱신하세요
+
+  ```
+  sips -c 813 1548 --cropOffset 0 0 <원본> --out /tmp/c.png
+  sips -z 630 1200 -s format jpeg -s formatOptions 88 /tmp/c.png --out public/og.jpg
+  ```
 
 ## 3D 오브젝트 (§11, §20-13)
 

@@ -17,14 +17,14 @@ export default function Home() {
       <Header />
 
       <main className="flex-1">
-        {/* 첫 배너 원본 1549×1015 — 그 비율을 기준으로 잡는다.
-            두 번째 배너(1558×1010)는 object-cover라 좌우가 1%쯤 잘린다.
+        {/* 첫 배너 원본 1548×1016 — 그 비율을 기준으로 잡는다.
+            두 번째 배너(1557×1010)는 object-cover라 좌우가 1%쯤 잘린다.
             제목이 상단에 있어 세로가 잘리는 쪽을 피한 선택이다.
             slides에 항목을 추가하면 4초 간격으로 자동 순환한다. */}
         <FortuneHero
-          ratio="1549/1015"
+          ratio="1548/1016"
           slides={[
-            { src: "/hero.png", alt: "990원 사주" },
+            { src: "/hero.jpg", alt: "990원 사주" },
             { src: "/hero-2.jpg", alt: "궁합운세 Destiny Match" },
           ]}
         />
