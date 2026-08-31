@@ -1,4 +1,5 @@
 import { MiniFortuneCard } from "./MiniFortuneCard";
+import { DragScroller } from "@/components/ui/DragScroller";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { DotLabel } from "@/components/y2k/DotLabel";
 import type { FortuneProduct } from "@/lib/products";
@@ -22,14 +23,18 @@ export function TrendingRow({ items }: { items: FortuneProduct[] }) {
         }
       />
 
-      {/* scroll-px 없이 snap-x를 쓰면 첫 카드가 좌측 패딩을 먹고 컨테이너 끝에 붙는다 */}
-      <ul className="no-scrollbar -mx-[var(--page-padding)] mt-3.5 flex snap-x scroll-px-[var(--page-padding)] gap-2.5 overflow-x-auto px-[var(--page-padding)] pb-1">
+      {/* scroll-px 없이 snap-x를 쓰면 첫 카드가 좌측 패딩을 먹고 컨테이너 끝에 붙는다.
+          터치는 네이티브 스크롤, 마우스는 DragScroller 가 끌어 준다 */}
+      <DragScroller
+        as="ul"
+        className="no-scrollbar -mx-[var(--page-padding)] mt-3.5 flex snap-x scroll-px-[var(--page-padding)] gap-2.5 overflow-x-auto px-[var(--page-padding)] pb-1"
+      >
         {items.map((product) => (
           <li key={product.id} className="w-[148px] shrink-0 snap-start">
             <MiniFortuneCard product={product} showRank className="h-full" />
           </li>
         ))}
-      </ul>
+      </DragScroller>
     </section>
   );
 }
