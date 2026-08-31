@@ -106,7 +106,15 @@ Hot Pink → Purple, 강한 Neon Gradient, 전체 배경 Aurora Gradient, CTA
 
 ## 4. Typography
 
-폰트는 역할별 최대 3계열.
+**폰트는 페이퍼로지(Paperlogy) 한 계열로 통일한다.** 역할 구분은 서체를
+바꾸는 대신 **굵기 · 크기 · 자간**으로만 만든다.
+
+  Weight             파일                          쓰임
+  ---------------- --------------------------- ----------------------
+  400 Regular        `Paperlogy-4Regular`        본문 · 캡션
+  500 Medium         `Paperlogy-5Medium`         라벨 (`.dot-label`)
+  600 SemiBold       `Paperlogy-6SemiBold`       버튼 · 영문 microcopy
+  700 Bold           `Paperlogy-7Bold`           제목 (`.dot-title`)
 
 ### A. Display / Hero
 
@@ -120,7 +128,7 @@ line-height: .95;
 
 ### B. Korean UI
 
-Pretendard, SUIT 등 깔끔한 Korean Sans-serif.
+페이퍼로지 Regular / Medium / SemiBold / Bold.
 
   Role              Mobile Size     Weight
   --------------- ------------- ----------
@@ -133,15 +141,17 @@ Pretendard, SUIT 등 깔끔한 Korean Sans-serif.
 
 Title line-height: `1.25–1.35`.
 
-### C. Pixel / Retro
+### C. Label / Microcopy
 
 `FORTUNE PORTAL`, `PICK YOUR FORTUNE`, `NOW TRENDING`, `LOVE FORTUNE`,
 `01 / 04`, `NOW ONLINE`, `FORTUNE MESSAGE.EXE` 등에만 사용. 본문에는
-사용하지 않습니다.
+사용하지 않습니다. 서체는 본문과 같고, 작은 크기 · 넓은 자간으로만
+라벨 성격을 만듭니다.
 
 ``` css
 font-size: 11px;
-letter-spacing: .02em;
+font-weight: 600;
+letter-spacing: .08em;
 ```
 
 ------------------------------------------------------------------------
@@ -190,7 +200,7 @@ Square UI가 기본입니다. 일반 카드에 16--24px Radius를 사용하지 �
 ```
 
 Window Header: - Height 32--36px - Pale Pink / Lavender / Baby Blue -
-1px bottom border - Pixel Font label - 우측 `_ □ ×` decoration
+1px bottom border - 영문 라벨(`.pixel`) - 우측 `_ □ ×` decoration
 
 Retro Window는 상품, Fortune Message, Event, 특별 콘텐츠에만 사용하고
 모든 섹션에 남발하지 않습니다.
@@ -382,7 +392,7 @@ Y2K 표현 때문에 UX를 희생하지 않습니다.
 -   본문 최소 14px 권장
 -   CTA touch target 최소 44px
 -   실제 버튼과 장식용 `_ □ ×`를 명확히 구분
--   중요 정보는 Pixel Font만으로 표현하지 않음
+-   중요 정보는 영문 라벨(`.pixel`)만으로 표현하지 않음
 -   텍스트 대비 확보
 -   이미지 안에 핵심 정보를 가두지 않음
 -   Hover에만 의존하지 않음
@@ -439,7 +449,7 @@ Claude Code는 아래 규칙을 우선순위 높게 준수해야 합니다.
 3.  전체 배경은 밝고 깨끗하게 유지한다.
 4.  Y2K를 핫핑크/네온의 양으로 표현하지 않는다.
 5.  Chrome/Gloss 효과는 Hero와 핵심 3D asset에 집중한다.
-6.  Pixel Font는 영문 label과 microcopy에만 사용한다.
+6.  라벨 스타일(`.pixel`)은 영문 label과 microcopy에만 사용한다.
 7.  상품 카드마다 같은 Retro Window 문법을 유지한다.
 8.  Border는 1px 중심, Radius는 2--4px 중심으로 한다.
 9.  카드마다 불필요한 Shadow를 넣지 않는다.
@@ -493,7 +503,7 @@ Claude Code는 아래 규칙을 우선순위 높게 준수해야 합니다.
 -   Y2K가 네온이 아니라 CD/Chrome/Pixel/Window UI로 표현되는가?
 -   상품 카드들이 하나의 브랜드에서 제작된 것처럼 보이는가?
 -   일반 한글 본문이 쉽게 읽히는가?
--   Pixel Font가 microcopy에만 제한되어 있는가?
+-   라벨 스타일(`.pixel`)이 microcopy에만 제한되어 있는가?
 -   Border가 얇고 Radius가 작게 유지되는가?
 -   모바일에서 핵심 상품이 가장 먼저 눈에 들어오는가?
 -   장식보다 상품/CTA가 먼저 읽히는가?

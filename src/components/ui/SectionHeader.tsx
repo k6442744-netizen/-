@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 interface SectionHeaderProps {
-  /** 섹션 제목 — 도트 서체(Umdot Mono) */
+  /** 섹션 제목 — 페이퍼로지 Bold (.dot-title) */
   title: string;
   right?: ReactNode;
   className?: string;

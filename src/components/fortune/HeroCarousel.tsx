@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { asset } from "@/lib/asset";
 
 interface HeroCarouselProps {
@@ -26,14 +26,22 @@ export function HeroCarousel({
   const trackRef = useRef<HTMLDivElement>(null);
   const indexRef = useRef(0);
   const count = slides.length;
+  /* 인디케이터 표시용 — 사본(index === count)은 첫 장으로 되돌려 표시한다 */
+  const [current, setCurrent] = useState(0);
+  /* 수동 조작 시 값을 올려 자동 전환 타이머를 처음부터 다시 돌린다 */
+  const [autoplayKey, setAutoplayKey] = useState(0);
 
-  const goTo = useCallback((next: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    indexRef.current = next;
-    track.style.transition = "transform 620ms cubic-bezier(0.4, 0, 0.2, 1)";
-    track.style.transform = `translateX(-${next * 100}%)`;
-  }, []);
+  const goTo = useCallback(
+    (next: number) => {
+      const track = trackRef.current;
+      if (!track) return;
+      indexRef.current = next;
+      setCurrent(next % count);
+      track.style.transition = "transform 620ms cubic-bezier(0.4, 0, 0.2, 1)";
+      track.style.transform = `translateX(-${next * 100}%)`;
+    },
+    [count],
+  );
 
   useEffect(() => {
     if (count < 2) return;
@@ -43,7 +51,7 @@ export function HeroCarousel({
       goTo(indexRef.current + 1);
     }, interval);
     return () => window.clearInterval(id);
-  }, [count, interval, goTo]);
+  }, [count, interval, goTo, autoplayKey]);
 
   /* 사본에 도달하면 애니메이션 없이 첫 장으로 되돌린다 */
   const handleTransitionEnd = () => {
@@ -79,6 +87,32 @@ export function HeroCarousel({
           </div>
         ))}
       </div>
+
+      {/* 컨트롤 — 배너 위에 얹는 점 인디케이터.
+          배너 색이 매번 달라서 흰 점 + 옅은 그림자로 대비를 확보한다. */}
+      {count > 1 && (
+        <div className="absolute inset-x-0 bottom-2 z-10 flex items-center justify-center gap-1.5">
+          {slides.map((slide, i) => (
+            <button
+              key={slide.src}
+              type="button"
+              aria-label={`${slide.alt} 배너 보기`}
+              aria-current={i === current}
+              onClick={() => {
+                goTo(i);
+                setAutoplayKey((k) => k + 1);
+              }}
+              className="flex size-6 items-center justify-center"
+            >
+              <span
+                className={`h-[6px] rounded-full shadow-[0_1px_3px_rgba(43,27,61,0.35)] transition-all duration-200 ${
+                  i === current ? "w-[16px] bg-white" : "w-[6px] bg-white/55"
+                }`}
+              />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

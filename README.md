@@ -119,38 +119,39 @@ Chrome 타이포·iridescent(CD)·윈도우 타이틀 바·카드 톤도 같은 
 
 하드코딩된 색상값은 사용하지 않습니다. 새 색·radius·shadow가 필요하면 기존 토큰을 먼저 확인하세요 (§20-15).
 
-유틸리티 클래스: `.pixel`(픽셀 라벨), `.chrome-silver` / `.chrome-pink`(Hero 크롬 타이포), `.iridescent`(CD 소재), `.grad-*`(허용된 그라데이션).
+유틸리티 클래스: `.pixel`(영문 라벨), `.chrome-silver` / `.chrome-pink`(Hero 크롬 타이포), `.iridescent`(CD 소재), `.grad-*`(허용된 그라데이션).
 
 ## 폰트
 
-| 역할 | 폰트 | 비고 |
+**페이퍼로지(Paperlogy) 한 가지로 통일**했습니다. 제목·본문·라벨 모두 같은 서체이고,
+역할 구분은 **굵기 · 크기 · 자간**으로만 만듭니다 (§4).
+
+| Weight | 파일 | 쓰임 |
 | --- | --- | --- |
-| Display / Hero (§4-A) | 잘난체 (`src/fonts/Jalnan.woff`) | Chrome 타이포에만 사용 |
-| Korean UI (§4-B) | Pretendard Variable (`src/fonts/PretendardVariable.woff2`) | 본문 전체 |
-| Label / Retro | **여주 도자체** (`src/fonts/YeojuCeramic.woff2`) | 섹션 제목·윈도우 라벨 등 한글 라벨 |
-| 설명 / 부가 텍스트 | **Umdot Mono 14** (`src/fonts/UmdotMono14[-Bold].woff2`) | 상품 설명·가격·캡션 (`.dot-text`) |
-| Pixel / Retro (§4-C) | Silkscreen (`next/font/google`) | 장식용 영문 표기만 |
+| 400 Regular | `src/fonts/Paperlogy-4Regular.woff2` | 본문 · 캡션 (`.dot-text`) |
+| 500 Medium | `src/fonts/Paperlogy-5Medium.woff2` | 짧은 라벨 (`.dot-label`) |
+| 600 SemiBold | `src/fonts/Paperlogy-6SemiBold.woff2` | 버튼 · 영문 microcopy (`.pixel`) |
+| 700 Bold | `src/fonts/Paperlogy-7Bold.woff2` | 섹션·카드 제목 (`.dot-title`) |
+
+`next/font/local`로 셀프호스팅하고 `--font-paperlogy-base` CSS 변수로 노출합니다.
+`--font-kr` / `--font-title` / `--font-label` / `--dot-text` / `--font-pixel` 토큰은
+호환을 위해 남겨 뒀지만 전부 같은 서체를 가리킵니다.
 
 ### 한글/영문 라벨 원칙
 
-디자인 시스템 §4-C는 라벨을 Pixel Font 영문으로 규정하지만, 영문이 많아 읽기 어렵다는 피드백에 따라 **의미는 한글, 분위기는 영문**으로 나눴습니다.
+디자인 시스템 §4-C는 라벨을 영문으로 규정하지만, 영문이 많아 읽기 어렵다는 피드백에 따라
+**의미는 한글, 분위기는 영문**으로 나눴습니다.
 
 | | 표기 | 예 |
 | --- | --- | --- |
-| 의미를 전달하는 라벨 | 한글 · 여주 도자체 (`CeramicLabel`) | `운세 골라보기` · `지금 인기 운세` · `궁합 사주` · `1위` · `총 22개` |
-| 장식용 표기 | 영문 · Pixel Font (`PixelLabel`) | 브랜드 워드마크 · 섹션 오버라인(`PICK YOUR FORTUNE`) · `NOW ONLINE` · `FORTUNE ID 001` · `.EXE` 윈도우 · 저작권 |
+| 의미를 전달하는 라벨 | 한글 · `.dot-label` (`DotLabel`) | `운세 골라보기` · `지금 인기 운세` · `궁합 사주` · `1위` · `총 22개` |
+| 장식용 표기 | 영문 · `.pixel` (`PixelLabel`) | 브랜드 워드마크 · 섹션 오버라인(`PICK YOUR FORTUNE`) · `NOW ONLINE` · `FORTUNE ID 001` · `.EXE` 윈도우 · 저작권 |
 
-섹션 제목은 `SectionHeader`의 `overline`(영문) + `title`(한글) 조합입니다.
-상품 데이터의 `label`(영문 코드)은 화면에 노출되지 않고, Featured 윈도우 라벨은 `labelKo`, Mini Card 라벨은 `type`을 씁니다.
+상품 데이터의 `label`(영문 코드)은 화면에 노출되지 않고, Featured 윈도우 라벨은 `labelKo`,
+Mini Card 라벨은 `type`을 씁니다.
 
-> 여주 도자체(388KB), Umdot Mono(각 ~450KB)는 사용자 PC의 설치 폰트를 woff2로 변환해 셀프호스팅합니다.
-
-**Umdot Mono 사용 규칙**
-- `unitsPerEm 1400` — 14px(및 28px)에서 도트가 가장 또렷합니다. 설명 텍스트는 **14px**로 맞추세요.
-- 고정폭이라 공백이 한 글자만큼 벌어져서 `.dot-text`에 `word-spacing: -0.32em`을 걸어 뒀습니다.
-- 한 줄에 들어가는 글자 수가 Pretendard보다 적습니다. 상품 설명은 **한 줄 11자 이내**를 권장합니다.
-
-> ⚠️ Pretendard Variable 원본(2MB)을 그대로 셀프호스팅 중입니다. 배포 전 서브셋(KS X 1001 등) 처리 권장.
+> 4종 합계 약 640KB입니다. 더 줄여야 하면 Medium/SemiBold를 빼고 400·700 두 종만 쓰는 것을
+> 먼저 검토하세요.
 
 ## 컴포넌트 구조
 

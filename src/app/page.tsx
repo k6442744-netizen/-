@@ -25,7 +25,7 @@ export default function Home() {
           ratio="1549/1015"
           slides={[
             { src: "/hero.png", alt: "990원 사주" },
-            { src: "/hero-2.png", alt: "궁합운세 Destiny Match" },
+            { src: "/hero-2.jpg", alt: "궁합운세 Destiny Match" },
           ]}
         />
 

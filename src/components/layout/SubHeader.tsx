@@ -7,7 +7,7 @@ export function SubHeader({
   title,
   backHref = "/",
 }: {
-  /** 화면 제목 (한글, 여주 도자체) */
+  /** 화면 제목 (한글, 페이퍼로지) */
   title: string;
   backHref?: string;
 }) {

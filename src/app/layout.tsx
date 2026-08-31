@@ -2,28 +2,15 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-/* Korean UI (§4-B) */
-const pretendard = localFont({
-  src: "../fonts/PretendardVariable.woff2",
-  weight: "45 920",
-  variable: "--font-pretendard-base",
-  display: "swap",
-});
-
-/* 타이틀 — 카페24 PRO UP (픽셀체). 섹션·카드 제목 전용 */
-const cafe24ProUp = localFont({
-  src: "../fonts/Cafe24PROUP.woff2",
-  variable: "--font-cafe24-proup-base",
-  display: "swap",
-});
-
-/* 설명 / 부가 텍스트 + 영문 microcopy — Umdot Mono (도트 계열, 14px 기준 설계) */
-const umdot = localFont({
+/* 전체 서체 — 페이퍼로지(Paperlogy). 제목·본문·라벨을 한 서체로 통일한다 (§4) */
+const paperlogy = localFont({
   src: [
-    { path: "../fonts/UmdotMono14.woff2", weight: "400", style: "normal" },
-    { path: "../fonts/UmdotMono14-Bold.woff2", weight: "700", style: "normal" },
+    { path: "../fonts/Paperlogy-4Regular.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/Paperlogy-5Medium.woff2", weight: "500", style: "normal" },
+    { path: "../fonts/Paperlogy-6SemiBold.woff2", weight: "600", style: "normal" },
+    { path: "../fonts/Paperlogy-7Bold.woff2", weight: "700", style: "normal" },
   ],
-  variable: "--font-umdot-base",
+  variable: "--font-paperlogy-base",
   display: "swap",
 });
 
@@ -69,7 +56,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${pretendard.variable} ${umdot.variable} ${cafe24ProUp.variable} antialiased`}
+        className={`${paperlogy.variable} antialiased`}
       >
         {children}
       </body>

@@ -6,13 +6,14 @@
    ========================================================================== */
 
 @theme inline {
-  --font-kr: var(--font-pretendard-base), "Apple SD Gothic Neo", sans-serif;
-  --font-pixel: var(--font-umdot-base), monospace;
-  /* 설명·부가 텍스트 (Umdot Mono) — 14px 기준으로 설계된 도트 폰트라 14px/28px에서 가장 또렷하다 */
-  --dot-text: var(--font-umdot-base), ui-monospace, monospace;
-  --font-label: var(--font-umdot-base), monospace;
-  /* 타이틀 픽셀체 (카페24 PRO UP) */
-  --font-title: var(--font-cafe24-proup-base), var(--font-umdot-base), monospace;
+  /* 서체는 페이퍼로지(Paperlogy) 하나로 통일한다.
+     역할 구분은 서체가 아니라 굵기·크기·자간으로만 한다 (§4). */
+  --font-paperlogy: var(--font-paperlogy-base), "Apple SD Gothic Neo", sans-serif;
+  --font-kr: var(--font-paperlogy);
+  --font-pixel: var(--font-paperlogy);
+  --dot-text: var(--font-paperlogy);
+  --font-label: var(--font-paperlogy);
+  --font-title: var(--font-paperlogy);
 }
 
 @theme {
@@ -109,7 +110,7 @@ body {
     #fef7fb;
   color: var(--text-primary);
   /* @theme inline 의 토큰은 :root 로 내보내지지 않으므로 raw CSS 에서는 원본 변수를 쓴다 */
-  font-family: var(--font-pretendard-base), "Apple SD Gothic Neo", sans-serif;
+  font-family: var(--font-paperlogy-base), "Apple SD Gothic Neo", sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   /* 한글 줄바꿈을 어절 단위로 (§17 가독성) */
@@ -117,34 +118,36 @@ body {
   overflow-wrap: break-word;
 }
 
-/* --- Typography: Pixel / Retro (§4-C) — 영문 label & microcopy 전용 --- */
+/* --- Typography: 영문 label & microcopy (§4-C) ---
+   서체는 본문과 같은 페이퍼로지. 작은 크기·굵기·넓은 자간으로 라벨 성격을 만든다. */
 .pixel {
-  font-family: var(--font-umdot-base), "Courier New", monospace;
+  font-family: var(--font-paperlogy-base), "Apple SD Gothic Neo", sans-serif;
   font-size: 11px;
+  font-weight: 600;
   line-height: 1.2;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.08em;
 }
 
-/* --- 설명 / 부가 텍스트 (Umdot Mono) ---
-   고정폭 폰트라 공백이 한 글자만큼 벌어져서 어절 간격을 줄여준다 */
+/* --- 설명 / 부가 텍스트 --- */
 .dot-text {
-  font-family: var(--font-umdot-base), ui-monospace, monospace;
-  word-spacing: -0.32em;
+  font-family: var(--font-paperlogy-base), "Apple SD Gothic Neo", sans-serif;
+  letter-spacing: -0.01em;
 }
 
-/* --- 타이틀 (카페24 PRO UP) — 섹션 제목·카드 제목 ---
-   픽셀체라 보간되면 흐려진다. 크기는 정수 px로만 쓴다. */
+/* --- 타이틀 — 섹션 제목·카드 제목 ---
+   같은 서체이므로 굵기와 좁은 자간으로 제목의 무게를 만든다. */
 .dot-title {
-  font-family: var(--font-cafe24-proup-base), var(--font-umdot-base),
-    ui-monospace, monospace;
-  letter-spacing: 0;
+  font-family: var(--font-paperlogy-base), "Apple SD Gothic Neo", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 /* --- Label / Retro — 윈도우 라벨·상품 종류 등 짧은 라벨 ---
-   본문(.dot-text)과 같은 Umdot Mono지만 자간은 라벨용으로 살짝 벌린다 */
+   본문과 같은 서체지만 자간은 라벨용으로 살짝 벌린다 */
 .dot-label {
-  font-family: var(--font-umdot-base), monospace;
-  letter-spacing: 0.01em;
+  font-family: var(--font-paperlogy-base), "Apple SD Gothic Neo", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 /* --- Iridescent (CD / Chrome / Glass object) --- */

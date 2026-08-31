@@ -8,7 +8,7 @@ interface PixelLabelProps {
 
 /**
  * Pixel / Retro label (§4-C)
- * 영문 label과 microcopy에만 사용. 본문·중요 정보에는 사용하지 않는다.
+ * 영문 label과 microcopy 전용. 본문과 같은 페이퍼로지를 작게·넓은 자간으로 쓴다.
  */
 export function PixelLabel({
   children,
