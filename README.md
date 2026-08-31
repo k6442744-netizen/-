@@ -206,7 +206,7 @@ Retro Window 문법은 Featured / Fortune Message에만 쓰고 Mini Card에는 �
 
 ```tsx
 <FortuneHero
-  ratio="1548/1016"
+  ratio="1558/1009"
   slides={[
     { src: "/hero.jpg", alt: "990원 사주" },
     { src: "/hero-2.jpg", alt: "궁합운세 Destiny Match" },
@@ -218,19 +218,22 @@ Retro Window 문법은 Featured / Fortune Message에만 쓰고 Mini Card에는 �
 
 | 파일 | 원본 | 용량 |
 | --- | --- | --- |
-| `public/hero.jpg` | 1548 × 1016 | 572KB |
-| `public/hero-2.jpg` | 1557 × 1010 | 678KB |
-| `public/og.jpg` | 1200 × 630 (첫 배너 상단 크롭) | 282KB |
+| `public/hero.jpg` | 1558 × 1009 | 628KB |
+| `public/hero-2.jpg` | 1557 × 1010 | 583KB |
+| `public/og.jpg` | 1200 × 630 (첫 배너 하단 크롭) | 333KB |
 
 - `ratio`는 **첫 배너 원본 비율**을 넘깁니다. 두 번째 배너는 `object-cover`라 좌우가 1%쯤 잘리는데, 제목이 상단에 있어 세로가 잘리는 쪽을 피한 선택입니다
 - **JPEG로 넣으세요.** `output: "export"` + `images: { unoptimized: true }`라 `next/image`가 최적화하지 않고 **원본이 그대로 나갑니다.** PNG 원본(각 2.5MB)을 그대로 두면 LCP가 눈에 띄게 늦습니다. `sips -s format jpeg -s formatOptions 90` 기준 1/4로 줄었고 표시 폭(최대 420px)에서는 차이가 보이지 않습니다
 - `slides`가 2장 이상이면 4초 간격으로 자동 순환하고, 드래그·점 인디케이터로도 넘길 수 있습니다
 - `slides`가 없으면 자리만 유지하는 placeholder가 렌더됩니다 (§20-13)
 - `next/image`의 `fill` + `priority`로 렌더 — LCP 이미지이므로 우선 로딩됩니다
-- OG 썸네일은 첫 배너에서 따로 만듭니다. 배너를 바꾸면 `public/og.jpg`도 같이 갱신하세요
+- OG 썸네일은 첫 배너에서 따로 만듭니다. 배너를 바꾸면 `public/og.jpg`도 같이 갱신하세요.
+  `--cropOffset` 은 중심이 아니라 **좌상단 원점** 기준(Y X)이므로, 제목이 있는 쪽이
+  남도록 오프셋을 잡아야 합니다. 현재 배너는 제목이 하단이라 아래쪽을 남깁니다
 
   ```
-  sips -c 813 1548 --cropOffset 0 0 <원본> --out /tmp/c.png
+  # 1558×1009 에서 아래쪽 813px (1009-813=196)
+  sips -c 813 1558 --cropOffset 196 0 <원본> --out /tmp/c.png
   sips -z 630 1200 -s format jpeg -s formatOptions 88 /tmp/c.png --out public/og.jpg
   ```
 
