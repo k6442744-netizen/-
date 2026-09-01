@@ -60,20 +60,46 @@ mkdir -p .github/workflows && mv docs/github-pages-workflow.yml .github/workflow
 | --- | --- | --- |
 | `/` | 메인 | Hero · 종류 메뉴 · 상품 3단 · Fortune Message · Feature Bar · Utility Nav |
 | `/tests/[slug]` | 테스트 종류별 목록 | `saju` · `ziwei` · `mbti` · `tarot` (SSG) |
-| `/login` | 간편 로그인 | 카카오 / 네이버 / Google / Apple |
+| `/login` | 간편 로그인 | 카카오 / 네이버 / Google / Apple. 이미 로그인 상태면 계정 요약 |
 
-헤더 좌측 메뉴 버튼 → **마이페이지 오버레이**(`MobileMenu`). 로그인 정보 · 대표프로필 · 하트 잔액 · 계정 메뉴.
+헤더 메뉴 버튼(또는 로그인 상태의 하트 칩) → **마이페이지 오버레이**(`MyPageOverlay`).
 재화는 **하트** 하나입니다. 상품 가격도 원화가 아니라 하트 개수(`products[].hearts`)로 표기하며,
 표기는 **픽셀 숫자 + 픽셀아트 하트**(`HeartCoin`, `public/objects/heart.png`) 조합입니다 — 피그마 `키치사주` 41-2430 규칙.
-샘플 계정 데이터는 `MobileMenu.tsx` 상단 `account` 객체에 있습니다.
 
 > ⚠️ 헤더에 `backdrop-blur`가 걸려 있어 그 안의 `position: fixed`는 헤더에 갇힙니다.
 > 오버레이는 `createPortal`로 `document.body`에 렌더해야 합니다.
 
+## 로그인 상태
+
+서버가 없는 정적 배포라 계정은 **브라우저에만** 삽니다. 화면은 아래 두 상태를 모두 가집니다.
+
+| | 비로그인 | 로그인 |
+| --- | --- | --- |
+| 헤더 우측 | `로그인` 버튼 → `/login` | **하트 잔액 칩** → 마이페이지 |
+| 마이페이지 회원카드 | 로그인 유도 (자물쇠 오브젝트 + CTA) | 이름 · 생년월일 · 사업자 · 이메일 |
+| `HEART.EXE` | 창 자체를 노출하지 않음 | 잔액 + `하트 충전하기` |
+| 계정 메뉴 5종 | 실버 톤, 누르면 `/login` | 활성 |
+| 로그아웃 · 회원탈퇴 | 숨김 | 노출 |
+
+```
+src/lib/storage.ts   localStorage/sessionStorage 접근 단일 창구
+src/lib/account.ts   계정 스토어 — useAccount() · login() · logout() · spendHearts()
+```
+
+- 상태는 `useSyncExternalStore` 기반 모듈 스토어입니다. 헤더·마이페이지·로그인 화면이 **같은 값을 보고 동시에 갱신**되어야 해서 각자 `useState`로 들고 있지 않습니다
+- 프리렌더와 하이드레이션 시점에는 **항상 비로그인**으로 그립니다(`getServerSnapshot`). 여기서 storage를 읽으면 서버 HTML과 달라져 하이드레이션이 깨집니다. 마운트 직후 React가 실제 값으로 한 번 더 그립니다
+- 다른 탭에서 로그인/로그아웃하면 `storage` 이벤트로 따라갑니다
+- 사파리 프라이빗 모드처럼 저장이 막힌 환경은 `storage.ts`가 메모리로 대체합니다 (새로고침하면 사라짐)
+- 로그인 후에는 `rememberReturnTo()`로 남긴 **보고 있던 화면**으로 돌아갑니다. `router.replace`라 뒤로가기로 로그인 화면에 되돌아오지 않습니다
+
+> 샘플 계정(`김소형` / 하트 12개)은 `src/lib/account.ts`의 `SAMPLE`에 있습니다.
+> 컴포넌트가 storage를 직접 만지지 않게 두었으니, 실제 API가 붙으면 이 파일만 바꾸면 됩니다.
+
 ### 간편 로그인 연동 지점
 
 `src/components/auth/LoginPanel.tsx`의 **`handleLogin` 한 곳**에서 각 사업자 OAuth를 호출하면 됩니다.
-현재는 `TODO` 주석 자리에 0.5초 지연 후 "연동 준비 중" 시스템 메시지를 띄우는 placeholder가 들어가 있습니다.
+현재는 `TODO` 주석 자리에서 0.5초 지연 후 `login(provider)`가 샘플 계정을 만듭니다 —
+어느 버튼을 눌러도 같은 계정이 들어오고, 그 사실을 화면의 시스템 메시지로 밝혀 둡니다.
 
 제공자 목록·문구·로고·버튼 스타일은 `src/components/auth/providers.tsx`에서 관리합니다.
 대표 수단(카카오)만 전체 폭 버튼, 나머지는 아이콘 버튼 — 브랜드 컬러가 화면을 지배하지 않게 하기 위한 구성입니다 (§2 컬러 비율).
@@ -159,6 +185,7 @@ Mini Card 라벨은 `type`을 씁니다.
 src/components/
 ├── auth/     LoginPanel · providers
 ├── layout/   AppFrame(360~420 프레임) · Header · SubHeader · Footer
+│             MyPageOverlay(마이페이지 · 로그인/비로그인)
 ├── y2k/      RetroWindow · PixelLabel · StatusBadge · ChromeTitle · PixelDecoration
 ├── fortune/  FortuneHero · FeatureBar · FeaturedFortuneCard · FortuneCarousel
 │             MiniFortuneCard · TrendingRow · AllFortuneGrid · TestTypeMenu
