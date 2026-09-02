@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { AppFrame, Padded } from "@/components/layout/AppFrame";
 import { SubHeader } from "@/components/layout/SubHeader";
@@ -61,7 +62,11 @@ export default function LoginPage() {
               간편 로그인
             </p>
 
-            <LoginPanel />
+            <Suspense
+              fallback={<div className="h-[52px] rounded-win bg-silver" />}
+            >
+              <LoginPanel />
+            </Suspense>
 
             <p className="mt-5 dot-text text-[12px] leading-[1.8] text-silver-mid">
               로그인 시{" "}

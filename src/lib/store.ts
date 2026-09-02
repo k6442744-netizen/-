@@ -21,6 +21,9 @@ export const KEY = {
   archive: "fp.archive.v1",
   claimedGifts: "fp.gifts.claimed.v1",
   pastLife: "fp.pastlife.v1",
+  pastLifeAlias: "fp.pastlife.alias.v1",
+  session: "fp.session.v1",
+  pendingPurchase: "fp.purchase.pending.v1",
 } as const;
 
 const listeners = new Map<string, Set<() => void>>();

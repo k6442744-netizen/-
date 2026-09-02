@@ -10,9 +10,12 @@ import { useToast } from "@/components/ui/Toast";
 import { PixelDecoration } from "@/components/y2k/PixelDecoration";
 import { DotLabel } from "@/components/y2k/DotLabel";
 import { ProfileForm } from "@/components/purchase/ProfileForm";
+import { VerdictMap } from "./VerdictMap";
 import {
   decodePerson,
+  displayName,
   judge,
+  readVerdict,
   reportUrl,
   type PastLifePerson,
 } from "@/lib/past-life";
@@ -68,7 +71,7 @@ export function JoinView() {
         />
 
         <h2 className="max-w-[240px] text-[24px] font-bold leading-[1.38] tracking-[-0.02em] text-ink">
-          {owner.name}님과
+          {displayName(owner)}님과
           <br />
           당신은 전생에
           <br />
@@ -116,13 +119,17 @@ function VerdictView({
 }) {
   const toast = useToast();
   const { relation, strength } = judge(owner, me);
+  const reading = readVerdict(relation, strength);
   const link = reportUrl(me);
+  /* 결과를 보내고 나면 다음에 무엇을 해야 하는지 알려 준다 */
+  const [sent, setSent] = useState(false);
 
   const send = async () => {
-    const text = `${owner.name}님, 우리는 전생에 ${relation.label}이었대요! 결과를 보내드릴게요.`;
+    const text = `${displayName(owner)}님, 우리는 전생에 ${relation.label}이었대요! 결과를 보내드릴게요.`;
     if (navigator.share) {
       try {
         await navigator.share({ title: "전생 관계 결과", text, url: link });
+        setSent(true);
         return;
       } catch {
         /* 공유창을 닫은 경우 — 복사로 넘어간다 */
@@ -130,6 +137,7 @@ function VerdictView({
     }
     try {
       await navigator.clipboard.writeText(link);
+      setSent(true);
       toast("결과 링크를 복사했어요");
     } catch {
       toast("링크를 길게 눌러 복사해 주세요");
@@ -140,7 +148,7 @@ function VerdictView({
     <Shell title="전생 관계 결과">
       <section className="border-b border-silver bg-[linear-gradient(180deg,#faf7ff_0%,#ffffff_70%)] px-[var(--page-padding)] pb-8 pt-8 text-center">
         <DotLabel className="text-[13px] text-ink-soft">
-          {owner.name}님과 당신은
+          {displayName(owner)}님과 당신은
         </DotLabel>
 
         <p className="mt-3 flex items-center justify-center gap-2">
@@ -158,44 +166,96 @@ function VerdictView({
           </span>
         </p>
 
-        <p className="mx-auto mt-6 max-w-[280px] dot-text text-[15px] leading-[1.85] text-ink-body">
-          {relation.detail}
-        </p>
+        <div className="mt-6">
+          <VerdictMap
+            ownerName={displayName(owner)}
+            myName={me.name}
+            relation={relation}
+            strength={strength}
+          />
+        </div>
       </section>
 
       <Padded className="pb-10 pt-6">
-        <dl className="overflow-hidden rounded-win border border-line bg-white">
-          {[
-            ["인연의 깊이", `${strength}%`],
-            ["이번 생 영향", relation.effect],
-            ["유의할 점", relation.caution],
-          ].map(([label, value], i) => (
-            <div
-              key={label}
-              className={`flex items-center justify-between gap-3 px-3.5 py-3 ${i > 0 ? "border-t border-silver" : ""}`}
-            >
-              <dt className="shrink-0 dot-text text-[13px] text-ink-soft">
-                {label}
-              </dt>
-              <dd className="text-right text-[14px] font-bold text-ink">
-                {value}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <div className="rounded-win border border-line bg-white px-3.5 py-3.5">
+          <div className="flex items-center justify-between">
+            <span className="dot-text text-[13px] text-ink-soft">인연의 깊이</span>
+            <span className="dot-text text-[16px] font-bold leading-none text-brand-lav">
+              {strength}%
+            </span>
+          </div>
+          <div
+            aria-hidden="true"
+            className="mt-2 h-2 w-full overflow-hidden rounded-full bg-silver"
+          >
+            <span
+              className="block h-full rounded-full bg-brand-lav-soft"
+              style={{ width: `${strength}%` }}
+            />
+          </div>
 
-        <button
-          type="button"
-          onClick={send}
-          className="mt-6 flex min-h-[52px] w-full items-center justify-center rounded-win border border-[#a97cff] bg-white text-[16px] font-bold text-brand-lav transition-colors hover:bg-page-lav active:bg-[#e6d8ff]"
-        >
-          {owner.name}님에게 결과 보내기
-        </button>
+          <div className="mt-3.5 flex items-center justify-between border-t border-silver pt-3">
+            <span className="dot-text text-[13px] text-ink-soft">
+              현생 키워드
+            </span>
+            <span className="rounded-full bg-page-pink px-2.5 py-1 text-[13px] font-bold text-brand-pink">
+              {relation.hint}
+            </span>
+          </div>
+        </div>
+
+        {/* 풀이 */}
+        <div className="mt-6 space-y-5">
+          {[
+            ["전생의 두 사람", reading.story],
+            ["이번 생의 흐름", reading.flow],
+            ["인연의 세기", reading.depth],
+          ].map(([title, body]) => (
+            <section key={title}>
+              <h3 className="dot-title text-[16px] text-ink">{title}</h3>
+              <p className="mt-1.5 dot-text text-[15px] leading-[1.85] text-ink-body">
+                {body}
+              </p>
+            </section>
+          ))}
+
+          <section className="rounded-win border border-line bg-page-lav/60 px-3.5 py-3">
+            <h3 className="dot-title text-[15px] text-ink">이렇게 해보세요</h3>
+            <p className="mt-1 dot-text text-[14px] leading-[1.75] text-ink-body">
+              {reading.advice}
+            </p>
+          </section>
+        </div>
+
+        <div className="mt-7 border-t border-silver pt-6">
+          <button
+            type="button"
+            onClick={send}
+            className="flex min-h-[52px] w-full items-center justify-center rounded-win border border-[#a97cff] bg-white text-[16px] font-bold text-brand-lav transition-colors hover:bg-page-lav active:bg-[#e6d8ff]"
+          >
+            {displayName(owner)}님에게 결과 보내기
+          </button>
+
+          <p className="mt-2.5 dot-text text-[12px] leading-[1.7] text-silver-mid">
+            {sent ? (
+              <>
+                링크가 준비됐어요. 카카오톡 등으로 {displayName(owner)}님께
+                보내면 {displayName(owner)}님의 전생 인맥에 내가 추가돼요.
+              </>
+            ) : (
+              <>
+                누르면 내 결과가 담긴 링크가 만들어져요. 그 링크를{" "}
+                {displayName(owner)}님께 보내면 {displayName(owner)}님의 전생
+                인맥에 내가 추가됩니다.
+              </>
+            )}
+          </p>
+        </div>
 
         {/* 참여한 김에 자기 판별기도 만들게 한다 */}
         <Link
           href="/past-life"
-          className={buttonClass({ className: "mt-2.5 w-full" })}
+          className={buttonClass({ className: "mt-3 w-full" })}
         >
           나도 전생 판별기 만들기
         </Link>

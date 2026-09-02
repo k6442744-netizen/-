@@ -290,6 +290,27 @@ body {
   animation: menu-out 240ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 
+/* --- 전생 인맥: 중심에서 번져 나가는 오라 ---
+   색은 기존 `.iridescent`(핑크·블루·라벤더·크림)를 그대로 쓴다 */
+@keyframes aura-pulse {
+  0% {
+    transform: scale(0.28);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.06);
+    opacity: 0;
+  }
+}
+.aura-pulse {
+  /* backwards: 시작 지연 동안에도 0% 상태(투명)를 유지한다.
+     없으면 지연 중인 레이어가 원래 불투명도로 잠깐 드러난다 */
+  animation: aura-pulse 7s cubic-bezier(0.22, 0.61, 0.36, 1) infinite backwards;
+}
+
 /* --- 전생 인맥: 궤도 그래픽 --- */
 @keyframes orbit-spin {
   to {

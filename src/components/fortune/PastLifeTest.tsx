@@ -1,9 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { FortuneObject } from "./FortuneObject";
 import { RetroWindow } from "@/components/y2k/RetroWindow";
 import { PixelDecoration } from "@/components/y2k/PixelDecoration";
 import { buttonClass } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { useSession } from "@/lib/session";
 
 /**
  * System Window (§12-5) — 이벤트 자리.
@@ -12,6 +15,12 @@ import { Icon } from "@/components/ui/Icon";
  * 전용 화면(`/past-life`)으로 따로 뺀다.
  */
 export function PastLifeTest() {
+  const { session } = useSession();
+  /* 내 링크를 만들려면 계정이 있어야 한다 — 친구 참여는 로그인이 필요 없다 */
+  const href = session
+    ? "/past-life"
+    : `/login/?next=${encodeURIComponent("/past-life")}`;
+
   return (
     <RetroWindow
       label="PAST LIFE.EXE"
@@ -51,7 +60,7 @@ export function PastLifeTest() {
         </p>
 
         <Link
-          href="/past-life"
+          href={href}
           className={buttonClass({
             tone: "lavender",
             className: "dot-text mt-4 w-full",

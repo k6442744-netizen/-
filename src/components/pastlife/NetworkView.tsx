@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { AppFrame, Padded } from "@/components/layout/AppFrame";
 import { SubHeader } from "@/components/layout/SubHeader";
@@ -9,19 +10,29 @@ import { buttonClass } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { DotLabel } from "@/components/y2k/DotLabel";
 import { MyProfileModal } from "@/components/purchase/MyProfileModal";
+import { Icon } from "@/components/ui/Icon";
+import { NetworkMenu } from "./NetworkMenu";
 import { RelationMap } from "./RelationMap";
 import { OrbitBadge } from "./OrbitBadge";
 import { useProfiles } from "@/lib/account";
+import { useSession } from "@/lib/session";
 import { useHydrated } from "@/lib/store";
 import {
   decodePerson,
+  displayName,
   findRelation,
+  groupColor,
   inviteUrl,
   isNewLink,
+  readMySaju,
+  relationGroups,
+  summarizeLuck,
   toPerson,
+  useAlias,
   useNetwork,
+  type RelationGroup,
 } from "@/lib/past-life";
-import { formatDate, formatTime } from "@/lib/profiles";
+import { describeProfile } from "@/lib/profiles";
 
 type Tab = "map" | "list";
 
@@ -35,12 +46,27 @@ export function NetworkView() {
   const params = useSearchParams();
   const hydrated = useHydrated();
   const { defaultProfile } = useProfiles();
-  const { links, addLink, counts, ranking, newCount, openedAt } =
-    useNetwork(defaultProfile);
+  const { session } = useSession();
+  const { alias, setAlias } = useAlias();
+  const {
+    links,
+    addLink,
+    addSamples,
+    clearSamples,
+    clearAll,
+    hasSample,
+    counts,
+    ranking,
+    newCount,
+    openedAt,
+  } = useNetwork(defaultProfile);
   const toast = useToast();
 
   const [tab, setTab] = useState<Tab>("map");
   const [editing, setEditing] = useState(false);
+  /* 유형을 눌러 좁혀 볼 수 있게 — 사람이 많아질수록 이게 목록을 읽게 해 준다 */
+  const [group, setGroup] = useState<RelationGroup | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   /* 친구가 보내온 결과 링크(`?add=`)로 들어오면 인맥에 넣는다 */
   const added = useRef<string | null>(null);
@@ -59,9 +85,15 @@ export function NetworkView() {
     }
   }, [addCode, addLink, defaultProfile, toast]);
 
+  const luck = summarizeLuck(counts);
+
+  const shownLinks = group
+    ? links.filter((l) => findRelation(l.relationId).group === group)
+    : links;
+
   const share = async () => {
     if (!defaultProfile) return;
-    const url = inviteUrl(toPerson(defaultProfile));
+    const url = inviteUrl({ ...toPerson(defaultProfile), alias });
     const text = `나랑 전생에 어떤 사이였을까? 생년월일 넣으면 바로 나와!`;
     if (navigator.share) {
       try {
@@ -83,6 +115,30 @@ export function NetworkView() {
     return (
       <Shell>
         <Padded className="py-16"> </Padded>
+      </Shell>
+    );
+  }
+
+  /* 내 링크를 만들고 인연을 모으려면 계정이 있어야 한다 */
+  if (!session) {
+    return (
+      <Shell>
+        <Padded className="py-16 text-center">
+          <p className="dot-title text-[18px] text-ink">
+            로그인하고 시작해요
+          </p>
+          <p className="mt-2 dot-text text-[14px] leading-[1.7] text-ink-soft">
+            내 링크와 모은 인연을 저장하려면 로그인이 필요해요.
+            <br />
+            친구가 참여하는 건 로그인 없이도 됩니다.
+          </p>
+          <Link
+            href={`/login/?next=${encodeURIComponent("/past-life")}`}
+            className={buttonClass({ className: "mt-6 px-8" })}
+          >
+            로그인하기
+          </Link>
+        </Padded>
       </Shell>
     );
   }
@@ -112,32 +168,35 @@ export function NetworkView() {
   }
 
   return (
-    <Shell>
+    <Shell onMenu={() => setMenuOpen(true)}>
       <Padded className="pb-8 pt-6">
         {/* 기준이 되는 나 */}
-        <section className="flex items-center gap-3 rounded-win border border-line bg-white px-3.5 py-3">
-          <span
-            aria-hidden="true"
-            className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-lav text-[17px] font-bold text-white"
-          >
-            {defaultProfile.name.slice(0, 1)}
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-[16px] font-bold text-ink">
-              {defaultProfile.name}
+        <section className="rounded-win border border-line bg-white px-4 py-3.5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[17px] font-bold text-ink">
+                {displayName({ ...toPerson(defaultProfile), alias })}
+              </p>
+              <p className="mt-1 dot-text text-[13px] text-ink-soft">
+                {describeProfile(defaultProfile)}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setEditing(true)}
+              className="h-8 shrink-0 rounded-win border border-line bg-white px-3 text-[13px] font-semibold text-ink-soft transition-colors hover:bg-hover"
+            >
+              수정
+            </button>
+          </div>
+
+          {/* 내 사주 한 줄평 */}
+          <p className="mt-3 border-t border-silver pt-3 dot-text text-[14px] leading-[1.6] text-ink">
+            <span aria-hidden="true" className="mr-1">
+              🔮
             </span>
-            <span className="mt-0.5 block dot-text text-[13px] text-ink-soft">
-              {formatDate(defaultProfile.birthDate)}{" "}
-              {formatTime(defaultProfile.birthTime)}
-            </span>
-          </span>
-          <button
-            type="button"
-            onClick={() => setEditing(true)}
-            className="h-8 shrink-0 rounded-win border border-line bg-white px-3 text-[13px] font-semibold text-ink-soft transition-colors hover:bg-hover"
-          >
-            수정
-          </button>
+            {readMySaju(toPerson(defaultProfile))}
+          </p>
         </section>
 
         {/* 발견한 인연 수 + 유형별 */}
@@ -167,17 +226,65 @@ export function NetworkView() {
             <OrbitBadge />
           </div>
 
-          <dl className="mt-4 grid grid-cols-5 divide-x divide-silver rounded-win border border-line bg-white text-center">
-            {counts.map(({ group, count }) => (
-              <div key={group} className="px-1 py-2.5">
-                <dt className="dot-text text-[11px] leading-tight text-silver-mid">
-                  {group}
-                </dt>
-                <dd className="mt-1 text-[16px] font-bold text-ink">{count}</dd>
-              </div>
-            ))}
-          </dl>
+          {/* 유형 칸이 곧 필터이자 색 범례가 된다 */}
+          <div className="mt-4 grid grid-cols-3 gap-1.5">
+            {counts.map((item) => {
+              const active = group === item.group;
+              const color = groupColor[item.group];
+              return (
+                <button
+                  key={item.group}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => setGroup(active ? null : item.group)}
+                  className={`flex items-center justify-center gap-1.5 rounded-win border py-2 transition-all ${color.soft} ${
+                    active
+                      ? "border-ink/20 ring-1 ring-ink/10"
+                      : "border-transparent opacity-80 hover:opacity-100"
+                  }`}
+                >
+                  <span className={`text-[12px] font-bold ${color.text}`}>
+                    {item.group}
+                  </span>
+                  <span className={`text-[14px] font-bold ${color.text}`}>
+                    {item.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </section>
+
+        {hasSample ? (
+          <p className="mt-2 flex items-center justify-between gap-2 rounded-win border border-dashed border-silver-mid bg-white px-3 py-2">
+            <span className="dot-text text-[12px] text-silver-mid">
+              화면 확인용 샘플이 섞여 있어요
+            </span>
+            <button
+              type="button"
+              onClick={clearSamples}
+              className="shrink-0 text-[12px] font-semibold text-ink-soft underline-offset-4 hover:underline"
+            >
+              비우기
+            </button>
+          </p>
+        ) : null}
+
+        {group ? (
+          <p className="mt-2 flex items-center justify-between gap-2 rounded-win bg-page-lav px-3 py-2">
+            <span className="dot-text text-[12px] text-ink-soft">
+              <span className="font-bold text-ink">{group}</span> 인연만 보고
+              있어요
+            </span>
+            <button
+              type="button"
+              onClick={() => setGroup(null)}
+              className="shrink-0 text-[12px] font-semibold text-brand-lav underline-offset-4 hover:underline"
+            >
+              전체 보기
+            </button>
+          </p>
+        ) : null}
 
         {links.length === 0 ? (
           <div className="py-12 text-center">
@@ -189,6 +296,24 @@ export function NetworkView() {
               <br />
               전생에 어떤 사이였는지 바로 나와요.
             </p>
+
+            {/* 화면을 미리 보기 위한 자리 — 실제 오픈 전에 지운다 */}
+            <div className="mt-6 flex justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => addSamples(8)}
+                className={buttonClass({ tone: "neutral", size: "sm" })}
+              >
+                샘플 8명
+              </button>
+              <button
+                type="button"
+                onClick={() => addSamples(100)}
+                className={buttonClass({ tone: "neutral", size: "sm" })}
+              >
+                샘플 100명
+              </button>
+            </div>
           </div>
         ) : (
           <>
@@ -223,94 +348,117 @@ export function NetworkView() {
             {tab === "map" ? (
               <div className="mt-5">
                 <RelationMap
-                  ownerName={defaultProfile.name}
-                  links={links}
+                  ownerName={displayName({ ...toPerson(defaultProfile), alias })}
+                  links={shownLinks}
                 />
               </div>
             ) : (
-              <ul className="mt-4 divide-y divide-silver overflow-hidden rounded-win border border-line bg-white">
-                {links.map((link, i) => {
-                  const relation = findRelation(link.relationId);
+              <div className="mt-4 space-y-3">
+                {relationGroups.map((name) => {
+                  const rows = shownLinks.filter(
+                    (l) => findRelation(l.relationId).group === name,
+                  );
+                  if (rows.length === 0) return null;
+                  const color = groupColor[name];
+
                   return (
-                    <li
-                      key={link.id}
-                      className="row-in flex items-center gap-3 px-3.5 py-3 transition-colors hover:bg-page-lav/50"
-                      /* 위에서부터 하나씩 떠오르게 한다 */
-                      style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(140deg,#ffb3dc_0%,#c9a6ff_100%)] text-[16px] font-bold text-white"
-                      >
-                        {link.person.name.slice(0, 1)}
-                      </span>
+                    <section key={name}>
+                      {/* 묶음 머리 — 색과 이름이 늘 붙어 다녀서 색을 외울 필요가 없다 */}
+                      <h3 className="flex items-center gap-1.5">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[12px] font-bold ${color.soft} ${color.text}`}
+                        >
+                          {name}
+                        </span>
+                        <span className="dot-text text-[12px] text-silver-mid">
+                          {rows.length}명
+                        </span>
+                      </h3>
 
-                      <span className="min-w-0 flex-1">
-                        <span className="flex items-center gap-1.5">
-                          <span className="truncate text-[15px] font-bold text-ink">
-                            {link.person.name}
-                          </span>
-                          {isNewLink(link, openedAt) ? (
-                            <span className="badge-pop shrink-0 rounded-tag bg-brand-pink px-1.5 py-px text-[10px] font-bold text-white">
-                              NEW
-                            </span>
-                          ) : null}
-                        </span>
-                        <span className="mt-1 flex flex-wrap items-center gap-1.5">
-                          <span className="flex items-center gap-1 rounded-full bg-page-lav px-2 py-0.5 text-[12px] font-bold text-brand-lav">
-                            <span aria-hidden="true">{relation.emoji}</span>
-                            {relation.label}
-                          </span>
-                          <span className="rounded-full border border-line px-1.5 py-0.5 dot-text text-[11px] text-silver-mid">
-                            {relation.hint}
-                          </span>
-                        </span>
-                      </span>
+                      <ul className="mt-1.5 divide-y divide-silver overflow-hidden rounded-win border border-line bg-white">
+                        {rows.map((link, i) => {
+                          const relation = findRelation(link.relationId);
+                          return (
+                            <li
+                              key={link.id}
+                              className="row-in flex items-center gap-3 px-3.5 py-2.5 transition-colors hover:bg-page-lav/40"
+                              style={{
+                                animationDelay: `${Math.min(i, 8) * 40}ms`,
+                              }}
+                            >
+                              <span className="min-w-0 flex-1">
+                                <span className="flex items-center gap-1.5">
+                                  <span className="truncate text-[15px] font-bold text-ink">
+                                    {link.person.name}
+                                  </span>
+                                  {isNewLink(link, openedAt) ? (
+                                    <span className="badge-pop shrink-0 rounded-tag bg-brand-pink px-1.5 py-px text-[10px] font-bold text-white">
+                                      NEW
+                                    </span>
+                                  ) : null}
+                                </span>
+                                <span className="mt-0.5 flex items-center gap-1.5 dot-text text-[13px] text-ink-soft">
+                                  <span aria-hidden="true">
+                                    {relation.emoji}
+                                  </span>
+                                  <span className="font-bold text-ink">
+                                    {relation.label}
+                                  </span>
+                                  <span className="truncate">
+                                    · {relation.hint}
+                                  </span>
+                                </span>
+                              </span>
 
-                      <span className="shrink-0 text-right">
-                        <span className="block dot-text text-[15px] font-bold leading-none text-brand-lav">
-                          {link.strength}%
-                        </span>
-                        <span className="mt-1 block dot-text text-[11px] text-silver-mid">
-                          인연도
-                        </span>
-                      </span>
-                    </li>
+                              <span
+                                className={`shrink-0 dot-text text-[15px] font-bold ${color.text}`}
+                              >
+                                {link.strength}%
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </section>
                   );
                 })}
-              </ul>
+              </div>
             )}
 
             {/* 랭킹 */}
             <section className="mt-6">
               <h3 className="dot-title text-[17px] text-ink">인연 랭킹</h3>
-              <ol className="mt-3 space-y-2">
+              <ol className="mt-3 overflow-hidden rounded-win border border-line bg-white">
                 {ranking.slice(0, 3).map((link, i) => {
                   const relation = findRelation(link.relationId);
+                  const color = groupColor[relation.group];
                   return (
                     <li
                       key={link.id}
-                      className={`flex items-center gap-3 rounded-win border px-3.5 py-3 ${
-                        i === 0
-                          ? "border-brand-pink bg-page-pink"
-                          : "border-line bg-white"
-                      }`}
+                      className={`relative flex items-center gap-2.5 px-3.5 py-2.5 ${i > 0 ? "border-t border-silver" : ""}`}
                     >
+                      {/* 인연도만큼 깔리는 옅은 배경 — 줄 높이를 늘리지 않고 차이를 보여 준다 */}
                       <span
                         aria-hidden="true"
-                        className={`dot-title w-5 shrink-0 text-[16px] ${i === 0 ? "text-brand-pink" : "text-silver-mid"}`}
+                        className={`absolute inset-y-0 left-0 ${color.soft} opacity-60`}
+                        style={{ width: `${link.strength}%` }}
+                      />
+
+                      <span
+                        aria-hidden="true"
+                        className={`dot-title relative w-3.5 shrink-0 text-[15px] ${i === 0 ? "text-brand-pink" : "text-silver-mid"}`}
                       >
                         {i + 1}
                       </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[15px] font-bold text-ink">
-                          {link.person.name}
-                        </span>
-                        <span className="mt-0.5 block dot-text text-[13px] text-ink-soft">
-                          {relation.emoji} {relation.label}
-                        </span>
+                      <span className="relative truncate text-[15px] font-bold text-ink">
+                        {link.person.name}
                       </span>
-                      <span className="shrink-0 dot-text text-[15px] font-bold text-brand-lav">
+                      <span
+                        className={`relative min-w-0 flex-1 truncate dot-text text-[13px] ${color.text}`}
+                      >
+                        {relation.emoji} {relation.label}
+                      </span>
+                      <span className="relative shrink-0 dot-text text-[14px] font-bold text-ink">
                         {link.strength}%
                       </span>
                     </li>
@@ -318,6 +466,27 @@ export function NetworkView() {
                 })}
               </ol>
             </section>
+
+            {/* 모인 결과로 보는 한 줄 정리 */}
+            {luck ? (
+              <section className="mt-6 rounded-win border border-line bg-[linear-gradient(140deg,#fff6fb_0%,#faf7ff_100%)] px-4 py-4 text-center">
+                <DotLabel className="text-[12px] text-silver-mid">
+                  내 인연 한 줄 정리
+                </DotLabel>
+                <p className="mt-2 dot-title text-[19px] text-ink">
+                  <span className={groupColor[luck.group].text}>
+                    {luck.title}
+                  </span>
+                  이 많은 사주예요
+                </p>
+                <p className="mt-1.5 dot-text text-[13px] leading-[1.7] text-ink-soft">
+                  {luck.detail}
+                </p>
+                <p className="mt-2.5 dot-text text-[12px] text-silver-mid">
+                  {luck.total}명 중 {luck.count}명이 {luck.group} 인연이에요
+                </p>
+              </section>
+            ) : null}
           </>
         )}
       </Padded>
@@ -334,14 +503,46 @@ export function NetworkView() {
       </div>
 
       <MyProfileModal open={editing} onClose={() => setEditing(false)} />
+
+      <NetworkMenu
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        name={defaultProfile.name}
+        alias={alias}
+        onSaveAlias={setAlias}
+        onEditProfile={() => setEditing(true)}
+        onClearAll={clearAll}
+        linkCount={links.length}
+      />
     </Shell>
   );
 }
 
-function Shell({ children }: { children: React.ReactNode }) {
+function Shell({
+  children,
+  onMenu,
+}: {
+  children: React.ReactNode;
+  /** 넘기면 헤더 우측에 관리 버튼이 붙는다 */
+  onMenu?: () => void;
+}) {
   return (
     <AppFrame>
-      <SubHeader title="나의 전생 인맥" />
+      <SubHeader
+        title="나의 전생 인맥"
+        right={
+          onMenu ? (
+            <button
+              type="button"
+              onClick={onMenu}
+              aria-label="전생 인맥 관리"
+              className="flex size-11 items-center justify-center rounded-win text-ink transition-colors hover:bg-hover"
+            >
+              <Icon name="menu" size={20} />
+            </button>
+          ) : null
+        }
+      />
       <main className="flex-1">{children}</main>
       <Footer />
     </AppFrame>

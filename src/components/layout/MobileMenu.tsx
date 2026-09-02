@@ -9,18 +9,13 @@ import { HeartChargeModal } from "@/components/purchase/HeartChargeModal";
 import { MyProfileModal } from "@/components/purchase/MyProfileModal";
 import { useProfiles } from "@/lib/account";
 import { useHearts } from "@/lib/ledger";
+import { useSession } from "@/lib/session";
 import { summarizeProfile } from "@/lib/profiles";
 import { KAKAO_CHANNEL_URL } from "@/lib/links";
+import { providers } from "@/components/auth/providers";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { PixelLabel } from "@/components/y2k/PixelLabel";
 import { RetroWindow } from "@/components/y2k/RetroWindow";
-
-/** 샘플 계정 정보 — 실제 로그인 연동 시 교체.
-    대표프로필(이름·생년월일)과 하트 잔액은 저장된 값을 따른다 */
-const account = {
-  provider: "카카오",
-  email: "fortune@example.com",
-};
 
 const menuItems: {
   icon: IconName;
@@ -93,6 +88,8 @@ export function MobileMenu() {
   const [chargeOpen, setChargeOpen] = useState(false);
   const { defaultProfile } = useProfiles();
   const { hearts } = useHearts();
+  const { session, signOut } = useSession();
+  const provider = providers.find((p) => p.id === session?.provider);
   const open = phase !== "closed";
   const close = useCallback(() => {
     setPhase((p) => (p === "open" ? "closing" : p));
@@ -198,14 +195,29 @@ export function MobileMenu() {
                       </button>
                     </div>
 
-                    <div className="flex items-center gap-2 bg-[#fff5fa] px-4 py-2.5">
-                      <span className="rounded-tag bg-kakao px-1.5 py-px text-[11px] font-bold text-kakao-ink">
-                        {account.provider}
-                      </span>
-                      <p className="dot-text min-w-0 flex-1 truncate text-[13px] text-ink-soft">
-                        {account.email}
-                      </p>
-                    </div>
+                    {session ? (
+                      <div className="flex items-center gap-2 bg-[#fff5fa] px-4 py-2.5">
+                        <span className="rounded-tag border border-line bg-white px-1.5 py-px text-[11px] font-bold text-ink-soft">
+                          {provider?.name ?? "간편 로그인"}
+                        </span>
+                        <p className="dot-text min-w-0 flex-1 truncate text-[13px] text-ink-soft">
+                          {session.email}
+                        </p>
+                      </div>
+                    ) : (
+                      <Link
+                        href="/login"
+                        onClick={close}
+                        className="flex items-center justify-between gap-2 bg-[#fff5fa] px-4 py-2.5 transition-colors hover:bg-page-pink"
+                      >
+                        <span className="dot-text text-[13px] text-ink-soft">
+                          로그인하고 내 운세를 저장하세요
+                        </span>
+                        <span className="shrink-0 text-[13px] font-semibold text-brand-pink">
+                          로그인
+                        </span>
+                      </Link>
+                    )}
                   </RetroWindow>
 
                   {/* 하트 잔액 */}
@@ -229,7 +241,11 @@ export function MobileMenu() {
 
                   {/* 이벤트 — 계정 메뉴와 성격이 달라 따로 두되 생김새는 맞춘다 */}
                   <Link
-                    href="/past-life"
+                    href={
+                      session
+                        ? "/past-life"
+                        : `/login/?next=${encodeURIComponent("/past-life")}`
+                    }
                     onClick={close}
                     className="flex min-h-[64px] items-center gap-2.5 rounded-win border border-line bg-white px-4 shadow-card transition-colors hover:bg-hover"
                   >
@@ -278,7 +294,12 @@ export function MobileMenu() {
                   <div className="flex items-center justify-center gap-3 pb-2 pt-1">
                     <button
                       type="button"
-                      className="text-[13px] text-silver-mid underline-offset-4 transition-colors hover:text-ink-soft hover:underline"
+                      onClick={() => {
+                        signOut();
+                        close();
+                      }}
+                      disabled={!session}
+                      className="text-[13px] text-silver-mid underline-offset-4 transition-colors hover:text-ink-soft hover:underline disabled:opacity-40 disabled:hover:no-underline"
                     >
                       로그아웃
                     </button>

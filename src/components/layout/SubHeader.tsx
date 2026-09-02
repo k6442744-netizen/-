@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { DotLabel } from "@/components/y2k/DotLabel";
 import { Icon } from "@/components/ui/Icon";
@@ -6,10 +7,13 @@ import { Icon } from "@/components/ui/Icon";
 export function SubHeader({
   title,
   backHref = "/",
+  right,
 }: {
   /** 화면 제목 (한글, 페이퍼로지) */
   title: string;
   backHref?: string;
+  /** 우측 액션 — 이 화면 전체에 대한 동작을 둔다 */
+  right?: ReactNode;
 }) {
   return (
     <header className="sticky top-0 z-30 border-b border-silver bg-page/95 backdrop-blur-[6px]">
@@ -25,6 +29,8 @@ export function SubHeader({
         <h1 className="pointer-events-none absolute inset-x-0 text-center">
           <DotLabel className="text-[16px] text-ink">{title}</DotLabel>
         </h1>
+
+        <div className="relative ml-auto flex items-center">{right}</div>
       </div>
     </header>
   );

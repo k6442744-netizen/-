@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { providers, type Provider } from "./providers";
-import { DotLabel } from "@/components/y2k/DotLabel";
+import { useSession } from "@/lib/session";
 
 const [primary, ...secondary] = providers;
 
@@ -12,19 +13,25 @@ const [primary, ...secondary] = providers;
  * 브랜드 컬러가 화면을 지배하지 않게 한다 (§2 컬러 비율, §20-11).
  *
  * 실제 OAuth 연동 지점은 `handleLogin` 한 곳입니다.
+ *
+ * 상품을 누르다 로그인으로 넘어온 경우 `next` 에 원래 화면이 담겨 있어서,
+ * 로그인이 끝나면 그 화면으로 되돌리고 하던 구매를 이어 간다.
  */
 export function LoginPanel() {
   const [pending, setPending] = useState<Provider["id"] | null>(null);
-  const [notice, setNotice] = useState<Provider | null>(null);
+  const router = useRouter();
+  const params = useSearchParams();
+  const { signIn } = useSession();
 
   const handleLogin = (provider: Provider) => {
-    setNotice(null);
     setPending(provider.id);
 
-    // TODO: 각 사업자 OAuth 연동 (예: signIn(provider.id) / Kakao SDK authorize)
+    // TODO: 각 사업자 OAuth 연동 (예: Kakao SDK authorize) 후 받은 정보로 signIn 호출
     window.setTimeout(() => {
-      setPending(null);
-      setNotice(provider);
+      signIn(provider.id);
+      const next = params.get("next");
+      /* 외부 주소로 튕기지 않도록 우리 경로만 허용한다 */
+      router.replace(next && next.startsWith("/") ? next : "/");
     }, 500);
   };
 
@@ -69,29 +76,6 @@ export function LoginPanel() {
         ))}
       </ul>
 
-      <div aria-live="polite">
-        {notice ? (
-          <div className="mt-4 rounded-win border border-[#a97cff] bg-white">
-            <div className="flex items-center justify-between border-b border-[#cdb4ff] bg-[#eadcff] px-2.5 py-1.5">
-              <DotLabel className="text-[12px] text-[#6b3fc7]">
-                시스템 메시지
-              </DotLabel>
-              <button
-                type="button"
-                onClick={() => setNotice(null)}
-                aria-label="알림 닫기"
-                className="flex h-[15px] w-[16px] items-center justify-center rounded-[1px] border border-silver-mid bg-white text-[9px] leading-none text-ink-soft"
-              >
-                ×
-              </button>
-            </div>
-            <p className="px-3 py-3 text-[13px] leading-[1.6] text-ink-soft">
-              <span className="font-semibold text-ink">{notice.name}</span> 간편
-              로그인은 연동 준비 중이에요. 조금만 기다려주세요.
-            </p>
-          </div>
-        ) : null}
-      </div>
     </div>
   );
 }

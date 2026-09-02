@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PixelDecoration } from "@/components/y2k/PixelDecoration";
 import { PixelLabel } from "@/components/y2k/PixelLabel";
 import { MobileMenu } from "./MobileMenu";
+import { HeaderAuth } from "./HeaderAuth";
 
 /** 좌: 메뉴 / 중앙: 로고 / 우: 로그인 */
 export function Header() {
@@ -22,12 +23,7 @@ export function Header() {
           <PixelDecoration shape="star" size={11} className="text-[#ffa6d2]" />
         </Link>
 
-        <Link
-          href="/login"
-          className="flex h-9 shrink-0 items-center rounded-win border border-[#ff8ec7] bg-white px-3 text-[13px] font-semibold text-brand-pink transition-colors hover:bg-[#ffeef7]"
-        >
-          로그인
-        </Link>
+        <HeaderAuth />
       </div>
     </header>
   );
