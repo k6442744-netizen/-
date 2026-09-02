@@ -5,7 +5,7 @@ import Link from "next/link";
 import { FortuneObject } from "@/components/fortune/FortuneObject";
 import { HeartCoin } from "@/components/ui/HeartCoin";
 import { Icon } from "@/components/ui/Icon";
-import { buttonClass } from "@/components/ui/Button";
+import { Button, buttonClass } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { DotLabel } from "@/components/y2k/DotLabel";
 import { HeartChargeModal } from "@/components/purchase/HeartChargeModal";
@@ -115,14 +115,14 @@ export function GiftComposer() {
           <button
             type="button"
             onClick={copy}
-            className={buttonClass({ tone: "neutral", className: "flex-1" })}
+            className={buttonClass({ variant: "tertiary", className: "flex-1" })}
           >
             링크 복사
           </button>
           <button
             type="button"
             onClick={share}
-            className={buttonClass({ className: "flex-1" })}
+            className={buttonClass({ variant: "secondary", className: "flex-1" })}
           >
             공유하기
           </button>
@@ -136,13 +136,13 @@ export function GiftComposer() {
               setPickedId(null);
               setMessage("");
             }}
-            className={buttonClass({ tone: "neutral", className: "flex-1" })}
+            className={buttonClass({ variant: "tertiary", className: "flex-1" })}
           >
             또 선물하기
           </button>
           <Link
             href="/"
-            className={buttonClass({ tone: "neutral", className: "flex-1" })}
+            className={buttonClass({ variant: "tertiary", className: "flex-1" })}
           >
             홈으로
           </Link>
@@ -193,7 +193,7 @@ export function GiftComposer() {
                   </span>
                 </span>
                 <span className="flex shrink-0 items-center gap-1">
-                  <span className="dot-text text-[14px] font-bold leading-none text-heart">
+                  <span className="dot-text text-[14px] font-bold leading-none text-accent">
                     {product.hearts}
                   </span>
                   <HeartCoin size={13} />
@@ -209,7 +209,7 @@ export function GiftComposer() {
           htmlFor="gift-sender"
           className="mb-1.5 block text-[13px] font-semibold text-ink"
         >
-          보내는 사람 <span className="font-normal text-silver-mid">(선택)</span>
+          보내는 사람 <span className="font-normal text-ink-faint">(선택)</span>
         </label>
         <input
           id="gift-sender"
@@ -217,7 +217,7 @@ export function GiftComposer() {
           onChange={(e) => setSender(e.target.value)}
           maxLength={12}
           placeholder="이름을 적으면 받는 분에게 보여요"
-          className="min-h-[46px] w-full rounded-win border border-line bg-white px-3 text-[15px] text-ink outline-none transition-colors placeholder:text-silver-mid focus:border-brand-pink"
+          className="min-h-[46px] w-full rounded-win border border-line bg-white px-3 text-[15px] text-ink outline-none transition-colors placeholder:text-ink-faint focus:border-brand-pink"
         />
       </div>
 
@@ -226,7 +226,7 @@ export function GiftComposer() {
           htmlFor="gift-message"
           className="mb-1.5 block text-[13px] font-semibold text-ink"
         >
-          한마디 <span className="font-normal text-silver-mid">(선택)</span>
+          한마디 <span className="font-normal text-ink-faint">(선택)</span>
         </label>
         <textarea
           id="gift-message"
@@ -234,9 +234,9 @@ export function GiftComposer() {
           onChange={(e) => setMessage(e.target.value.slice(0, MESSAGE_MAX))}
           rows={2}
           placeholder="올해도 좋은 일만 가득하길!"
-          className="w-full resize-none rounded-win border border-line bg-white px-3 py-2.5 text-[15px] leading-[1.6] text-ink outline-none transition-colors placeholder:text-silver-mid focus:border-brand-pink"
+          className="w-full resize-none rounded-win border border-line bg-white px-3 py-2.5 text-[15px] leading-[1.6] text-ink outline-none transition-colors placeholder:text-ink-faint focus:border-brand-pink"
         />
-        <p className="mt-1 text-right dot-text text-[12px] text-silver-mid">
+        <p className="mt-1 text-right dot-text text-[12px] text-ink-faint">
           {message.length} / {MESSAGE_MAX}
         </p>
       </div>
@@ -246,7 +246,7 @@ export function GiftComposer() {
         <span className="flex items-center gap-1.5">
           <span
             className={`dot-text text-[15px] font-bold leading-none ${
-              picked && !enough ? "text-brand-pink" : "text-ink-soft"
+              picked && !enough ? "text-accent" : "text-ink-soft"
             }`}
           >
             {hydrated ? hearts : "—"}
@@ -255,11 +255,12 @@ export function GiftComposer() {
         </span>
       </div>
 
-      <button
-        type="button"
+      <Button
+        variant="primary"
+        size="cta"
         disabled={!picked}
         onClick={send}
-        className="mt-4 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-win border border-[#ff8ec7] bg-white text-[16px] font-bold text-brand-pink transition-colors hover:bg-page-pink active:bg-[#ffdcee] disabled:cursor-not-allowed disabled:border-line disabled:bg-silver disabled:text-silver-mid"
+        className="mt-4 w-full"
       >
         {!picked ? (
           "선물할 운세를 골라 주세요"
@@ -274,9 +275,9 @@ export function GiftComposer() {
         ) : (
           "하트 충전하기"
         )}
-      </button>
+      </Button>
 
-      <p className="mt-3 flex items-start gap-1.5 dot-text text-[12px] leading-[1.7] text-silver-mid">
+      <p className="mt-3 flex items-start gap-1.5 dot-text text-[12px] leading-[1.7] text-ink-faint">
         <Icon name="notice" size={14} className="mt-0.5 shrink-0" />
         받는 분이 링크를 열어 사주정보를 넣으면 결과가 만들어져요. 링크는 한
         번만 사용할 수 있어요.

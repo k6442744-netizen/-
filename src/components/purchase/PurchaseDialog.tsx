@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Modal } from "@/components/ui/Modal";
 import { HeartCoin } from "@/components/ui/HeartCoin";
+import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { CoupleSlots } from "./CoupleSlots";
 import { HeartPackageList } from "./HeartPackageList";
@@ -200,22 +201,24 @@ export function PurchaseDialog({
       onBack={onBack}
       footer={
         step.kind === "charge" ? (
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="cta"
+            className="w-full"
             onClick={() => setCheckout(true)}
-            className="flex min-h-[52px] w-full items-center justify-center rounded-win border border-[#ff8ec7] bg-white text-[16px] font-bold text-brand-pink transition-colors hover:bg-page-pink active:bg-[#ffdcee]"
           >
-            {chargePack.name} 결제하기
-          </button>
+            결제하기
+          </Button>
         ) : step.kind === "pick" && couple ? (
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="cta"
             disabled={!ready}
+            className="w-full"
             onClick={() => setStep({ kind: "pay" })}
-            className="flex min-h-[52px] w-full items-center justify-center rounded-win border border-[#ff8ec7] bg-white text-[16px] font-bold text-brand-pink transition-colors hover:bg-page-pink active:bg-[#ffdcee] disabled:cursor-not-allowed disabled:border-line disabled:bg-silver disabled:text-silver-mid"
           >
             {ready ? "궁합 운세 보기" : "두 사람을 모두 골라 주세요"}
-          </button>
+          </Button>
         ) : undefined
       }
     >
@@ -237,7 +240,7 @@ export function PurchaseDialog({
               />
 
               <p className="mb-1.5 mt-5 text-[13px] font-semibold text-ink">
-                <span className="text-brand-pink">
+                <span className="text-accent">
                   {slotCaptions[activeSlot]}
                 </span>{" "}
                 자리에 넣을 사람
@@ -291,7 +294,7 @@ export function PurchaseDialog({
                   </span>
                   <span className="min-w-0 flex-1">
                     {couple ? (
-                      <span className="block dot-label text-[11px] text-silver-mid">
+                      <span className="block dot-label text-[11px] text-ink-faint">
                         {labels[i]}
                       </span>
                     ) : null}
@@ -318,7 +321,7 @@ export function PurchaseDialog({
             <div className="flex items-center justify-between">
               <dt className="text-[14px] font-semibold text-ink">사용 하트</dt>
               <dd className="flex items-center gap-1.5">
-                <span className="dot-text text-[19px] font-bold leading-none text-heart">
+                <span className="dot-text text-[19px] font-bold leading-none text-accent">
                   {product.hearts}
                 </span>
                 <HeartCoin size={18} />
@@ -329,7 +332,7 @@ export function PurchaseDialog({
               <dd className="flex items-center gap-1.5">
                 <span
                   className={`dot-text text-[14px] font-bold leading-none ${
-                    enough ? "text-ink-soft" : "text-brand-pink"
+                    enough ? "text-ink-soft" : "text-accent"
                   }`}
                 >
                   {hearts}
@@ -343,16 +346,17 @@ export function PurchaseDialog({
           <div aria-live="polite">
             {!gift && !enough ? (
               <p className="mt-3 rounded-win border border-[#ff8ec7] bg-page-pink px-3 py-2.5 dot-text text-[13px] leading-[1.6] text-ink">
-                하트가 <span className="font-bold text-brand-pink">{short}개</span>{" "}
+                하트가 <span className="font-bold text-accent">{short}개</span>{" "}
                 모자라요. 충전하면 바로 이어서 볼 수 있어요.
               </p>
             ) : null}
           </div>
 
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="cta"
+            className="mt-4 w-full"
             onClick={enough ? handlePay : () => setStep({ kind: "charge" })}
-            className="mt-4 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-win border border-[#ff8ec7] bg-white text-[16px] font-bold text-brand-pink transition-colors hover:bg-page-pink active:bg-[#ffdcee]"
           >
             {gift ? (
               "결과 보기"
@@ -367,7 +371,7 @@ export function PurchaseDialog({
             ) : (
               "하트 충전하기"
             )}
-          </button>
+          </Button>
         </div>
       ) : null}
 
@@ -378,7 +382,7 @@ export function PurchaseDialog({
             {short > 0 ? (
               <>
                 {" "}
-                <span className="font-bold text-brand-pink">{short}개</span>만 더
+                <span className="font-bold text-accent">{short}개</span>만 더
                 채우면 바로 볼 수 있어요.
               </>
             ) : null}
@@ -388,7 +392,7 @@ export function PurchaseDialog({
             <HeartPackageList selected={chargeHearts} onSelect={setChargePick} />
           </div>
 
-          <p className="mt-3 dot-text text-[12px] leading-[1.7] text-silver-mid">
+          <p className="mt-3 dot-text text-[12px] leading-[1.7] text-ink-faint">
             충전하면 이어서 바로 결제할 수 있어요.
           </p>
         </div>
@@ -398,7 +402,8 @@ export function PurchaseDialog({
     <PgCheckoutModal
       open={checkout}
       onClose={() => setCheckout(false)}
-      orderName={`${chargePack.name} (하트 ${chargePack.hearts}개)`}
+      orderName={chargePack.name}
+      orderDetail={`하트 ${chargePack.hearts}개`}
       amount={chargePack.price}
       onSuccess={handleCharged}
     />

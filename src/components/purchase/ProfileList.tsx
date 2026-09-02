@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/Button";
 import { relationAvatar } from "@/lib/tone";
 import { summarizeProfile, type SajuProfile } from "@/lib/profiles";
 
@@ -92,7 +93,7 @@ export function ProfileList({
 
                   {/* 이미 들어간 사람만 어느 자리인지 알려 주고, 나머지는 비워 둔다 */}
                   {onEdit || mode === "go" ? null : slot ? (
-                    <span className="shrink-0 rounded-tag border border-line bg-page-pink px-1.5 py-0.5 text-[11px] font-bold text-brand-pink">
+                    <span className="shrink-0 rounded-tag border border-line bg-page-pink px-1.5 py-0.5 text-[11px] font-bold text-accent">
                       {slot} 자리
                     </span>
                   ) : null}
@@ -113,16 +114,17 @@ export function ProfileList({
         </ul>
       )}
 
-      <button
-        type="button"
+      <Button
+        variant="secondary"
+        size="cta"
+        className="mt-4 w-full"
         onClick={onAdd}
-        className="mt-4 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-win border border-[#ff8ec7] bg-white text-[15px] font-bold text-brand-pink transition-colors hover:bg-page-pink active:bg-[#ffdcee]"
       >
         <span aria-hidden="true" className="text-[17px] leading-none">
           +
         </span>
         {addLabel}
-      </button>
+      </Button>
     </div>
   );
 }

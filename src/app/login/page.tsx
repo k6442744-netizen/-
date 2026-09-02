@@ -68,7 +68,7 @@ export default function LoginPage() {
               <LoginPanel />
             </Suspense>
 
-            <p className="mt-5 dot-text text-[12px] leading-[1.8] text-silver-mid">
+            <p className="mt-5 dot-text text-[12px] leading-[1.8] text-ink-faint">
               로그인 시{" "}
               <Link href="#" className="text-ink-soft underline underline-offset-2">
                 이용약관

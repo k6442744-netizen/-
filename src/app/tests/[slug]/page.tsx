@@ -78,7 +78,7 @@ export default async function TestTypePage({
             <p className="text-[14px] font-semibold text-ink">
               전체 {items.length}개
             </p>
-            <DotLabel className="text-[12px] text-silver-mid">
+            <DotLabel className="text-[12px] text-ink-faint">
               전체 목록
             </DotLabel>
           </div>

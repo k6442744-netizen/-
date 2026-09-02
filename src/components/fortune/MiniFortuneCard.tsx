@@ -63,7 +63,7 @@ export function MiniFortuneCard({
           {name}
         </p>
         <p className="mt-auto flex items-center gap-1 pt-2.5">
-          <span className="dot-text text-[15px] font-bold leading-none text-heart">
+          <span className="dot-text text-[15px] font-bold leading-none text-accent">
             {hearts}
           </span>
           <HeartCoin size={14} />

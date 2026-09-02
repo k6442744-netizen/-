@@ -55,7 +55,10 @@ export function ArchiveList() {
         <p className="mt-2 dot-text text-[14px] leading-[1.7] text-ink-soft">
           운세를 보면 결과가 여기에 쌓여요.
         </p>
-        <Link href="/" className={buttonClass({ className: "mt-6 px-8" })}>
+        <Link
+          href="/"
+          className={buttonClass({ variant: "primary", className: "mt-6 px-8" })}
+        >
           운세 보러 가기
         </Link>
       </div>
@@ -89,14 +92,14 @@ export function ArchiveList() {
                   {/* 언제 봤는지는 메타 정보라 카테고리 줄에 함께 둔다 */}
                   <span className="flex items-center gap-1.5">
                     <DotLabel
-                      className={`text-[11px] ${product ? toneText[product.tone] : "text-silver-mid"}`}
+                      className={`text-[11px] ${product ? toneText[product.tone] : "text-ink-faint"}`}
                     >
                       {product?.type ?? "지난 상품"}
                     </DotLabel>
                     <span aria-hidden="true" className="text-[11px] text-silver">
                       ·
                     </span>
-                    <span className="dot-text text-[11px] text-silver-mid">
+                    <span className="dot-text text-[11px] text-ink-faint">
                       {formatWhen(entry.createdAt)}
                     </span>
                   </span>
@@ -121,7 +124,7 @@ export function ArchiveList() {
 
       {rest > 0 ? (
         <Button
-          tone="neutral"
+          variant="tertiary"
           className="mt-4 w-full"
           onClick={() => setLimit((n) => n + PAGE_SIZE)}
         >

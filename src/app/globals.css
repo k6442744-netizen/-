@@ -23,6 +23,8 @@
   --color-page-lav: #f3ecff;
 
   --color-brand-pink: #ff4fa3;
+  /* 글자로 읽히는 핑크 — brand-pink(3.0:1)는 면 전용이라 글자에는 이 색을 쓴다 */
+  --color-accent: #d1247e;
   /* 재화(하트) 수치 전용 */
   --color-heart: #f04685;
   --color-brand-pink-soft: #ffb3dc;
@@ -41,6 +43,8 @@
   --color-ink-soft: #625c6d;
   /* 결과지처럼 길게 읽는 본문 — 제목 바로 아래 단계까지 진하게 */
   --color-ink-body: #2f2a38;
+  /* 날짜·단위 같은 캡션. silver-mid(2.1:1)는 선·비활성 전용이라 글자에는 이 색을 쓴다 */
+  --color-ink-faint: #7a7288;
 
   /* --- 간편 로그인 브랜드 컬러 ---
      각 사업자 브랜드 가이드가 색을 고정하므로 디자인 시스템 팔레트의 예외로 둔다.
@@ -82,6 +86,8 @@
   --text-primary: #2b1b3d;
   --text-secondary: #625c6d;
   --text-body: #2f2a38;
+  --text-faint: #7a7288;
+  --pink-text: #d1247e;
 
   --border-default: 1px solid #fde9f3;
   --border-pink: 1px solid #ff8ec7;
@@ -228,12 +234,6 @@ body {
   animation: float-soft 5s ease-in-out infinite;
 }
 
-/* --- 마이페이지 오버레이 전환 ---
-   패널은 오른쪽에서 끝까지 밀려 들어오고 닫힐 때 같은 경로로 되돌아간다.
-   fill-mode both 로 애니메이션 종료 후 위치가 튀지 않게 고정한다. */
-/* 메뉴 버튼이 좌측에 있으므로 패널도 왼쪽에서 들어온다.
-   가운데 정렬(-translate-x-1/2)은 Tailwind v4의 `translate` 속성이 담당하므로
-   여기서는 `transform` 으로 슬라이드 오프셋만 준다 (두 속성은 합성된다) */
 /* --- 배경을 떠다니는 하트 --- */
 @keyframes heart-float {
   0% {
@@ -267,27 +267,17 @@ body {
   animation-delay: var(--heart-delay, 0s);
 }
 
-@keyframes menu-in {
+/* --- 결과를 풀이하는 동안의 진행 바 --- */
+@keyframes loading-sweep {
   from {
     transform: translateX(-100%);
   }
   to {
-    transform: translateX(0);
+    transform: translateX(320%);
   }
 }
-@keyframes menu-out {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-.menu-in {
-  animation: menu-in 300ms cubic-bezier(0.32, 0.72, 0, 1) both;
-}
-.menu-out {
-  animation: menu-out 240ms cubic-bezier(0.32, 0.72, 0, 1) both;
+.loading-sweep {
+  animation: loading-sweep 1.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
 /* --- 전생 인맥: 중심에서 번져 나가는 오라 ---
@@ -322,11 +312,6 @@ body {
 }
 .orbit-spin-slow {
   animation: orbit-spin 26s linear infinite reverse;
-}
-
-/* 궤도가 돌아도 점은 서 있게 — 부모의 회전을 되돌린다 */
-.orbit-dot {
-  animation: orbit-spin 16s linear infinite reverse;
 }
 
 @keyframes badge-pop {
@@ -371,6 +356,25 @@ body {
   animation: row-in 340ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 
+/* --- 궁합: 두 자리가 다 차면 가운데 하트가 튀어나온다 --- */
+@keyframes heart-pop {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.18);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.heart-pop {
+  animation: heart-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
 /* --- 토스트 알림 --- */
 @keyframes toast-in {
   from {
@@ -413,38 +417,6 @@ body {
 }
 .pop-out {
   animation: pop-out 180ms ease-in both;
-}
-
-/* --- 궁합: 두 자리가 다 차면 가운데 하트가 튀어나온다 --- */
-@keyframes heart-pop {
-  0% {
-    transform: scale(0.3);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.18);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-.heart-pop {
-  animation: heart-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-/* --- 결과를 풀이하는 동안의 진행 바 --- */
-@keyframes loading-sweep {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(320%);
-  }
-}
-.loading-sweep {
-  animation: loading-sweep 1.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
 @keyframes dim-in {

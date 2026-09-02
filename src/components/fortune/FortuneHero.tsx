@@ -40,10 +40,10 @@ export function FortuneHero({
           style={{ aspectRatio: ratio }}
         >
           <PixelDecoration shape="sparkle" size={16} className="text-brand-pink-soft" />
-          <DotLabel className="text-[14px] text-silver-mid">
+          <DotLabel className="text-[14px] text-ink-faint">
             히어로 이미지 영역
           </DotLabel>
-          <PixelLabel className="!text-[9px] text-silver-mid/70">
+          <PixelLabel className="!text-[9px] text-ink-faint/70">
             840 × 525 @2x
           </PixelLabel>
         </div>

@@ -136,7 +136,7 @@ export function FortuneCarousel({ items }: { items: FortuneProduct[] }) {
       <SectionHeader
         title="추천운세"
         right={
-          <PixelLabel className="!text-[11px] text-silver-mid">
+          <PixelLabel className="!text-[11px] text-ink-faint">
             <span className="text-ink">{pad(index + 1)}</span> /{" "}
             {pad(items.length)}
           </PixelLabel>

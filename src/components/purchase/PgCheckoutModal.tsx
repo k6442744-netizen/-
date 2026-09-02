@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
+import { cardMark, payMethodLogo } from "./payMethodLogos";
 import { payMethods, requestPayment, type PayMethodId } from "@/lib/payment";
 
 /**
@@ -14,12 +16,16 @@ export function PgCheckoutModal({
   open,
   onClose,
   orderName,
+  orderDetail,
   amount,
   onSuccess,
 }: {
   open: boolean;
   onClose: () => void;
+  /** 상품 이름 — 결제 버튼에 그대로 들어간다 */
   orderName: string;
+  /** 상품 이름만으로 부족할 때 덧붙이는 설명 (수량 등) */
+  orderDetail?: string;
   amount: number;
   onSuccess: (paymentId: string) => void;
 }) {
@@ -49,24 +55,32 @@ export function PgCheckoutModal({
       title="결제"
       subtitle="결제수단을 선택해 주세요"
       footer={
-        <button
-          type="button"
+        <Button
+          variant="primary"
+          size="cta"
           disabled={paying || !agreed}
           onClick={pay}
-          className="flex min-h-[52px] w-full items-center justify-center rounded-win border border-[#ff8ec7] bg-white text-[16px] font-bold text-brand-pink transition-colors hover:bg-page-pink active:bg-[#ffdcee] disabled:border-line disabled:bg-silver disabled:text-silver-mid"
+          className="w-full"
         >
           {paying
             ? "결제 승인 중…"
             : agreed
-              ? `${amount.toLocaleString()}원 결제하기`
+              ? `${orderName} 결제하기`
               : "결제 동의 후 진행할 수 있어요"}
-        </button>
+        </Button>
       }
     >
       <dl className="rounded-win border border-line bg-white px-3.5 py-3">
         <div className="flex items-center justify-between">
           <dt className="dot-text text-[13px] text-ink-soft">주문 내용</dt>
-          <dd className="text-[14px] font-semibold text-ink">{orderName}</dd>
+          <dd className="text-right text-[14px] font-semibold text-ink">
+            {orderName}
+            {orderDetail ? (
+              <span className="ml-1 dot-text font-normal text-ink-soft">
+                {orderDetail}
+              </span>
+            ) : null}
+          </dd>
         </div>
         <div className="mt-2 flex items-center justify-between border-t border-silver pt-2">
           <dt className="dot-text text-[13px] text-ink-soft">결제 금액</dt>
@@ -86,7 +100,7 @@ export function PgCheckoutModal({
             return (
               <label
                 key={item.id}
-                className={`flex min-h-[48px] cursor-pointer items-center gap-2.5 rounded-win border px-3.5 transition-colors ${
+                className={`flex min-h-[54px] cursor-pointer items-center gap-3.5 rounded-win border px-3.5 transition-colors ${
                   active
                     ? "border-brand-pink bg-page-pink"
                     : "border-line bg-white hover:bg-hover"
@@ -100,11 +114,17 @@ export function PgCheckoutModal({
                   onChange={() => setMethod(item.id)}
                   className="size-[18px] shrink-0 accent-[color:var(--pink-primary)]"
                 />
-                <span
-                  className={`text-[15px] font-semibold ${active ? "text-ink" : "text-ink-soft"}`}
-                >
-                  {item.label}
-                </span>
+                {/* 공식 로고가 있으면 로고만 — 브랜드명이 이미 로고 안에 들어 있다 */}
+                {payMethodLogo(item.id, item.label) ?? (
+                  <>
+                    {cardMark()}
+                    <span
+                      className={`text-[15px] font-semibold ${active ? "text-ink" : "text-ink-soft"}`}
+                    >
+                      {item.label}
+                    </span>
+                  </>
+                )}
               </label>
             );
           })}
@@ -148,7 +168,7 @@ export function PgCheckoutModal({
         ) : null}
       </div>
 
-      <p className="mt-4 dot-text text-[12px] leading-[1.7] text-silver-mid">
+      <p className="mt-4 dot-text text-[12px] leading-[1.7] text-ink-faint">
         지금은 PG 연동 전이라 실제 결제는 일어나지 않습니다.
       </p>
     </Modal>

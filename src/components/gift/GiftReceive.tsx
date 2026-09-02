@@ -6,7 +6,7 @@ import { AppFrame, Padded } from "@/components/layout/AppFrame";
 import { SubHeader } from "@/components/layout/SubHeader";
 import { Footer } from "@/components/layout/Footer";
 import { FortuneObject } from "@/components/fortune/FortuneObject";
-import { buttonClass } from "@/components/ui/Button";
+import { Button, buttonClass } from "@/components/ui/Button";
 import { DotLabel } from "@/components/y2k/DotLabel";
 import { usePurchase } from "@/components/purchase/PurchaseProvider";
 import { useClaimedGifts, decodeGift } from "@/lib/gift";
@@ -41,7 +41,10 @@ export function GiftReceive() {
           <p className="mt-2 dot-text text-[14px] leading-[1.7] text-ink-soft">
             링크가 잘렸거나 잘못된 주소예요. 보낸 분에게 다시 받아 주세요.
           </p>
-          <Link href="/" className={buttonClass({ className: "mt-6 px-8" })}>
+          <Link
+            href="/"
+            className={buttonClass({ variant: "primary", className: "mt-6 px-8" })}
+          >
             홈으로 가기
           </Link>
         </div>
@@ -80,7 +83,7 @@ export function GiftReceive() {
               “{gift.m}”
             </p>
             {gift.f ? (
-              <footer className="mt-2 dot-text text-[13px] text-silver-mid">
+              <footer className="mt-2 dot-text text-[13px] text-ink-faint">
                 — {gift.f}
               </footer>
             ) : null}
@@ -96,15 +99,17 @@ export function GiftReceive() {
             </p>
             <Link
               href={`/result/?id=${alreadyClaimed}`}
-              className={buttonClass({ className: "mt-3 w-full" })}
+              className={buttonClass({ variant: "primary", className: "mt-3 w-full" })}
             >
               결과 보러 가기
             </Link>
           </div>
         ) : (
           <>
-            <button
-              type="button"
+            <Button
+              variant="primary"
+              size="cta"
+              className="mt-6 w-full"
               onClick={() =>
                 openPurchase(product, {
                   code: code ?? "",
@@ -112,11 +117,10 @@ export function GiftReceive() {
                   from: gift.f,
                 })
               }
-              className="mt-6 flex min-h-[52px] w-full items-center justify-center rounded-win border border-[#ff8ec7] bg-white text-[16px] font-bold text-brand-pink transition-colors hover:bg-page-pink active:bg-[#ffdcee]"
             >
               선물 받기
-            </button>
-            <p className="mt-3 text-center dot-text text-[12px] leading-[1.7] text-silver-mid">
+            </Button>
+            <p className="mt-3 text-center dot-text text-[12px] leading-[1.7] text-ink-faint">
               사주정보를 넣으면 바로 결과가 만들어져요. 한 번만 사용할 수 있어요.
             </p>
           </>

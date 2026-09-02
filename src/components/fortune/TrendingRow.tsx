@@ -17,7 +17,7 @@ export function TrendingRow({ items }: { items: FortuneProduct[] }) {
       <SectionHeader
         title="지금 인기 운세"
         right={
-          <DotLabel className="text-[13px] text-silver-mid">
+          <DotLabel className="text-[13px] text-ink-faint">
             실시간 순위
           </DotLabel>
         }

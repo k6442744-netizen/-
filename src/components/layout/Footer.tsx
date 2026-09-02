@@ -9,7 +9,7 @@ export function Footer() {
         </PixelLabel>
         <PixelLabel
           as="span"
-          className="rounded-full border border-silver-mid px-2 py-[3px] !text-[9px] text-silver-mid"
+          className="rounded-full border border-silver-mid px-2 py-[3px] !text-[9px] text-ink-faint"
         >
           Y2K MAGIC
         </PixelLabel>
@@ -25,7 +25,7 @@ export function Footer() {
         </a>
       </nav>
 
-      <PixelLabel as="p" className="mt-5 !text-[9px] leading-[1.6] text-silver-mid">
+      <PixelLabel as="p" className="mt-5 !text-[9px] leading-[1.6] text-ink-faint">
         © 2026 FORTUNE PORTAL. ALL RIGHTS RESERVED.
       </PixelLabel>
     </footer>

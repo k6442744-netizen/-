@@ -62,6 +62,7 @@ export function PastLifeTest() {
         <Link
           href={href}
           className={buttonClass({
+            variant: "secondary",
             tone: "lavender",
             className: "dot-text mt-4 w-full",
           })}

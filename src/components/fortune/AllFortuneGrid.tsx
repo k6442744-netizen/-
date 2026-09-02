@@ -44,7 +44,7 @@ export function AllFortuneGrid({ items }: { items: FortuneProduct[] }) {
       <SectionHeader
         title="전체 운세"
         right={
-          <DotLabel className="text-[13px] text-silver-mid">
+          <DotLabel className="text-[13px] text-ink-faint">
             총 <span className="text-ink">{matched.length}</span>개
           </DotLabel>
         }
@@ -93,7 +93,7 @@ export function AllFortuneGrid({ items }: { items: FortuneProduct[] }) {
 
       {rest > 0 ? (
         <Button
-          tone="neutral"
+          variant="tertiary"
           className="mt-4 w-full"
           onClick={() => setLimit((n) => n + PAGE_SIZE)}
         >

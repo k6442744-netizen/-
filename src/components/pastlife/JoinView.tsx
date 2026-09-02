@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { AppFrame, Padded } from "@/components/layout/AppFrame";
 import { SubHeader } from "@/components/layout/SubHeader";
-import { buttonClass } from "@/components/ui/Button";
+import { Button, buttonClass } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { PixelDecoration } from "@/components/y2k/PixelDecoration";
 import { DotLabel } from "@/components/y2k/DotLabel";
@@ -44,7 +44,10 @@ export function JoinView() {
           <p className="mt-2 dot-text text-[14px] leading-[1.7] text-ink-soft">
             주소가 잘렸을 수 있어요. 보낸 분에게 링크를 다시 받아 주세요.
           </p>
-          <Link href="/" className={buttonClass({ className: "mt-6 px-8" })}>
+          <Link
+            href="/"
+            className={buttonClass({ variant: "primary", className: "mt-6 px-8" })}
+          >
             홈으로 가기
           </Link>
         </Padded>
@@ -99,7 +102,7 @@ export function JoinView() {
           }
         />
 
-        <p className="mt-4 text-center dot-text text-[12px] leading-[1.7] text-silver-mid">
+        <p className="mt-4 text-center dot-text text-[12px] leading-[1.7] text-ink-faint">
           입력한 정보는 결과 분석에만 쓰이고 이 기기에 저장되지 않아요.
         </p>
       </Padded>
@@ -161,7 +164,7 @@ function VerdictView({
         </p>
 
         <p className="mt-4">
-          <span className="inline-block rounded-full bg-page-pink px-3.5 py-1.5 text-[13px] font-bold text-brand-pink">
+          <span className="inline-block rounded-full bg-page-pink px-3.5 py-1.5 text-[13px] font-bold text-accent">
             {relation.hint}
           </span>
         </p>
@@ -198,7 +201,7 @@ function VerdictView({
             <span className="dot-text text-[13px] text-ink-soft">
               현생 키워드
             </span>
-            <span className="rounded-full bg-page-pink px-2.5 py-1 text-[13px] font-bold text-brand-pink">
+            <span className="rounded-full bg-page-pink px-2.5 py-1 text-[13px] font-bold text-accent">
               {relation.hint}
             </span>
           </div>
@@ -228,15 +231,17 @@ function VerdictView({
         </div>
 
         <div className="mt-7 border-t border-silver pt-6">
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            tone="lavender"
+            size="cta"
+            className="w-full"
             onClick={send}
-            className="flex min-h-[52px] w-full items-center justify-center rounded-win border border-[#a97cff] bg-white text-[16px] font-bold text-brand-lav transition-colors hover:bg-page-lav active:bg-[#e6d8ff]"
           >
             {displayName(owner)}님에게 결과 보내기
-          </button>
+          </Button>
 
-          <p className="mt-2.5 dot-text text-[12px] leading-[1.7] text-silver-mid">
+          <p className="mt-2.5 dot-text text-[12px] leading-[1.7] text-ink-faint">
             {sent ? (
               <>
                 링크가 준비됐어요. 카카오톡 등으로 {displayName(owner)}님께
@@ -255,7 +260,7 @@ function VerdictView({
         {/* 참여한 김에 자기 판별기도 만들게 한다 */}
         <Link
           href="/past-life"
-          className={buttonClass({ className: "mt-3 w-full" })}
+          className={buttonClass({ variant: "secondary", className: "mt-3 w-full" })}
         >
           나도 전생 판별기 만들기
         </Link>
@@ -263,7 +268,7 @@ function VerdictView({
         <button
           type="button"
           onClick={onRetry}
-          className="mx-auto mt-5 block min-h-[40px] px-3 text-[13px] text-silver-mid underline-offset-4 transition-colors hover:text-ink-soft hover:underline"
+          className="mx-auto mt-5 block min-h-[40px] px-3 text-[13px] text-ink-faint underline-offset-4 transition-colors hover:text-ink-soft hover:underline"
         >
           정보를 잘못 넣었어요
         </button>

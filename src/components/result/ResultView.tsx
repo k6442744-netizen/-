@@ -73,7 +73,10 @@ export function ResultView() {
           <p className="mt-2 dot-text text-[14px] leading-[1.7] text-ink-soft">
             링크가 만료됐거나 보관함에서 지워진 결과예요.
           </p>
-          <Link href="/" className={buttonClass({ className: "mt-6 px-8" })}>
+          <Link
+            href="/"
+            className={buttonClass({ variant: "primary", className: "mt-6 px-8" })}
+          >
             홈으로 가기
           </Link>
         </main>
@@ -100,7 +103,7 @@ export function ResultView() {
             <h2 className="mt-1.5 text-[24px] font-bold leading-[1.32] tracking-[-0.02em] text-ink">
               {name}
             </h2>
-            <p className="mt-1.5 dot-text text-[13px] text-silver-mid">
+            <p className="mt-1.5 dot-text text-[13px] text-ink-faint">
               {formatWhen(entry.createdAt)}
             </p>
 
@@ -130,7 +133,7 @@ export function ResultView() {
             className="mt-6 rounded-win border border-line bg-white px-4 py-6"
           >
             <div className="text-center">
-              <DotLabel className="text-[12px] text-silver-mid">
+              <DotLabel className="text-[12px] text-ink-faint">
                 {result.scoreLabel}
               </DotLabel>
               <p className="mt-1.5 flex items-end justify-center gap-1">
@@ -223,7 +226,7 @@ export function ResultView() {
                 <li key={line} className="flex items-start gap-2.5">
                   <span
                     aria-hidden="true"
-                    className="mt-px w-4 shrink-0 dot-text text-[14px] font-bold text-brand-pink"
+                    className="mt-px w-4 shrink-0 dot-text text-[14px] font-bold text-accent"
                   >
                     {i + 1}
                   </span>
@@ -242,7 +245,7 @@ export function ResultView() {
               ["행운의 요일", result.lucky.day],
             ].map(([label, value]) => (
               <div key={label} className="px-2 py-4 text-center">
-                <dt className="dot-text text-[12px] text-silver-mid">{label}</dt>
+                <dt className="dot-text text-[12px] text-ink-faint">{label}</dt>
                 <dd className="mt-1.5 text-[14px] font-bold leading-[1.4] text-ink">
                   {value}
                 </dd>
@@ -250,7 +253,7 @@ export function ResultView() {
             ))}
           </dl>
 
-          <p className="mt-7 flex items-center justify-center gap-1.5 dot-text text-[13px] text-silver-mid">
+          <p className="mt-7 flex items-center justify-center gap-1.5 dot-text text-[13px] text-ink-faint">
             하트 {entry.hearts}개
             <HeartCoin size={13} />를 써서 본 {couple ? "궁합" : "운세"}예요.
           </p>
@@ -259,13 +262,13 @@ export function ResultView() {
             {/* 결과를 다 읽은 뒤의 이동 버튼 — 강조할 자리가 아니라 무채색으로 둔다 */}
             <Link
               href="/archive"
-              className={buttonClass({ tone: "neutral", className: "flex-1" })}
+              className={buttonClass({ variant: "tertiary", className: "flex-1" })}
             >
               보관함 보기
             </Link>
             <Link
               href="/"
-              className={buttonClass({ tone: "neutral", className: "flex-1" })}
+              className={buttonClass({ variant: "tertiary", className: "flex-1" })}
             >
               홈으로
             </Link>

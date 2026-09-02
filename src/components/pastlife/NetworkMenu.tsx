@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { Icon } from "@/components/ui/Icon";
-import { buttonClass } from "@/components/ui/Button";
+import { Button, buttonClass } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 
 type View = { mode: "menu" } | { mode: "alias" } | { mode: "delete" };
@@ -100,9 +100,9 @@ export function NetworkMenu({
             value={draft}
             onChange={(e) => setDraft(e.target.value.slice(0, ALIAS_MAX))}
             placeholder={name}
-            className="min-h-[46px] w-full rounded-win border border-line bg-white px-3 text-[15px] text-ink outline-none transition-colors placeholder:text-silver-mid focus:border-brand-pink"
+            className="min-h-[46px] w-full rounded-win border border-line bg-white px-3 text-[15px] text-ink outline-none transition-colors placeholder:text-ink-faint focus:border-brand-pink"
           />
-          <p className="mt-1.5 dot-text text-[12px] leading-[1.7] text-silver-mid">
+          <p className="mt-1.5 dot-text text-[12px] leading-[1.7] text-ink-faint">
             비워 두면 사주정보의 이름({name})이 그대로 쓰여요. 실명을 알리고
             싶지 않을 때 별명을 넣어 주세요.
           </p>
@@ -111,7 +111,7 @@ export function NetworkMenu({
             <button
               type="button"
               onClick={() => setView({ mode: "menu" })}
-              className={buttonClass({ tone: "neutral", className: "flex-1" })}
+              className={buttonClass({ variant: "tertiary", className: "flex-1" })}
             >
               취소
             </button>
@@ -122,7 +122,7 @@ export function NetworkMenu({
                 toast("표시 이름을 바꿨어요");
                 close();
               }}
-              className={buttonClass({ className: "flex-[2]" })}
+              className={buttonClass({ variant: "secondary", className: "flex-[2]" })}
             >
               저장하기
             </button>
@@ -141,21 +141,21 @@ export function NetworkMenu({
             <button
               type="button"
               onClick={() => setView({ mode: "menu" })}
-              className={buttonClass({ tone: "neutral", className: "flex-[2]" })}
+              className={buttonClass({ variant: "tertiary", className: "flex-[2]" })}
             >
               그대로 둘게요
             </button>
-            <button
-              type="button"
+            <Button
+              variant="danger"
+              className="flex-1"
               onClick={() => {
                 onClearAll();
                 toast("인연 기록을 지웠어요");
                 close();
               }}
-              className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-win border border-[#ff8ec7] bg-brand-pink px-4 text-[15px] font-semibold text-white transition-colors hover:brightness-95"
             >
               삭제
-            </button>
+            </Button>
           </div>
         </div>
       ) : null}
@@ -182,7 +182,7 @@ function MenuRow({
     >
       <span className="min-w-0 flex-1">
         <span
-          className={`block text-[15px] font-bold ${tone === "danger" ? "text-brand-pink" : "text-ink"}`}
+          className={`block text-[15px] font-bold ${tone === "danger" ? "text-accent" : "text-ink"}`}
         >
           {title}
         </span>
@@ -193,7 +193,7 @@ function MenuRow({
       <Icon
         name="chevron-right"
         size={18}
-        className="shrink-0 text-silver-mid"
+        className="shrink-0 text-ink-faint"
       />
     </button>
   );

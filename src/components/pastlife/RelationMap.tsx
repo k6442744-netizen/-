@@ -154,7 +154,7 @@ export function RelationMap({
         })}
       </div>
 
-      <p className="mt-1 text-center dot-text text-[12px] text-silver-mid">
+      <p className="mt-1 text-center dot-text text-[12px] text-ink-faint">
         안쪽에 가까울수록 인연이 깊어요 · 눌러서 확인
       </p>
 

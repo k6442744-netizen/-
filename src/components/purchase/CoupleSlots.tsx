@@ -90,7 +90,7 @@ function Slot({
               : "border-dashed border-brand-pink-soft bg-white hover:bg-page-pink"
         }`}
       >
-        <span className="dot-label text-[11px] text-silver-mid">{caption}</span>
+        <span className="dot-label text-[11px] text-ink-faint">{caption}</span>
 
         {profile ? (
           <>
@@ -119,7 +119,7 @@ function Slot({
             <span className="dot-text text-[12px] text-ink-soft">
               비어 있어요
             </span>
-            <span className="dot-text text-[11px] text-silver-mid">
+            <span className="dot-text text-[11px] text-ink-faint">
               아래에서 골라 주세요
             </span>
           </>
@@ -131,7 +131,7 @@ function Slot({
           type="button"
           onClick={onClear}
           aria-label={`${caption} 자리 비우기`}
-          className="absolute right-1 top-1 flex size-7 items-center justify-center rounded-win text-silver-mid transition-colors hover:bg-white hover:text-ink"
+          className="absolute right-1 top-1 flex size-7 items-center justify-center rounded-win text-ink-faint transition-colors hover:bg-white hover:text-ink"
         >
           <Icon name="close" size={14} />
         </button>

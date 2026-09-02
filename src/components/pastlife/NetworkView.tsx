@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { AppFrame, Padded } from "@/components/layout/AppFrame";
 import { SubHeader } from "@/components/layout/SubHeader";
 import { Footer } from "@/components/layout/Footer";
-import { buttonClass } from "@/components/ui/Button";
+import { Button, buttonClass } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { DotLabel } from "@/components/y2k/DotLabel";
 import { MyProfileModal } from "@/components/purchase/MyProfileModal";
@@ -134,7 +134,7 @@ export function NetworkView() {
           </p>
           <Link
             href={`/login/?next=${encodeURIComponent("/past-life")}`}
-            className={buttonClass({ className: "mt-6 px-8" })}
+            className={buttonClass({ variant: "primary", className: "mt-6 px-8" })}
           >
             로그인하기
           </Link>
@@ -157,7 +157,7 @@ export function NetworkView() {
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className={buttonClass({ className: "mt-6 px-8" })}
+            className={buttonClass({ variant: "primary", className: "mt-6 px-8" })}
           >
             사주정보 입력하기
           </button>
@@ -257,7 +257,7 @@ export function NetworkView() {
 
         {hasSample ? (
           <p className="mt-2 flex items-center justify-between gap-2 rounded-win border border-dashed border-silver-mid bg-white px-3 py-2">
-            <span className="dot-text text-[12px] text-silver-mid">
+            <span className="dot-text text-[12px] text-ink-faint">
               화면 확인용 샘플이 섞여 있어요
             </span>
             <button
@@ -302,14 +302,14 @@ export function NetworkView() {
               <button
                 type="button"
                 onClick={() => addSamples(8)}
-                className={buttonClass({ tone: "neutral", size: "sm" })}
+                className={buttonClass({ variant: "text" })}
               >
                 샘플 8명
               </button>
               <button
                 type="button"
                 onClick={() => addSamples(100)}
-                className={buttonClass({ tone: "neutral", size: "sm" })}
+                className={buttonClass({ variant: "text" })}
               >
                 샘플 100명
               </button>
@@ -317,10 +317,11 @@ export function NetworkView() {
           </div>
         ) : (
           <>
+            {/* 보기 전환 — 밑줄이 지금 보고 있는 쪽을 가리킨다 */}
             <div
               role="tablist"
               aria-label="보기 방식"
-              className="mt-5 grid grid-cols-2 gap-1 rounded-win border border-line bg-white p-1"
+              className="mt-5 flex border-b border-silver"
             >
               {(
                 [
@@ -334,10 +335,10 @@ export function NetworkView() {
                   role="tab"
                   aria-selected={tab === key}
                   onClick={() => setTab(key)}
-                  className={`min-h-[40px] rounded-win text-[14px] font-bold transition-colors ${
+                  className={`-mb-px min-h-[42px] flex-1 border-b-2 text-[15px] transition-colors ${
                     tab === key
-                      ? "bg-page-lav text-brand-lav"
-                      : "text-ink-soft hover:bg-hover"
+                      ? "border-brand-lav font-bold text-ink"
+                      : "border-transparent font-medium text-ink-soft hover:text-ink"
                   }`}
                 >
                   {label}
@@ -370,7 +371,7 @@ export function NetworkView() {
                         >
                           {name}
                         </span>
-                        <span className="dot-text text-[12px] text-silver-mid">
+                        <span className="dot-text text-[12px] text-ink-faint">
                           {rows.length}명
                         </span>
                       </h3>
@@ -446,7 +447,7 @@ export function NetworkView() {
 
                       <span
                         aria-hidden="true"
-                        className={`dot-title relative w-3.5 shrink-0 text-[15px] ${i === 0 ? "text-brand-pink" : "text-silver-mid"}`}
+                        className={`dot-title relative w-3.5 shrink-0 text-[15px] ${i === 0 ? "text-accent" : "text-ink-faint"}`}
                       >
                         {i + 1}
                       </span>
@@ -470,7 +471,7 @@ export function NetworkView() {
             {/* 모인 결과로 보는 한 줄 정리 */}
             {luck ? (
               <section className="mt-6 rounded-win border border-line bg-[linear-gradient(140deg,#fff6fb_0%,#faf7ff_100%)] px-4 py-4 text-center">
-                <DotLabel className="text-[12px] text-silver-mid">
+                <DotLabel className="text-[12px] text-ink-faint">
                   내 인연 한 줄 정리
                 </DotLabel>
                 <p className="mt-2 dot-title text-[19px] text-ink">
@@ -482,7 +483,7 @@ export function NetworkView() {
                 <p className="mt-1.5 dot-text text-[13px] leading-[1.7] text-ink-soft">
                   {luck.detail}
                 </p>
-                <p className="mt-2.5 dot-text text-[12px] text-silver-mid">
+                <p className="mt-2.5 dot-text text-[12px] text-ink-faint">
                   {luck.total}명 중 {luck.count}명이 {luck.group} 인연이에요
                 </p>
               </section>
@@ -493,13 +494,15 @@ export function NetworkView() {
 
       {/* 링크 공유 — 이 화면의 핵심 행동이라 아래에 붙여 둔다 */}
       <div className="sticky bottom-0 z-20 border-t border-silver bg-page/95 px-[var(--page-padding)] pb-[max(14px,env(safe-area-inset-bottom))] pt-3 backdrop-blur-[6px]">
-        <button
-          type="button"
+        <Button
+          variant="primary"
+          tone="lavender"
+          size="cta"
+          className="w-full"
           onClick={share}
-          className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-win border border-[#a97cff] bg-white text-[16px] font-bold text-brand-lav transition-colors hover:bg-page-lav active:bg-[#e6d8ff]"
         >
-          링크 공유하고 더 많은 인연 찾기
-        </button>
+          나의 전생 인맥 링크 복사
+        </Button>
       </div>
 
       <MyProfileModal open={editing} onClose={() => setEditing(false)} />

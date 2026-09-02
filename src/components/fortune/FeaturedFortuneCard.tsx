@@ -65,14 +65,15 @@ export function FeaturedFortuneCard({
         className={`flex items-center justify-between gap-3 px-4 py-2 ${bandBg[tone]}`}
       >
         <p className="flex items-center gap-1.5">
-          <span className="dot-text text-[18px] font-bold leading-none text-heart">
+          <span className="dot-text text-[18px] font-bold leading-none text-accent">
             {hearts}
           </span>
           <HeartCoin size={17} />
         </p>
         <Button
+          variant="secondary"
           tone={buttonTone(tone)}
-          size="sm"
+          size="compact"
           onClick={() => openPurchase(product)}
         >
           보러가기

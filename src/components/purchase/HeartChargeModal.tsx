@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { HeartCoin } from "@/components/ui/HeartCoin";
+import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { HeartPackageList } from "./HeartPackageList";
 import { PgCheckoutModal } from "./PgCheckoutModal";
@@ -38,17 +39,18 @@ export function HeartChargeModal({
         title="하트 충전"
         subtitle="충전한 하트로 운세를 볼 수 있어요"
         footer={
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="cta"
+            className="w-full"
             onClick={() => setCheckout(true)}
-            className="flex min-h-[52px] w-full items-center justify-center rounded-win border border-[#ff8ec7] bg-white text-[16px] font-bold text-brand-pink transition-colors hover:bg-page-pink active:bg-[#ffdcee]"
           >
-            {pack.name} 결제하기
-          </button>
+            결제하기
+          </Button>
         }
       >
         <div className="rounded-win border border-line bg-white px-4 py-4 text-center">
-          <p className="dot-text text-[13px] text-silver-mid">
+          <p className="dot-text text-[13px] text-ink-faint">
             지금 보유한 하트
           </p>
           <p className="mt-1.5 flex items-center justify-center gap-2">
@@ -63,12 +65,36 @@ export function HeartChargeModal({
           충전할 하트
         </p>
         <HeartPackageList selected={picked} onSelect={setPicked} />
+
+        {/* 결제 유의사항 — 환불 기준은 결제 전에 보이는 자리에 둔다 */}
+        <section className="mt-5 rounded-win border border-line bg-silver px-3.5 py-3">
+          <h3 className="text-[13px] font-semibold text-ink">결제 전 확인해 주세요</h3>
+          <ul className="mt-2 space-y-1.5">
+            {[
+              "충전한 하트는 유효기간 없이 쓸 수 있어요.",
+              "한 번도 쓰지 않은 하트는 결제일로부터 7일 안에 전액 환불돼요.",
+              "일부를 썼다면 남은 하트만 환불됩니다.",
+              "결제 내역과 영수증은 마이페이지 하트 내역에서 볼 수 있어요.",
+            ].map((line) => (
+              <li
+                key={line}
+                className="flex gap-1.5 dot-text text-[12px] leading-[1.7] text-ink-soft"
+              >
+                <span aria-hidden="true" className="text-ink-faint">
+                  ·
+                </span>
+                {line}
+              </li>
+            ))}
+          </ul>
+        </section>
       </Modal>
 
       <PgCheckoutModal
         open={open && checkout}
         onClose={() => setCheckout(false)}
-        orderName={`${pack.name} (하트 ${pack.hearts}개)`}
+        orderName={pack.name}
+        orderDetail={`하트 ${pack.hearts}개`}
         amount={pack.price}
         onSuccess={(paymentId) => {
           charge({

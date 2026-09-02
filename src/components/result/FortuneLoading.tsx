@@ -41,7 +41,7 @@ export function FortuneLoading({
         <span className="loading-sweep block h-full w-1/3 rounded-full bg-brand-pink-soft" />
       </div>
 
-      <PixelLabel as="p" className="mt-6 text-silver-mid">
+      <PixelLabel as="p" className="mt-6 text-ink-faint">
         READING YOUR FORTUNE...
       </PixelLabel>
     </div>

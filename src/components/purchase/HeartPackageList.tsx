@@ -49,7 +49,7 @@ export function HeartPackageList({
                   ) : null}
                 </span>
                 <span className="mt-0.5 flex items-center gap-1">
-                  <span className="dot-text text-[14px] font-bold leading-none text-heart">
+                  <span className="dot-text text-[14px] font-bold leading-none text-accent">
                     {pkg.hearts}
                   </span>
                   <HeartCoin size={13} />

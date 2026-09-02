@@ -6,6 +6,23 @@ import { Icon } from "./Icon";
 
 type Phase = "closed" | "open" | "closing";
 
+/* 팝업 위에 팝업이 뜨는 경우가 있어(충전 → 결제창) 열린 개수를 센다.
+   각자 원래 값을 되돌리면 두 번째 팝업이 `hidden` 을 복원해 스크롤이 잠긴 채로 남는다 */
+let openCount = 0;
+let restoreOverflow = "";
+
+function lockScroll() {
+  if (openCount === 0) {
+    restoreOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+  }
+  openCount += 1;
+  return () => {
+    openCount -= 1;
+    if (openCount === 0) document.body.style.overflow = restoreOverflow;
+  };
+}
+
 interface ModalProps {
   open: boolean;
   onClose: () => void;
@@ -54,11 +71,10 @@ export function Modal({
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const unlock = lockScroll();
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
+      unlock();
     };
   }, [visible, onClose]);
 

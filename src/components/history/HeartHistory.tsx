@@ -50,7 +50,7 @@ export function HeartHistory() {
     <>
       <section className="rounded-win border border-line bg-white px-4 py-4">
         <div className="flex items-center justify-between">
-          <DotLabel className="text-[13px] text-silver-mid">보유 하트</DotLabel>
+          <DotLabel className="text-[13px] text-ink-faint">보유 하트</DotLabel>
           <p className="flex items-center gap-1.5">
             <span className="dot-title text-[26px] leading-none text-heart">
               {hydrated ? hearts : "—"}
@@ -76,7 +76,7 @@ export function HeartHistory() {
               onClick={() => setFilter(key)}
               className={`min-h-[38px] rounded-win border px-4 text-[14px] font-semibold transition-colors ${
                 active
-                  ? "border-brand-pink bg-page-pink text-brand-pink"
+                  ? "border-brand-pink bg-page-pink text-accent"
                   : "border-line bg-white text-ink-soft hover:bg-hover"
               }`}
             >
@@ -107,7 +107,10 @@ export function HeartHistory() {
           <p className="mt-2 dot-text text-[14px] leading-[1.7] text-ink-soft">
             하트를 충전하거나 운세를 보면 여기에 쌓여요.
           </p>
-          <Link href="/" className={buttonClass({ className: "mt-6 px-8" })}>
+          <Link
+            href="/"
+            className={buttonClass({ variant: "primary", className: "mt-6 px-8" })}
+          >
             운세 보러 가기
           </Link>
         </div>
@@ -129,7 +132,7 @@ function HistoryRow({ entry }: { entry: LedgerEntry }) {
     return (
       <div className="flex items-center gap-3 px-3.5 py-3.5">
         <span className="min-w-0 flex-1">
-          <span className="block dot-text text-[12px] text-silver-mid">
+          <span className="block dot-text text-[12px] text-ink-faint">
             {formatWhen(entry.createdAt)}
           </span>
           <span className="mt-0.5 block truncate text-[15px] font-bold text-ink">
@@ -138,7 +141,7 @@ function HistoryRow({ entry }: { entry: LedgerEntry }) {
         </span>
         <span className="shrink-0 text-right">
           <span className="flex items-center justify-end gap-1">
-            <span className="dot-text text-[15px] font-bold leading-none text-heart">
+            <span className="dot-text text-[15px] font-bold leading-none text-accent">
               +{entry.hearts}
             </span>
             <HeartCoin size={14} />
@@ -159,7 +162,7 @@ function HistoryRow({ entry }: { entry: LedgerEntry }) {
       className="flex items-center gap-3 px-3.5 py-3.5 transition-colors hover:bg-hover"
     >
       <span className="min-w-0 flex-1">
-        <span className="block dot-text text-[12px] text-silver-mid">
+        <span className="block dot-text text-[12px] text-ink-faint">
           {formatWhen(entry.createdAt)}
         </span>
         <span className="mt-0.5 block truncate text-[15px] font-bold text-ink">

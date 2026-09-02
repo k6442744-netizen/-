@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PixelDecoration } from "@/components/y2k/PixelDecoration";
 import { PixelLabel } from "@/components/y2k/PixelLabel";
-import { MobileMenu } from "./MobileMenu";
+import { Icon } from "@/components/ui/Icon";
 import { HeaderAuth } from "./HeaderAuth";
 
 /** 좌: 메뉴 / 중앙: 로고 / 우: 로그인 */
@@ -9,7 +9,13 @@ export function Header() {
   return (
     <header className="sticky top-0 z-30 border-b border-silver bg-page/95 backdrop-blur-[6px]">
       <div className="relative flex h-14 items-center justify-between px-[calc(var(--page-padding)-8px)]">
-        <MobileMenu />
+        <Link
+          href="/my"
+          aria-label="마이페이지"
+          className="flex size-11 shrink-0 items-center justify-center rounded-win text-ink transition-colors hover:bg-hover"
+        >
+          <Icon name="menu" size={22} />
+        </Link>
 
         <Link
           href="/"

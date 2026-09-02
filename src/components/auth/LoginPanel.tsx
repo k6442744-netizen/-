@@ -52,7 +52,7 @@ export function LoginPanel() {
 
       <div className="my-4 flex items-center gap-3">
         <span aria-hidden="true" className="h-px flex-1 bg-silver" />
-        <p className="shrink-0 text-[12px] text-silver-mid">다른 방법으로 로그인</p>
+        <p className="shrink-0 text-[12px] text-ink-faint">다른 방법으로 로그인</p>
         <span aria-hidden="true" className="h-px flex-1 bg-silver" />
       </div>
 

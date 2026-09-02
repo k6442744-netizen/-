@@ -21,7 +21,7 @@ import {
 } from "@/lib/profiles";
 
 const fieldClass =
-  "min-h-[46px] w-full rounded-win border bg-white px-3 text-[15px] text-ink outline-none transition-colors placeholder:text-silver-mid focus:border-brand-pink";
+  "min-h-[46px] w-full rounded-win border bg-white px-3 text-[15px] text-ink outline-none transition-colors placeholder:text-ink-faint focus:border-brand-pink";
 
 type FieldKey = keyof ProfileDraft;
 type Errors = Partial<Record<FieldKey, string>>;
@@ -220,7 +220,7 @@ export function ProfileForm({
           maxLength={5}
           aria-invalid={Boolean(errorOf("birthTime"))}
           aria-describedby={`${uid}-time-msg`}
-          className={`${fieldClass} ${errorOf("birthTime") ? "border-brand-pink" : "border-line"} disabled:bg-silver disabled:text-silver-mid`}
+          className={`${fieldClass} ${errorOf("birthTime") ? "border-brand-pink" : "border-line"} disabled:bg-silver disabled:text-ink-faint`}
         />
         <label className="mt-2 flex min-h-[32px] w-fit cursor-pointer items-center gap-2">
           <input
@@ -245,23 +245,20 @@ export function ProfileForm({
 
       <div className="flex gap-2 pt-1">
         {onCancel ? (
-          <Button tone="neutral" className="flex-1" onClick={onCancel}>
+          <Button variant="tertiary" className="flex-1" onClick={onCancel}>
             취소
           </Button>
         ) : null}
-        <button
-          type="submit"
-          className="inline-flex min-h-[44px] flex-[2] items-center justify-center rounded-win border border-[#ff8ec7] bg-white px-5 text-[15px] font-semibold text-brand-pink transition-colors duration-150 hover:bg-page-pink active:bg-[#ffdcee]"
-        >
+        <Button variant="secondary" type="submit" className="flex-[2]">
           {submitLabel}
-        </button>
+        </Button>
       </div>
 
       {onDelete ? (
         <button
           type="button"
           onClick={onDelete}
-          className="mx-auto block min-h-[40px] px-3 text-[13px] text-silver-mid underline-offset-4 transition-colors hover:text-ink-soft hover:underline"
+          className="mx-auto block min-h-[40px] px-3 text-[13px] text-ink-faint underline-offset-4 transition-colors hover:text-ink-soft hover:underline"
         >
           이 사주정보 삭제하기
         </button>
@@ -303,7 +300,7 @@ function Field({
         id={messageId}
         role={error ? "alert" : undefined}
         className={`mt-1.5 dot-text text-[12px] leading-[1.6] ${
-          error ? "text-brand-pink" : "text-silver-mid"
+          error ? "text-accent" : "text-ink-faint"
         } ${error || hint ? "" : "hidden"}`}
       >
         {error ?? hint}
@@ -339,7 +336,7 @@ function Chips<T extends string>({
               key={key}
               className={`flex min-h-[38px] cursor-pointer items-center rounded-win border px-3.5 text-[14px] font-semibold transition-colors ${
                 active
-                  ? "border-brand-pink bg-page-pink text-brand-pink"
+                  ? "border-brand-pink bg-page-pink text-accent"
                   : "border-line bg-white text-ink-soft hover:bg-silver"
               }`}
             >
@@ -387,7 +384,7 @@ function Segmented<T extends string>({
               key={key}
               className={`flex min-h-[44px] flex-1 cursor-pointer items-center justify-center rounded-win border text-[14px] font-semibold transition-colors ${
                 active
-                  ? "border-brand-pink bg-page-pink text-brand-pink"
+                  ? "border-brand-pink bg-page-pink text-accent"
                   : "border-line bg-white text-ink-soft hover:bg-silver"
               }`}
             >

@@ -158,11 +158,10 @@ const productList: Omit<FortuneProduct, "tone">[] = [
   },
 
   { id: "today-luck", type: "사주", label: "TODAY LUCK", category: "재미", object: "star-charm", image: "/objects/eight-ball.png", short: "오늘", name: "오늘의 운세", hearts: 2, rank: 1 },
-  { id: "tojeong-2026", type: "사주", label: "TOJEONG 2026", category: "종합", object: "cd", image: "/objects/star-keyring.png", short: "토정비결", name: "2026 토정비결", hearts: 10, rank: 2 },
-  { id: "money-flow", type: "사주", label: "MONEY FLOW", category: "재물", object: "key", image: "/objects/tote.png", short: "재물운", name: "나의 재물운", hearts: 7, rank: 3 },
-  { id: "red-thread", type: "타로", label: "RED THREAD", category: "연애", object: "butterfly", image: "/objects/butterfly.png", short: "인연", name: "인연의 붉은 실", hearts: 3, rank: 4 },
-  { id: "re-match", type: "타로", label: "RE:MATCH", category: "연애", object: "flip-phone", image: "/objects/flip-phone.png", short: "재회", name: "재회 가능성", hearts: 8, rank: 5 },
-  { id: "mbti-match", type: "MBTI", label: "MBTI MATCH", category: "연애", object: "heart", image: "/objects/cherry.png", short: "MBTI", name: "MBTI 연애 궁합", hearts: 3, rank: 6, people: 2 },
+  { id: "money-flow", type: "사주", label: "MONEY FLOW", category: "재물", object: "key", image: "/objects/tote.png", short: "재물운", name: "나의 재물운", hearts: 7, rank: 2 },
+  { id: "red-thread", type: "타로", label: "RED THREAD", category: "연애", object: "butterfly", image: "/objects/butterfly.png", short: "인연", name: "인연의 붉은 실", hearts: 3, rank: 3 },
+  { id: "re-match", type: "타로", label: "RE:MATCH", category: "연애", object: "flip-phone", image: "/objects/flip-phone.png", short: "재회", name: "재회 가능성", hearts: 8, rank: 4 },
+  { id: "mbti-match", type: "MBTI", label: "MBTI MATCH", category: "연애", object: "heart", image: "/objects/cherry.png", short: "MBTI", name: "MBTI 연애 궁합", hearts: 3, rank: 5, people: 2 },
 
   { id: "name-match", type: "사주", label: "NAME MATCH", category: "연애", object: "envelope", image: "/objects/angel-patch.png", short: "이름", name: "이름 궁합", hearts: 2, people: 2 },
   { id: "job-luck", type: "사주", label: "JOB LUCK", category: "직장", object: "key", image: "/objects/babygirl.png", short: "취업", name: "취업·이직운", hearts: 6 },
