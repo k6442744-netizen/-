@@ -15,6 +15,9 @@ const FAR = 46;
 /** 잎차례 각도 — 같은 각도에 몰리지 않게 흩뿌린다 */
 const GOLDEN_ANGLE = 137.508;
 
+/** 점으로 찍는 구간에서 이름을 붙일 인원 — 인연이 깊은 순서대로 */
+const DOT_LABELS = 20;
+
 /** 인연도를 0~1 로 — 자리와 크기를 정하는 기준이 된다 */
 const ratio = (strength: number) =>
   Math.min(
@@ -50,8 +53,8 @@ export function RelationMap({
 
   const count = links.length;
   const mode = nodeMode(count);
-  /* 점으로 찍는 구간에서는 깊은 인연 몇 명만 이름을 붙인다 */
-  const labelCount = mode === "dot" ? 6 : count;
+  /* 점으로 찍는 구간에서는 깊은 인연 스무 명까지만 이름을 붙인다 */
+  const labelCount = mode === "dot" ? DOT_LABELS : count;
   const labelled = new Set(
     [...links]
       .sort((a, b) => b.strength - a.strength)
@@ -64,6 +67,7 @@ export function RelationMap({
 
   return (
     <div>
+      <div>
       <div className="relative mx-auto aspect-square w-full max-w-[330px]">
         {/* 중심에서 번져 나가는 오라 — 색이 천천히 섞이며 돈다 */}
         <span
@@ -119,28 +123,31 @@ export function RelationMap({
               style={{
                 left: `${50 + Math.cos(angle) * radius}%`,
                 top: `${50 + Math.sin(angle) * radius}%`,
-                zIndex: isPicked ? 20 : Math.round(depth * 10),
+                /* 이름이 붙은 노드는 점들 위로 올려 가려지지 않게 한다 */
+                zIndex: isPicked ? 40 : showName ? 20 + Math.round(depth * 8) : 1,
                 animationDelay: `${Math.min(i, 20) * 45}ms`,
               }}
             >
-              {showName ? (
-                <span
-                  className={`max-w-[76px] truncate rounded-full px-2 py-0.5 font-bold shadow-card transition-transform ${color.soft} ${color.text} ${
-                    isPicked ? "scale-110 ring-2 ring-ink/15" : ""
-                  }`}
-                  style={{ fontSize: nameSize }}
-                >
-                  {link.person.name}
-                </span>
-              ) : (
+              {mode === "dot" ? (
                 <span
                   aria-hidden="true"
                   className={`rounded-full shadow-card transition-transform ${color.solid} ${
                     isPicked ? "scale-125 ring-2 ring-ink/15" : ""
-                  }`}
+                  } ${showName ? "ring-2 ring-white" : "opacity-90"}`}
                   style={{ width: 9 + depth * 5, height: 9 + depth * 5 }}
                 />
-              )}
+              ) : null}
+
+              {showName ? (
+                <span
+                  className={`max-w-[76px] truncate rounded-full font-bold shadow-card ring-2 ring-white transition-transform ${color.soft} ${color.text} ${
+                    mode === "dot" ? "mt-1 px-1.5 py-px" : "px-2 py-0.5"
+                  } ${isPicked ? "scale-110" : ""}`}
+                  style={{ fontSize: mode === "dot" ? 10.5 : nameSize }}
+                >
+                  {link.person.name}
+                </span>
+              ) : null}
 
               {mode === "chip" ? (
                 <span
@@ -154,9 +161,10 @@ export function RelationMap({
         })}
       </div>
 
-      <p className="mt-1 text-center dot-text text-[12px] text-ink-faint">
-        안쪽에 가까울수록 인연이 깊어요 · 눌러서 확인
-      </p>
+        <p className="mt-1 text-center dot-text text-[12px] text-ink-faint">
+          안쪽에 가까울수록 인연이 깊어요 · 눌러서 확인
+        </p>
+      </div>
 
       {/* 누른 사람 — 이름표가 없는 노드도 여기서 확인한다 */}
       {selected && selectedRelation ? (

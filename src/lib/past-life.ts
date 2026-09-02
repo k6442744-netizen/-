@@ -55,11 +55,10 @@ export const relations: PastLifeRelation[] = [
   { id: "unfinished", label: "못다한사랑", emoji: "🕯️", group: "연애", hint: "아쉬움", detail: "약속만 남기고 헤어진 사이", story: "다시 만나자는 약속만 남기고 흩어졌습니다." },
   { id: "runaway-love", label: "도망연인", emoji: "🏃", group: "연애", hint: "충동", detail: "손 잡고 함께 도망쳤던 사이", story: "짐도 없이 손만 잡고 길을 나섰던 밤이 있었습니다." },
   { id: "destined", label: "운명짝꿍", emoji: "🧵", group: "연애", hint: "재회", detail: "실이 계속 이어져 다시 만나던 사이", story: "헤어져도 다른 마을에서 또 마주치곤 했습니다." },
-  { id: "mirror-love", label: "거울연인", emoji: "🪞", group: "연애", hint: "공감", detail: "서로를 너무 닮아 힘들었던 사이", story: "같은 성질이라 서로를 단번에 알아보고, 또 그만큼 힘들어했습니다." },
-  { id: "rehearsal", label: "이별연습", emoji: "🌊", group: "연애", hint: "반복", detail: "만나고 헤어지길 반복한 사이", story: "붙었다 떨어지길 계절마다 반복했습니다." },
-  { id: "letter-love", label: "편지연인", emoji: "📮", group: "연애", hint: "그리움", detail: "얼굴보다 글로 더 자주 만난 사이", story: "얼굴보다 글씨를 더 오래 들여다보던 사이였습니다." },
-  { id: "night-guest", label: "밤손님", emoji: "🌙", group: "연애", hint: "비밀", detail: "밤에만 만날 수 있었던 사이", story: "해가 지고서야 문을 두드릴 수 있는 관계였습니다." },
-  { id: "summer-love", label: "여름연인", emoji: "🎐", group: "연애", hint: "추억", detail: "한 계절만 뜨거웠던 사이", story: "한 계절이 지나자 약속도 없이 멀어졌습니다." },
+  { id: "promise", label: "재회약속", emoji: "🎋", group: "연애", hint: "기다림", detail: "다음 생에 다시 만나자고 약속한 사이", story: "마지막 밤에 서로의 이름을 적어 두고 헤어졌습니다." },
+  { id: "letgo", label: "놓아준사랑", emoji: "🪶", group: "연애", hint: "후회", detail: "붙잡지 않고 보내 준 사이", story: "잡을 수 있었는데 한 발 물러섰던 자리입니다." },
+  { id: "secret-love", label: "비밀연인", emoji: "🤫", group: "연애", hint: "은밀함", detail: "아무도 모르게 만나던 사이", story: "둘만 아는 길로 돌아서 만나곤 했습니다." },
+  { id: "late-love", label: "늦은사랑", emoji: "🍶", group: "연애", hint: "타이밍", detail: "너무 늦게 서로를 알아본 사이", story: "마음을 알아챘을 땐 이미 각자의 자리가 정해져 있었습니다." },
 
   /* --- 좋은 인연 · 귀인 --- */
   { id: "benefactor", label: "귀인", emoji: "💎", group: "인연", hint: "행운", detail: "중요한 순간마다 도움을 준 사이", story: "결정적인 길목마다 이 사람이 서 있었습니다." },
@@ -72,8 +71,6 @@ export const relations: PastLifeRelation[] = [
   { id: "comrade", label: "전우", emoji: "🎖️", group: "인연", hint: "의리", detail: "같은 편에서 끝까지 버틴 사이", story: "같은 편에 서서 끝까지 자리를 지켰습니다." },
   { id: "business", label: "동업자", emoji: "🤝", group: "인연", hint: "협력", detail: "함께 일을 일으킨 사이", story: "함께 일을 벌이고 함께 키웠습니다." },
   { id: "fated-mate", label: "운명동료", emoji: "🧶", group: "인연", hint: "인연", detail: "어디서 다시 만나도 같은 일을 하던 사이", story: "어느 생에서 만나도 늘 같은 일을 하고 있었습니다." },
-  { id: "village", label: "한마을", emoji: "🌾", group: "인연", hint: "익숙함", detail: "같은 땅에서 나고 자란 사이", story: "같은 우물을 쓰고 같은 계절을 났습니다." },
-  { id: "healer", label: "약손", emoji: "🩹", group: "인연", hint: "위로", detail: "아플 때 곁에서 돌봐 주던 사이", story: "아플 때 약을 달이고 밤새 곁을 지켰습니다." },
 
   /* --- 친구 · 일상 --- */
   { id: "childhood", label: "소꿉친구", emoji: "🧸", group: "친구", hint: "편함", detail: "어릴 적부터 붙어 다니던 사이", story: "걷기도 전부터 붙어 다녔습니다." },
