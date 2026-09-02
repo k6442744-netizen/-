@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { PurchaseProvider } from "@/components/purchase/PurchaseProvider";
+import { ToastProvider } from "@/components/ui/Toast";
 import "./globals.css";
 
 /* 전체 서체 — 페이퍼로지(Paperlogy). 제목·본문·라벨을 한 서체로 통일한다 (§4) */
@@ -55,10 +57,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko">
-      <body
-        className={`${paperlogy.variable} antialiased`}
-      >
-        {children}
+      <body className={`${paperlogy.variable} antialiased`}>
+        {/* 구매 팝업과 토스트는 화면 전체에 하나씩만 둔다.
+            자기 화면을 통째로 그리는 페이지도 있어서 AppFrame 이 아니라 여기서 감싼다 */}
+        <ToastProvider>
+          <PurchaseProvider>{children}</PurchaseProvider>
+        </ToastProvider>
       </body>
     </html>
   );

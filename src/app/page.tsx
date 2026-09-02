@@ -8,7 +8,7 @@ import { TestTypeMenu } from "@/components/fortune/TestTypeMenu";
 import { FortuneCarousel } from "@/components/fortune/FortuneCarousel";
 import { TrendingRow } from "@/components/fortune/TrendingRow";
 import { AllFortuneGrid } from "@/components/fortune/AllFortuneGrid";
-import { FortuneMessage } from "@/components/fortune/FortuneMessage";
+import { PastLifeTest } from "@/components/fortune/PastLifeTest";
 import { featuredProducts, products, trendingProducts } from "@/lib/products";
 
 export default function Home() {
@@ -44,7 +44,7 @@ export default function Home() {
           </Padded>
 
           <Padded>
-            <FortuneMessage />
+            <PastLifeTest />
           </Padded>
 
           <Padded>

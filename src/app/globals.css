@@ -31,10 +31,16 @@
   --color-brand-blue: #c8ecff;
 
   --color-silver: #fdf3f8;
+  /* 아이콘 버튼 등의 hover — 색이 얹히지 않도록 아주 옅은 무채색 */
+  --color-hover: #f5f4f6;
   --color-silver-mid: #b8adcd;
   --color-line: #fde9f3;
   --color-ink: #2b1b3d;
-  --color-ink-soft: #6b5b85;
+  /* 설명·캡션. 디자인 시스템 §2의 --text-secondary(#66606E) 기준으로 두고
+     자주끼는 아주 조금만 남긴다 — 길게 이어지면 보라색으로 읽힌다 */
+  --color-ink-soft: #625c6d;
+  /* 결과지처럼 길게 읽는 본문 — 제목 바로 아래 단계까지 진하게 */
+  --color-ink-body: #2f2a38;
 
   /* --- 간편 로그인 브랜드 컬러 ---
      각 사업자 브랜드 가이드가 색을 고정하므로 디자인 시스템 팔레트의 예외로 둔다.
@@ -74,7 +80,8 @@
   --silver-light: #fdf3f8;
   --silver-mid: #b8adcd;
   --text-primary: #2b1b3d;
-  --text-secondary: #6b5b85;
+  --text-secondary: #625c6d;
+  --text-body: #2f2a38;
 
   --border-default: 1px solid #fde9f3;
   --border-pink: 1px solid #ff8ec7;
@@ -281,6 +288,142 @@ body {
 }
 .menu-out {
   animation: menu-out 240ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+/* --- 전생 인맥: 궤도 그래픽 --- */
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.orbit-spin {
+  animation: orbit-spin 16s linear infinite;
+}
+.orbit-spin-slow {
+  animation: orbit-spin 26s linear infinite reverse;
+}
+
+/* 궤도가 돌아도 점은 서 있게 — 부모의 회전을 되돌린다 */
+.orbit-dot {
+  animation: orbit-spin 16s linear infinite reverse;
+}
+
+@keyframes badge-pop {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.09);
+  }
+}
+.badge-pop {
+  animation: badge-pop 1.9s ease-in-out infinite;
+}
+
+/* 인연이 하나씩 톡 나타나는 등장 */
+@keyframes node-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.node-in {
+  animation: node-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.row-in {
+  animation: row-in 340ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+/* --- 토스트 알림 --- */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+.toast-in {
+  /* 가운데 정렬을 keyframe 안에서 같이 처리한다 — translate 유틸과 겹치지 않게 */
+  animation: toast-in 240ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+/* --- 가운데 팝업 --- */
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes pop-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+}
+.pop-in {
+  animation: pop-in 220ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.pop-out {
+  animation: pop-out 180ms ease-in both;
+}
+
+/* --- 궁합: 두 자리가 다 차면 가운데 하트가 튀어나온다 --- */
+@keyframes heart-pop {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.18);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.heart-pop {
+  animation: heart-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* --- 결과를 풀이하는 동안의 진행 바 --- */
+@keyframes loading-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(320%);
+  }
+}
+.loading-sweep {
+  animation: loading-sweep 1.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
 @keyframes dim-in {

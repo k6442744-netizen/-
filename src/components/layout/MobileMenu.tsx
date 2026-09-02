@@ -2,35 +2,97 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { HeartCoin } from "@/components/ui/HeartCoin";
+import { HeartChargeModal } from "@/components/purchase/HeartChargeModal";
+import { MyProfileModal } from "@/components/purchase/MyProfileModal";
+import { useProfiles } from "@/lib/account";
+import { useHearts } from "@/lib/ledger";
+import { summarizeProfile } from "@/lib/profiles";
+import { KAKAO_CHANNEL_URL } from "@/lib/links";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { PixelDecoration } from "@/components/y2k/PixelDecoration";
 import { PixelLabel } from "@/components/y2k/PixelLabel";
 import { RetroWindow } from "@/components/y2k/RetroWindow";
 
-/** 샘플 계정 정보 — 실제 로그인 연동 시 교체 */
+/** 샘플 계정 정보 — 실제 로그인 연동 시 교체.
+    대표프로필(이름·생년월일)과 하트 잔액은 저장된 값을 따른다 */
 const account = {
   provider: "카카오",
-  email: "thgudd17625@naver.com",
-  name: "김소형",
-  birth: "1999-04-02",
-  hearts: 12,
+  email: "fortune@example.com",
 };
 
-const menuItems: { icon: IconName; label: string }[] = [
-  { icon: "faq", label: "문의하기" },
-  { icon: "receipt", label: "결제내역" },
-  { icon: "box", label: "보관함" },
-  { icon: "gift", label: "선물하기" },
-  { icon: "ticket", label: "쿠폰 등록하기" },
+const menuItems: {
+  icon: IconName;
+  label: string;
+  href?: string;
+  /** 서비스 밖으로 나가는 링크 — 새 탭으로 연다 */
+  external?: boolean;
+}[] = [
+  { icon: "faq", label: "문의하기", href: KAKAO_CHANNEL_URL, external: true },
+  { icon: "receipt", label: "하트 내역", href: "/history" },
+  { icon: "box", label: "보관함", href: "/archive" },
+  { icon: "gift", label: "선물하기", href: "/gift" },
+  /* 쿠폰은 아직 준비 전이라 가려 둔다 — 열 때 이 줄만 되살리면 된다
+  { icon: "ticket", label: "쿠폰 등록하기" }, */
 ];
 
+/** 메뉴 그리드 열 수 — 항목이 홀수면 마지막 하나가 두 칸을 쓴다 */
+const MENU_COLUMNS = 2;
+
 type Phase = "closed" | "open" | "closing";
+
+type MenuItem = (typeof menuItems)[number];
+
+/** 메뉴 한 칸 — 외부 링크(카카오 채널)는 새 탭으로 연다 */
+function MenuLink({
+  item,
+  onNavigate,
+}: {
+  item: MenuItem;
+  onNavigate: () => void;
+}) {
+  const className =
+    "flex min-h-[64px] flex-col items-center justify-center gap-1.5 px-2 transition-colors hover:bg-hover";
+  const content = (
+    <>
+      <Icon name={item.icon} size={20} className="text-brand-lav" />
+      <span className="dot-text text-[14px] text-ink">{item.label}</span>
+    </>
+  );
+
+  if (item.external && item.href) {
+    return (
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onNavigate}
+        className={className}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      href={item.href ?? "#"}
+      onClick={item.href ? onNavigate : undefined}
+      className={className}
+    >
+      {content}
+    </Link>
+  );
+}
 
 export function MobileMenu() {
   /* 닫힐 때도 같은 경로로 되돌아가야 해서 closing 단계를 둔다 */
   const [phase, setPhase] = useState<Phase>("closed");
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [chargeOpen, setChargeOpen] = useState(false);
+  const { defaultProfile } = useProfiles();
+  const { hearts } = useHearts();
   const open = phase !== "closed";
   const close = useCallback(() => {
     setPhase((p) => (p === "open" ? "closing" : p));
@@ -57,7 +119,7 @@ export function MobileMenu() {
         aria-label="메뉴 열기"
         aria-expanded={phase === "open"}
         onClick={() => setPhase("open")}
-        className="flex size-11 shrink-0 items-center justify-center rounded-win text-ink transition-colors hover:bg-page-lav"
+        className="flex size-11 shrink-0 items-center justify-center rounded-win text-ink transition-colors hover:bg-hover"
       >
         <Icon name="menu" size={22} />
       </button>
@@ -103,36 +165,36 @@ export function MobileMenu() {
 
                 <div className="flex-1 space-y-4 overflow-y-auto overscroll-contain px-[var(--page-padding)] py-5">
                   {/* 회원카드 — 로그인 정보 + 대표프로필을 한 장으로 */}
-                  <RetroWindow
-                    label="MEMBER CARD"
-                    labelFont="pixel"
-                    tone="pink"
-                    icon={<PixelDecoration shape="star" size={11} />}
-                  >
+                  <RetroWindow label="내 정보" tone="pink">
                     <div className="flex items-center gap-3.5 px-4 pb-4 pt-4">
                       <span className="flex size-14 shrink-0 items-center justify-center bg-brand-pink-soft">
                         <span className="dot-text text-[20px] font-bold text-white">
-                          {account.name.slice(0, 1)}
+                          {defaultProfile ? defaultProfile.name.slice(0, 1) : "?"}
                         </span>
                       </span>
 
                       <div className="min-w-0 flex-1">
                         <p className="flex items-center gap-1.5 text-[17px] font-bold text-ink">
-                          {account.name}
-                          <span className="rounded-tag border border-line px-1.5 py-px text-[11px] font-medium text-ink-soft">
-                            본인
-                          </span>
+                          {defaultProfile ? defaultProfile.name : "사주정보 없음"}
+                          {defaultProfile ? (
+                            <span className="rounded-tag border border-line px-1.5 py-px text-[11px] font-medium text-ink-soft">
+                              기본
+                            </span>
+                          ) : null}
                         </p>
                         <p className="dot-text mt-1 text-[14px] text-ink-soft">
-                          {account.birth}
+                          {defaultProfile
+                            ? summarizeProfile(defaultProfile)
+                            : "운세를 보려면 사주정보가 필요해요"}
                         </p>
                       </div>
 
                       <button
                         type="button"
-                        className="h-8 shrink-0 rounded-win border border-line bg-white px-3 text-[13px] font-semibold text-ink-soft transition-colors hover:bg-page-lav"
+                        onClick={() => setProfileOpen(true)}
+                        className="h-8 shrink-0 rounded-win border border-line bg-white px-3 text-[13px] font-semibold text-ink-soft transition-colors hover:bg-hover"
                       >
-                        변경
+                        {defaultProfile ? "변경" : "입력"}
                       </button>
                     </div>
 
@@ -147,51 +209,65 @@ export function MobileMenu() {
                   </RetroWindow>
 
                   {/* 하트 잔액 */}
-                  <RetroWindow label="HEART.EXE" labelFont="pixel" tone="lavender">
+                  <RetroWindow label="보유 하트" tone="lavender">
                     <div className="px-4 pb-4 pt-5 text-center">
-                      <PixelLabel
-                        as="p"
-                        className="!text-[10px] tracking-[0.08em] text-brand-lav"
-                      >
-                        MY HEART
-                      </PixelLabel>
-
-                      <p className="mt-2.5 flex items-center justify-center gap-2">
+                      <p className="flex items-center justify-center gap-2">
                         <span className="dot-text text-[32px] font-bold leading-none text-heart">
-                          {account.hearts}
+                          {hearts}
                         </span>
                         <HeartCoin size={30} />
                       </p>
 
-                      <Button className="mt-4 w-full">하트 충전하기</Button>
+                      <Button
+                        className="mt-4 w-full"
+                        onClick={() => setChargeOpen(true)}
+                      >
+                        하트 충전하기
+                      </Button>
                     </div>
                   </RetroWindow>
+
+                  {/* 이벤트 — 계정 메뉴와 성격이 달라 따로 두되 생김새는 맞춘다 */}
+                  <Link
+                    href="/past-life"
+                    onClick={close}
+                    className="flex min-h-[64px] items-center gap-2.5 rounded-win border border-line bg-white px-4 shadow-card transition-colors hover:bg-hover"
+                  >
+                    <Icon
+                      name="star"
+                      size={20}
+                      className="shrink-0 text-brand-lav"
+                    />
+                    <span className="flex items-center gap-1.5">
+                      <span className="dot-text text-[14px] text-ink">
+                        전생관계 판별기
+                      </span>
+                      <span className="rounded-tag bg-brand-lav px-1.5 py-px text-[10px] font-bold text-white">
+                        무료
+                      </span>
+                    </span>
+                  </Link>
 
                   {/* 메뉴 — 리스트 대신 2열 아이콘 그리드 */}
                   <nav aria-label="계정 메뉴">
                     <ul className="grid grid-cols-2 overflow-hidden rounded-win border border-line bg-white shadow-card">
                       {menuItems.map((item, i) => {
-                        const isLast = i === menuItems.length - 1;
+                        const rows = Math.ceil(menuItems.length / MENU_COLUMNS);
+                        /* 항목이 홀수일 때만 마지막 하나가 한 줄을 다 쓴다 */
+                        const wide =
+                          menuItems.length % MENU_COLUMNS === 1 &&
+                          i === menuItems.length - 1;
+                        const lastRow = Math.floor(i / MENU_COLUMNS) === rows - 1;
                         return (
                           <li
                             key={item.label}
-                            className={`${isLast ? "col-span-2" : ""} ${
-                              !isLast && i % 2 === 0 ? "border-r border-silver" : ""
-                            } ${i < menuItems.length - 1 ? "border-b border-silver" : ""}`}
+                            className={`${wide ? "col-span-2" : ""} ${
+                              !wide && i % MENU_COLUMNS === 0
+                                ? "border-r border-silver"
+                                : ""
+                            } ${lastRow ? "" : "border-b border-silver"}`}
                           >
-                            <a
-                              href="#"
-                              className="flex min-h-[64px] flex-col items-center justify-center gap-1.5 px-2 transition-colors hover:bg-page-pink"
-                            >
-                              <Icon
-                                name={item.icon}
-                                size={20}
-                                className="text-brand-lav"
-                              />
-                              <span className="dot-text text-[14px] text-ink">
-                                {item.label}
-                              </span>
-                            </a>
+                            <MenuLink item={item} onNavigate={close} />
                           </li>
                         );
                       })}
@@ -216,6 +292,16 @@ export function MobileMenu() {
                   </div>
                 </div>
               </div>
+
+              <MyProfileModal
+                open={profileOpen}
+                onClose={() => setProfileOpen(false)}
+              />
+
+              <HeartChargeModal
+                open={chargeOpen}
+                onClose={() => setChargeOpen(false)}
+              />
             </div>,
             document.body,
           )

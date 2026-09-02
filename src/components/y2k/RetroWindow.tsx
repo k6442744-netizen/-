@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { DotLabel } from "./DotLabel";
 import { PixelLabel } from "./PixelLabel";
+import { barBg, toneText } from "@/lib/tone";
 
 export type WindowTone = "pink" | "lavender" | "blue" | "yellow";
 
@@ -17,13 +18,6 @@ interface RetroWindowProps {
   bodyClassName?: string;
 }
 
-const tone: Record<WindowTone, { bar: string; label: string }> = {
-  pink: { bar: "bg-[#ffc9e6]", label: "text-[#d1247e]" },
-  lavender: { bar: "bg-[#ddc9ff]", label: "text-[#6b3fc7]" },
-  blue: { bar: "bg-[#c4ecff]", label: "text-[#1f7fae]" },
-  yellow: { bar: "bg-[#ffe6a3]", label: "text-[#9a6b12]" },
-};
-
 /**
  * Signature Component — Retro Window (§7)
  * 상품 / Fortune Message / Event / 특별 콘텐츠에만 사용하고 모든 섹션에 남발하지 않는다.
@@ -38,27 +32,25 @@ export function RetroWindow({
   className = "",
   bodyClassName = "",
 }: RetroWindowProps) {
-  const t = tone[toneName];
-
   return (
     <section
       className={`overflow-hidden rounded-win border border-line bg-white shadow-win ${className}`}
     >
       <div
-        className={`flex h-[34px] items-center justify-between gap-2 ${t.bar} pl-2.5 pr-2`}
+        className={`flex h-[34px] items-center justify-between gap-2 ${barBg[toneName]} pl-2.5 pr-2`}
       >
         <div className="flex min-w-0 items-center gap-1.5">
           {icon ? (
-            <span aria-hidden="true" className={t.label}>
+            <span aria-hidden="true" className={toneText[toneName]}>
               {icon}
             </span>
           ) : null}
           {labelFont === "pixel" ? (
-            <PixelLabel className={`truncate !text-[11px] ${t.label}`}>
+            <PixelLabel className={`truncate !text-[11px] ${toneText[toneName]}`}>
               {label}
             </PixelLabel>
           ) : (
-            <DotLabel className={`truncate text-[13px] ${t.label}`}>
+            <DotLabel className={`truncate text-[13px] ${toneText[toneName]}`}>
               {label}
             </DotLabel>
           )}

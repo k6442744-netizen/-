@@ -26,7 +26,13 @@ export function FortuneCarousel({ items }: { items: FortuneProduct[] }) {
   const [index, setIndex] = useState(0);
   const last = items.length - 1;
 
-  const drag = useRef({ active: false, startX: 0, dx: 0 });
+  const drag = useRef({
+    active: false,
+    startX: 0,
+    dx: 0,
+    moved: false,
+    captured: false,
+  });
 
   const setX = useCallback((i: number, dx: number) => {
     const track = trackRef.current;
@@ -53,20 +59,33 @@ export function FortuneCarousel({ items }: { items: FortuneProduct[] }) {
     const track = trackRef.current;
     if (!track) return;
 
-    drag.current = { active: true, startX: e.clientX, dx: 0 };
+    drag.current = {
+      active: true,
+      startX: e.clientX,
+      dx: 0,
+      moved: false,
+      captured: false,
+    };
     track.style.transition = "none";
     /* 마우스로 끌 때 이미지·텍스트가 딸려오는 기본 동작만 막는다 (click 은 그대로) */
     if (e.pointerType === "mouse") e.preventDefault();
-    try {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {
-      /* 캡처가 안 되면 캡처 없이 진행 */
-    }
+    /* 포인터 캡처는 실제로 끌기 시작할 때 건다 — 캡처가 걸린 채 클릭하면
+       click 의 대상이 카드 안 버튼이 아니라 이 트랙으로 바뀐다 */
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!drag.current.active) return;
     let dx = e.clientX - drag.current.startX;
+    if (Math.abs(dx) > 4 && !drag.current.moved) {
+      drag.current.moved = true;
+      /* 카드 밖으로 나가도 계속 따라오도록 이때부터 캡처한다 */
+      try {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        drag.current.captured = true;
+      } catch {
+        /* 캡처가 안 되면 캡처 없이 진행 */
+      }
+    }
     /* 첫 장에서 뒤로, 마지막 장에서 앞으로 — 갈 곳이 없으면 저항을 준다 */
     const atEdge =
       (indexRef.current === 0 && dx > 0) || (indexRef.current === last && dx < 0);
@@ -78,15 +97,24 @@ export function FortuneCarousel({ items }: { items: FortuneProduct[] }) {
   const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!drag.current.active) return;
     drag.current.active = false;
-    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+    if (drag.current.captured && e.currentTarget.hasPointerCapture(e.pointerId)) {
       e.currentTarget.releasePointerCapture(e.pointerId);
     }
+    drag.current.captured = false;
 
     const threshold = swipeThreshold(e.currentTarget.clientWidth || 1);
     const { dx } = drag.current;
     if (dx <= -threshold) goTo(indexRef.current + 1);
     else if (dx >= threshold) goTo(indexRef.current - 1);
     else goTo(indexRef.current); // 임계값 미달 — 제자리로 되돌린다
+  };
+
+  /* 끌고 나서 손을 뗀 자리의 카드 링크가 눌리지 않도록 한다 */
+  const handleClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!drag.current.moved) return;
+    drag.current.moved = false;
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   /* 화면 밖 카드의 버튼으로 탭 이동하면 그 카드를 따라 보여 준다.
@@ -125,6 +153,7 @@ export function FortuneCarousel({ items }: { items: FortuneProduct[] }) {
         onPointerMove={handlePointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
+        onClickCapture={handleClickCapture}
       >
         <ul
           ref={trackRef}

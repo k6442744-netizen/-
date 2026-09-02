@@ -17,7 +17,7 @@ export function SubHeader({
         <Link
           href={backHref}
           aria-label="뒤로 가기"
-          className="flex size-11 items-center justify-center rounded-win text-ink transition-colors hover:bg-page-lav"
+          className="flex size-11 items-center justify-center rounded-win text-ink transition-colors hover:bg-hover"
         >
           <Icon name="chevron-left" size={20} />
         </Link>

@@ -25,7 +25,13 @@ export function DragScroller({
   className = "",
 }: DragScrollerProps) {
   const ref = useRef<HTMLElement>(null);
-  const drag = useRef({ active: false, startX: 0, startScroll: 0, moved: false });
+  const drag = useRef({
+    active: false,
+    startX: 0,
+    startScroll: 0,
+    moved: false,
+    captured: false,
+  });
 
   const onPointerDown = (e: React.PointerEvent<HTMLElement>) => {
     if (e.pointerType !== "mouse" || e.button !== 0) return;
@@ -38,16 +44,15 @@ export function DragScroller({
       startX: e.clientX,
       startScroll: el.scrollLeft,
       moved: false,
+      captured: false,
     };
     /* 텍스트 선택·이미지 끌기만 막는다. click 은 그대로 발생한다 */
     e.preventDefault();
     /* 스냅이 걸린 채로 scrollLeft 를 만지면 끌리는 도중 튄다 */
     el.style.scrollSnapType = "none";
-    try {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {
-      /* 캡처가 안 되면 캡처 없이 진행 */
-    }
+    /* 포인터 캡처는 여기서 걸지 않는다 — 캡처가 걸린 채 클릭하면 click 의
+       대상이 카드가 아니라 이 목록으로 바뀌어 카드가 눌리지 않는다.
+       실제로 끌기 시작한 뒤에 건다 (onPointerMove) */
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLElement>) => {
@@ -55,7 +60,16 @@ export function DragScroller({
     const el = ref.current;
     if (!el) return;
     const dx = e.clientX - drag.current.startX;
-    if (Math.abs(dx) > 4) drag.current.moved = true;
+    if (Math.abs(dx) > 4 && !drag.current.moved) {
+      drag.current.moved = true;
+      /* 목록 밖으로 나가도 계속 끌리도록 이때부터 캡처한다 */
+      try {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        drag.current.captured = true;
+      } catch {
+        /* 캡처가 안 되면 캡처 없이 진행 */
+      }
+    }
     el.scrollLeft = drag.current.startScroll - dx;
   };
 
@@ -64,9 +78,10 @@ export function DragScroller({
     drag.current.active = false;
     const el = ref.current;
     if (!el) return;
-    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+    if (drag.current.captured && e.currentTarget.hasPointerCapture(e.pointerId)) {
       e.currentTarget.releasePointerCapture(e.pointerId);
     }
+    drag.current.captured = false;
     /* CSS 로 정의된 스냅으로 되돌린다 — 놓은 자리에서 브라우저가 맞춰 준다 */
     el.style.scrollSnapType = "";
   };

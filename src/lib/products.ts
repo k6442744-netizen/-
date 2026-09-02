@@ -91,6 +91,8 @@ export interface FortuneProduct {
   description?: string;
   /** 재화(하트) 가격 */
   hearts: number;
+  /** 풀이에 필요한 사주정보 수 — 궁합류는 2명 (기본 1) */
+  people?: 1 | 2;
   /** Featured swipe card 노출 여부 */
   featured?: boolean;
   /** NOW TRENDING 순위 (있으면 트렌딩 노출) */
@@ -114,6 +116,7 @@ const productList: Omit<FortuneProduct, "tone">[] = [
     short: "궁합", name: "너와 나의 궁합",
     description: "우리의 인연과 궁합을\n상세하게 알려드려요.",
     hearts: 3,
+    people: 2,
     featured: true,
   },
   {
@@ -159,9 +162,9 @@ const productList: Omit<FortuneProduct, "tone">[] = [
   { id: "money-flow", type: "사주", label: "MONEY FLOW", category: "재물", object: "key", image: "/objects/tote.png", short: "재물운", name: "나의 재물운", hearts: 7, rank: 3 },
   { id: "red-thread", type: "타로", label: "RED THREAD", category: "연애", object: "butterfly", image: "/objects/butterfly.png", short: "인연", name: "인연의 붉은 실", hearts: 3, rank: 4 },
   { id: "re-match", type: "타로", label: "RE:MATCH", category: "연애", object: "flip-phone", image: "/objects/flip-phone.png", short: "재회", name: "재회 가능성", hearts: 8, rank: 5 },
-  { id: "mbti-match", type: "MBTI", label: "MBTI MATCH", category: "연애", object: "heart", image: "/objects/cherry.png", short: "MBTI", name: "MBTI 연애 궁합", hearts: 3, rank: 6 },
+  { id: "mbti-match", type: "MBTI", label: "MBTI MATCH", category: "연애", object: "heart", image: "/objects/cherry.png", short: "MBTI", name: "MBTI 연애 궁합", hearts: 3, rank: 6, people: 2 },
 
-  { id: "name-match", type: "사주", label: "NAME MATCH", category: "연애", object: "envelope", image: "/objects/angel-patch.png", short: "이름", name: "이름 궁합", hearts: 2 },
+  { id: "name-match", type: "사주", label: "NAME MATCH", category: "연애", object: "envelope", image: "/objects/angel-patch.png", short: "이름", name: "이름 궁합", hearts: 2, people: 2 },
   { id: "job-luck", type: "사주", label: "JOB LUCK", category: "직장", object: "key", image: "/objects/babygirl.png", short: "취업", name: "취업·이직운", hearts: 6 },
   { id: "exam-luck", type: "사주", label: "EXAM LUCK", category: "직장", object: "star-charm", image: "/objects/star-keyring.png", short: "합격", name: "시험·합격운", hearts: 7 },
   { id: "monthly", type: "사주", label: "MONTHLY", category: "종합", object: "cd", image: "/objects/music-player.png", short: "이달", name: "이달의 운세", hearts: 4 },
@@ -191,3 +194,8 @@ export const trendingProducts = products
 
 export const productsByType = (type: TestType) =>
   products.filter((p) => p.type === type);
+
+export const findProduct = (id: string) => products.find((p) => p.id === id);
+
+/** 풀이에 필요한 사주정보 수 (기본 1명) */
+export const peopleOf = (product: FortuneProduct) => product.people ?? 1;

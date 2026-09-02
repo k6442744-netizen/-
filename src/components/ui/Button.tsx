@@ -1,7 +1,9 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type Tone = "pink" | "lavender" | "neutral";
-type Size = "md" | "sm";
+export type ButtonTone = "pink" | "lavender" | "neutral";
+export type ButtonSize = "md" | "sm";
+type Tone = ButtonTone;
+type Size = ButtonSize;
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   tone?: Tone;
@@ -27,6 +29,15 @@ const sizeClass: Record<Size, string> = {
   sm: "min-h-[38px] px-4 text-[14px]",
 };
 
+/** 링크(`<a>`)를 버튼처럼 보이게 할 때 쓰는 클래스 조합 */
+export function buttonClass({
+  tone = "pink",
+  size = "md",
+  className = "",
+}: { tone?: Tone; size?: Size; className?: string } = {}) {
+  return `inline-flex items-center justify-center gap-1.5 rounded-win border bg-white font-semibold transition-colors duration-150 ${toneClass[tone]} ${sizeClass[size]} ${className}`;
+}
+
 export function Button({
   tone = "pink",
   size = "md",
@@ -37,7 +48,7 @@ export function Button({
   return (
     <button
       type="button"
-      className={`inline-flex items-center justify-center gap-1.5 rounded-win border bg-white font-semibold transition-colors duration-150 ${toneClass[tone]} ${sizeClass[size]} ${className}`}
+      className={buttonClass({ tone, size, className })}
       {...props}
     >
       {children}

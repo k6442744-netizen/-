@@ -1,30 +1,11 @@
+"use client";
+
 import { FortuneObject } from "./FortuneObject";
 import { DotLabel } from "@/components/y2k/DotLabel";
 import { HeartCoin } from "@/components/ui/HeartCoin";
+import { usePurchase } from "@/components/purchase/PurchaseProvider";
+import { paleBg, starTint, toneText } from "@/lib/tone";
 import type { FortuneProduct } from "@/lib/products";
-
-/** 카드 배경 — 톤 색을 아주 옅게 깐다. 별 패턴이 이 위에 얹힌다 */
-const pale: Record<FortuneProduct["tone"], string> = {
-  pink: "bg-[#fff0f8]",
-  lavender: "bg-[#f5efff]",
-  blue: "bg-[#edf8ff]",
-  yellow: "bg-[#fff8ea]",
-};
-
-/** 배경 위에 깔리는 픽셀 별 색 — 같은 톤을 한 단계 진하게 */
-const starTint: Record<FortuneProduct["tone"], string> = {
-  pink: "bg-[#ffd0e8]",
-  lavender: "bg-[#ded0ff]",
-  blue: "bg-[#c6e9ff]",
-  yellow: "bg-[#ffe6ab]",
-};
-
-const labelColor: Record<FortuneProduct["tone"], string> = {
-  pink: "text-[#d1247e]",
-  lavender: "text-[#6b3fc7]",
-  blue: "text-[#1f7fae]",
-  yellow: "text-[#9a6b12]",
-};
 
 /**
  * Mini Card (§8)
@@ -42,15 +23,17 @@ export function MiniFortuneCard({
   className?: string;
 }) {
   const { type, tone, object, name, hearts, rank, image, short } = product;
+  const openPurchase = usePurchase();
 
   return (
-    <a
-      href="#"
-      className={`group flex flex-col overflow-hidden rounded-win border border-line bg-white shadow-card transition-shadow hover:shadow-win ${className}`}
+    <button
+      type="button"
+      onClick={() => openPurchase(product)}
+      className={`group flex w-full flex-col text-left overflow-hidden rounded-win border border-line bg-white shadow-card transition-shadow hover:shadow-win ${className}`}
     >
       {/* 타이틀이 위, 이미지가 아래 — 이미지 칸을 길게 잡아 둘 다 들어가게 한다 */}
       <div
-        className={`relative flex h-[142px] flex-col items-center gap-1 pt-5 ${pale[tone]}`}
+        className={`relative flex h-[142px] flex-col items-center gap-1 pt-5 ${paleBg[tone]}`}
       >
         <span
           aria-hidden="true"
@@ -59,7 +42,7 @@ export function MiniFortuneCard({
 
         {showRank && rank ? (
           <span
-            className={`dot-title absolute left-2.5 top-2 z-10 text-[14px] leading-none ${labelColor[tone]}`}
+            className={`dot-title absolute left-2.5 top-2 z-10 text-[14px] leading-none ${toneText[tone]}`}
           >
             {rank}위
           </span>
@@ -75,7 +58,7 @@ export function MiniFortuneCard({
       </div>
 
       <div className="flex flex-1 flex-col px-3 pb-3 pt-2.5">
-        <DotLabel className={`text-[11px] ${labelColor[tone]}`}>{type}</DotLabel>
+        <DotLabel className={`text-[11px] ${toneText[tone]}`}>{type}</DotLabel>
         <p className="mt-1.5 dot-text text-[14px] font-bold leading-[1.45] text-ink">
           {name}
         </p>
@@ -86,6 +69,6 @@ export function MiniFortuneCard({
           <HeartCoin size={14} />
         </p>
       </div>
-    </a>
+    </button>
   );
 }

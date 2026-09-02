@@ -1,18 +1,14 @@
+"use client";
+
 import { FortuneObject } from "./FortuneObject";
 import { RetroWindow } from "@/components/y2k/RetroWindow";
 import { PixelDecoration } from "@/components/y2k/PixelDecoration";
 import { Button } from "@/components/ui/Button";
 import { HeartCoin } from "@/components/ui/HeartCoin";
 import { Icon } from "@/components/ui/Icon";
+import { usePurchase } from "@/components/purchase/PurchaseProvider";
+import { bandBg, buttonTone } from "@/lib/tone";
 import type { FortuneProduct } from "@/lib/products";
-
-/** 하단 가격·CTA 줄은 얇은 선 대신 별도 바(레트로 윈도우의 상태 표시줄)로 분리한다 */
-const footerBand: Record<FortuneProduct["tone"], string> = {
-  pink: "bg-[#ffdcef]",
-  lavender: "bg-[#e7daff]",
-  blue: "bg-[#d6f0ff]",
-  yellow: "bg-[#ffeec2]",
-};
 
 /**
  * Featured Card (§8)
@@ -27,6 +23,7 @@ export function FeaturedFortuneCard({
 }) {
   const { labelKo, type, tone, object, name, description, hearts, image } =
     product;
+  const openPurchase = usePurchase();
 
   return (
     <RetroWindow
@@ -65,7 +62,7 @@ export function FeaturedFortuneCard({
       </div>
 
       <div
-        className={`flex items-center justify-between gap-3 px-4 py-2 ${footerBand[tone]}`}
+        className={`flex items-center justify-between gap-3 px-4 py-2 ${bandBg[tone]}`}
       >
         <p className="flex items-center gap-1.5">
           <span className="dot-text text-[18px] font-bold leading-none text-heart">
@@ -73,7 +70,11 @@ export function FeaturedFortuneCard({
           </span>
           <HeartCoin size={17} />
         </p>
-        <Button tone={tone === "pink" ? "pink" : "lavender"} size="sm">
+        <Button
+          tone={buttonTone(tone)}
+          size="sm"
+          onClick={() => openPurchase(product)}
+        >
           보러가기
           <Icon name="arrow-right" size={15} />
         </Button>
